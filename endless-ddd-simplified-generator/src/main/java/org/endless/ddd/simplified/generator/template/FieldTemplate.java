@@ -179,7 +179,7 @@ public class FieldTemplate {
      */
     public static void enumValues(StringBuilder stringBuilder, List<EnumValue> values, List<Field> fields, String className) {
 
-        String codeType = fields.get(0).getType();
+        String codeType = fields.getFirst().getType();
         if (!codeType.equals("String") && !codeType.equals("Integer") && !codeType.equals("Long")) {
             throw new IllegalArgumentException("无法识别的枚举类型");
         }
@@ -194,7 +194,7 @@ public class FieldTemplate {
             stringBuilder.append("    ").append(value.getCode()).append("(").append(fieldName).append(", ").append(description).append("),\n");
         }
         // 移除最后一个多余的逗号
-        if (stringBuilder.length() > 0) {
+        if (!stringBuilder.isEmpty()) {
             stringBuilder.setLength(stringBuilder.length() - 2);
         }
         stringBuilder.append(";\n\n");

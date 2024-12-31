@@ -113,7 +113,6 @@ public class StringTools {
     }
 
 
-
     /**
      * 工具方法： 获取最后N个大写字母后的字符串
      *
@@ -187,13 +186,14 @@ public class StringTools {
     /**
      * 工具方法：驼峰转下划线
      *
-     * @param string 字符串
+     * @param camelCase 驼峰字符串
      * @return {@link String }
      */
     public static String snakeCase(String camelCase) {
         return convertToSeparator(camelCase, "_");
     }
-        /**
+
+    /**
      * 工具方法： 将驼峰形式的类名转换为点号形式
      *
      * @param camelCase 驼峰形式
@@ -202,9 +202,11 @@ public class StringTools {
     public static String convertToDot(String camelCase) {
         return convertToSeparator(camelCase, ".");
     }
+
     public static String convertToSlash(String camelCase) {
         return convertToSeparator(camelCase, "/");
     }
+
     public static String convertToSeparator(String camelCase, String separator) {
         StringBuilder result = new StringBuilder();
 

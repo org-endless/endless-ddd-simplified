@@ -210,7 +210,7 @@ public interface Mapper<R extends DataRecord<? extends Entity>> extends BaseMapp
         try {
             List<R> records = this.selectBatchIds(ids).stream()
                     .filter(record -> Boolean.FALSE.equals(record.getIsRemoved()))
-                    .collect(Collectors.toList());
+                    .toList();
             if (records.size() > ids.size()) {
                 throw new MapperFindException("数据库存在重复数据");
             }

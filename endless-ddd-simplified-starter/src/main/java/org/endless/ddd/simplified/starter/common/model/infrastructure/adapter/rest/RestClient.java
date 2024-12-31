@@ -1,6 +1,5 @@
 package org.endless.ddd.simplified.starter.common.model.infrastructure.adapter.rest;
 
-import org.endless.ddd.simplified.starter.common.model.infrastructure.adapter.transfer.DrivenTransfer;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 

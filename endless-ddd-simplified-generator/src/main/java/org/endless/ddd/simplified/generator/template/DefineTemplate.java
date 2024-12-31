@@ -33,8 +33,6 @@ public class DefineTemplate {
                     .append("@Getter\n")
                     .append("@ToString\n")
                     .append("@Builder(buildMethodName = \"innerBuild\")\n");
-        } else if (className.endsWith("HandlerImpl")) {
-
         } else if (className.endsWith("DataManager")) {
             stringBuilder
                     .append("@Lazy\n")

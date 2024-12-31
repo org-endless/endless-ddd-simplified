@@ -415,9 +415,7 @@ public class MethodTemplate {
             String fieldGenericsEntity = generics(fieldType);
             String fieldGenerics = fieldGenericsEntity.replace("Entity", getLastCamelCase(className, 1));
 
-            if (fieldName.equals("createAt") || fieldName.equals("modifyAt") || fieldName.equals("removeAt")) {
-                continue;
-            } else if (fieldType.startsWith("List<")) {
+            if (fieldType.startsWith("List<")) {
                 if (entityNames.contains(fieldGenericsEntity)) {
                     stringBuilder
                             .append("                .").append(fieldName).append("(").append(fieldName).append("== null? new ArrayList<>() : ").append(fieldName).append(".stream()\n")
@@ -438,7 +436,7 @@ public class MethodTemplate {
                 expandedTypes.add(fieldType);
             } else if (entityNames.contains(fieldType)) {
                 stringBuilder.append("                .").append(fieldName).append("(").append(fieldName).append(".to())\n");
-            } else {
+            } else if (!fieldName.equals("createAt") && !fieldName.equals("modifyAt") && !fieldName.equals("removeAt")) {
                 stringBuilder.append("                .").append(fieldName).append("(").append(fieldName).append(")\n");
             }
         }

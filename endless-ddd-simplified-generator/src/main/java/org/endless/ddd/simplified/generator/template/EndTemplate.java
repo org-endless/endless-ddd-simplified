@@ -14,7 +14,7 @@ public class EndTemplate {
 
     public static void end(StringBuilder stringBuilder) {
         // 移除最后一个多余的换行符
-        if (stringBuilder.length() > 0) {
+        if (!stringBuilder.isEmpty()) {
             stringBuilder.setLength(stringBuilder.length() - 1);
         }
         stringBuilder.append("}\n");
