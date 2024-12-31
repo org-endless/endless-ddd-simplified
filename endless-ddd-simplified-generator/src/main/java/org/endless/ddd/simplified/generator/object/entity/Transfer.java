@@ -94,8 +94,24 @@ public class Transfer {
         if (!StringUtils.hasText(description)) {
             throw new IllegalArgumentException("传输对象描述不能为空，当前值为: " + description);
         }
+        if (adapterType == AdapterType.DRIVING) {
+            if (cqrsType == CQRSType.QUERY && messageType == MessageType.REQUEST && !description.endsWith("查询请求传输对象")) {
+                throw new IllegalArgumentException("查询请求传输对象描述必须以 \"查询请求传输对象\" 结尾, 输入的是: " + description);
+            } else if (cqrsType == CQRSType.QUERY && messageType == MessageType.RESPONSE && !description.endsWith("查询响应传输对象")) {
+                throw new IllegalArgumentException("查询响应传输对象描述必须以 \"查询响应传输对象\" 结尾, 输入的是: " + description);
+            } else if (cqrsType == CQRSType.COMMAND && messageType == MessageType.REQUEST && !description.endsWith("命令请求传输对象")) {
+                throw new IllegalArgumentException("命令请求传输对象描述必须以 \"命令请求传输对象\" 结尾, 输入的是: " + description);
+            } else if (cqrsType == CQRSType.COMMAND && messageType == MessageType.RESPONSE && !description.endsWith("命令响应传输对象")) {
+                throw new IllegalArgumentException("命令响应传输对象描述必须以 \"命令响应传输对象\" 结尾, 输入的是: " + description);
     }
-
+        } else {
+            if (messageType == MessageType.REQUEST && !description.endsWith("被动请求传输对象")) {
+                throw new IllegalArgumentException("被动适配器请求传输对象描述必须以 \"被动请求传输对象\" 结尾, 输入的是: " + description);
+            } else if (messageType == MessageType.RESPONSE && !description.endsWith("被动响应传输对象")) {
+                throw new IllegalArgumentException("被动适配器响应传输对象描述必须以 \"被动响应传输对象\" 结尾, 输入的是: " + description);
+            }
+        }
+    }
 
     private void validateFields() {
         if (fields != null && !fields.isEmpty()) {

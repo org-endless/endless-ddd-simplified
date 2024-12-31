@@ -28,6 +28,7 @@ import java.time.Duration;
  */
 @EnableCaching
 @Import(RedisConfiguration.class)
+@ConditionalOnProperty(name = "spring.cache.type")
 public class CacheConfiguration implements CachingConfigurer {
 
     @Bean

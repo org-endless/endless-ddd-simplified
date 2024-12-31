@@ -7,6 +7,8 @@ import com.alibaba.fastjson2.filter.Filter;
 import lombok.extern.slf4j.Slf4j;
 import org.endless.ddd.simplified.starter.common.config.endless.EndlessAutoConfiguration;
 import org.endless.ddd.simplified.starter.common.exception.model.infrastructure.data.manager.DataManagerException;
+import org.endless.ddd.simplified.starter.common.utils.model.json.JsonTools;
+import org.endless.ddd.simplified.starter.common.utils.model.object.ObjectTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.serializer.RedisSerializer;
 
@@ -40,7 +42,7 @@ public class FastJson2JsonRedisSerializer<T> implements RedisSerializer<T> {
             if (t == null) {
                 return new byte[0];
             }
-            log.trace("[Redis序列化对象]: {}", t.toString().replaceAll("[\\r\\n\\s]", ""));
+            log.trace("[Redis序列化对象]: {}", ObjectTools.maskSensitive(t).replaceAll("[\\r\\n\\s]", ""));
             return JSON.toJSONString(t, filter(), JSONWriter.Feature.PrettyFormat).getBytes(charset());
         } catch (Exception e) {
             throw new DataManagerException("Redis序列化对象异常: " + e.getMessage(), e);
@@ -54,7 +56,7 @@ public class FastJson2JsonRedisSerializer<T> implements RedisSerializer<T> {
                 return null;
             }
             String string = new String(bytes, charset());
-            log.trace("[Redis反序列化对象]: {}", string.replaceAll("[\\r\\n\\s]", ""));
+            log.trace("[Redis反序列化对象]: {}", JsonTools.maskSensitive(string.replaceAll("[\\r\\n\\s]", "")));
             return JSON.parseObject(string, clazz, filter());
         } catch (Exception e) {
             throw new DataManagerException("Redis反序列化对象异常: " + e.getMessage(), e);
@@ -66,7 +68,7 @@ public class FastJson2JsonRedisSerializer<T> implements RedisSerializer<T> {
     }
 
     private Charset charset() {
-        return configuration.charset();
+        return configuration.charset().getCharset();
     }
 
     @Autowired

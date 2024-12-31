@@ -1,6 +1,6 @@
 package org.endless.ddd.simplified.starter.common.exception.utils.crypto;
 
-import org.endless.ddd.simplified.starter.common.utils.string.StringTools;
+import org.endless.ddd.simplified.starter.common.utils.model.string.StringTools;
 
 /**
  * CryptoException
@@ -15,7 +15,7 @@ import org.endless.ddd.simplified.starter.common.utils.string.StringTools;
  */
 public class CryptoException extends RuntimeException {
 
-    private static final String DEFAULT_MESSAGE = "密码学处理异常";
+    private static final String DEFAULT_MESSAGE = "加解密处理异常";
 
     public CryptoException(String message) {
         super("[" + DEFAULT_MESSAGE + "]" + StringTools.addBrackets(message));

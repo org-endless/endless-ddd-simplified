@@ -70,6 +70,10 @@ public class Field {
             if (!name.endsWith("s") || !description.endsWith("列表")) {
                 throw new IllegalArgumentException(type + " 类型字段 " + name + " 必须以s结尾，且描述必须以列表结尾！");
             }
+        } else if (type.startsWith("List<String>") || type.startsWith("List<Long>")) {
+            if (!name.endsWith("Ids") || !description.endsWith("ID列表")) {
+                throw new IllegalArgumentException(type + " 类型字段 " + name + " 必须以Ids结尾，且描述必须以ID列表结尾！");
+            }
         }
     }
 
@@ -80,8 +84,8 @@ public class Field {
     }
 
     private void validateNullable() {
-        // if (nullable == null) {
-        //     throw new IllegalArgumentException("字段是否可空不能为空");
-        // }
+        if (this.type.equals("Value") && this.nullable) {
+            throw new IllegalArgumentException("Value类型字段不能为可空！");
+        }
     }
 }

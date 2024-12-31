@@ -1,13 +1,10 @@
 package org.endless.ddd.simplified.starter.common.utils.id.snowflake;
 
 import org.endless.ddd.simplified.starter.common.exception.utils.id.SnowflakeIdException;
-import org.endless.ddd.simplified.starter.common.utils.time.TimeStamp;
+import org.endless.ddd.simplified.starter.common.utils.model.time.TimeStamp;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.util.Optional;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * SnowflakeIdGenerator
@@ -24,85 +21,58 @@ import java.util.regex.Pattern;
 public class SnowflakeIdGenerator {
 
     // 容忍时间窗口，单位：毫秒
-    private static final long TIME_WINDOW = 5L;
+    private static final Long TIME_WINDOW = 5L;
 
-    private static final long DATA_CENTER_ID_BITS = 5L;
+    private static final Long DATA_CENTER_ID_BITS = 4L;
 
-    private static final long WORKER_ID_BITS = 5L;
+    private static final Long WORKER_ID_BITS = 6L;
 
-    private static final long SEQUENCE_BITS = 12L;
+    private static final Long SEQUENCE_BITS = 12L;
 
-    private static final long DATA_CENTER_ID_SHIFT = SEQUENCE_BITS + WORKER_ID_BITS;
+    private static final Long DATA_CENTER_ID_SHIFT = SEQUENCE_BITS + WORKER_ID_BITS;
 
-    private static final long WORKER_ID_SHIFT = SEQUENCE_BITS;
+    private static final Long WORKER_ID_SHIFT = SEQUENCE_BITS;
 
-    private static final long TIMESTAMP_SHIFT = SEQUENCE_BITS + WORKER_ID_BITS + DATA_CENTER_ID_BITS;
+    private static final Long TIMESTAMP_SHIFT = SEQUENCE_BITS + WORKER_ID_BITS + DATA_CENTER_ID_BITS;
 
-    private static final long MAX_DATA_CENTER_ID = ~(-1L << DATA_CENTER_ID_BITS);
+    private static final Long MAX_DATA_CENTER_ID = ~(-1L << DATA_CENTER_ID_BITS);
 
-    private static final long MAX_WORKER_ID = ~(-1L << WORKER_ID_BITS);
+    private static final Long MAX_WORKER_ID = ~(-1L << WORKER_ID_BITS);
 
-    private static final long MAX_SEQUENCE = ~(-1L << SEQUENCE_BITS);
+    private static final Long MAX_SEQUENCE = ~(-1L << SEQUENCE_BITS);
 
-    private final long dataCenterId;
+    private final Long dataCenterId;
 
-    private final long workerId;
+    private final Long workerId;
 
-    private long sequence = 0L;
+    private Long sequence = 0L;
 
-    private long lastTimestamp = -1L;
+    private Long lastTimestamp = -1L;
 
     private final ReentrantLock lock = new ReentrantLock(); // 使用 ReentrantLock
 
-    public SnowflakeIdGenerator(long dataCenterId, long workerId) {
+    public SnowflakeIdGenerator(Long dataCenterId, Long workerId) {
         validateIds(dataCenterId, workerId);
         this.dataCenterId = dataCenterId;
         this.workerId = workerId;
     }
 
-    public SnowflakeIdGenerator() {
-        String hostName = null;
-        try {
-            hostName = InetAddress.getLocalHost().getHostName();
-        } catch (UnknownHostException e) {
-            throw new SnowflakeIdException("获取主机名失败: " + e.getMessage(), e);
-        }
-        String[] parts = hostName.split("-");
 
-        if (parts.length < 2) {
-            throw new SnowflakeIdException("错误的主机名格式: " + hostName + " 请修改主机名格式为: DataCenterXXXX-ServerXXXX，数据中心和服务器名称可修改");
-        }
-
-        this.dataCenterId = parseIdFromPart(parts[0]);
-        this.workerId = parseIdFromPart(parts[1]);
-
-        validateIds(this.dataCenterId, this.workerId);
-    }
-
-    private void validateIds(long dataCenterId, long workerId) {
+    private void validateIds(Long dataCenterId, Long workerId) {
         if (dataCenterId < 0 || dataCenterId > MAX_DATA_CENTER_ID) {
-            throw new SnowflakeIdException("数据中心ID无效或超出5位数范围: " + dataCenterId);
+            throw new SnowflakeIdException("数据中心ID无效或超出 0-15 范围: " + dataCenterId);
         }
         if (workerId < 0 || workerId > MAX_WORKER_ID) {
-            throw new SnowflakeIdException("服务器ID无效或超出5位数范围: " + workerId);
+            throw new SnowflakeIdException("服务器ID无效或超出 0-63 范围: " + workerId);
         }
     }
 
-    private long parseIdFromPart(String part) {
-        // 提取数字部分
-        Pattern pattern = Pattern.compile("\\d+");
-        Matcher matcher = pattern.matcher(part);
-        if (matcher.find()) {
-            String numberStr = matcher.group();
-            return Long.parseLong(numberStr);
-        }
-        throw new SnowflakeIdException("错误的主机名格式，请修改主机名格式为: DataCenterXXXX-ServerXXXX，数据中心和服务器名称可修改");
-    }
+    // 提取数字部分
 
-    public long nextId() {
+    public Long nextId() {
         lock.lock(); // 加锁
         try {
-            long timestamp = TimeStamp.now();
+            Long timestamp = TimeStamp.now();
 
             if (timestamp < lastTimestamp) {
                 if (lastTimestamp - timestamp < TIME_WINDOW) {
@@ -112,14 +82,14 @@ public class SnowflakeIdGenerator {
                 }
             }
 
-            if (lastTimestamp == timestamp) {
+            if (lastTimestamp.equals(timestamp)) {
                 sequence = (sequence + 1) & MAX_SEQUENCE;
                 if (sequence == 0) {
                     // 如果序列号超限，等待1毫秒
                     timestamp = waitNextMillis(lastTimestamp);
                 }
             } else {
-                sequence = 0;
+                sequence = 0L;
             }
 
             lastTimestamp = timestamp;
@@ -132,9 +102,11 @@ public class SnowflakeIdGenerator {
         }
     }
 
-    private long waitNextMillis(long lastTimestamp) {
-        long timestamp = TimeStamp.now();
-        while (timestamp <= lastTimestamp) {
+    private Long waitNextMillis(Long lastTimestamp) {
+        Optional.ofNullable(lastTimestamp)
+                .orElseThrow(() -> new SnowflakeIdException("lastTimestamp 不能为空"));
+        Long timestamp = TimeStamp.now();
+        while (timestamp.compareTo(lastTimestamp) <= 0) {
             timestamp = TimeStamp.now();
         }
         return timestamp;

@@ -32,6 +32,7 @@ public interface DataRecord<E extends Entity> {
 
     Boolean getIsRemoved();
 
+    Long getRemoveAt();
     /**
      * 获取数据库记录实体ID名称
      *

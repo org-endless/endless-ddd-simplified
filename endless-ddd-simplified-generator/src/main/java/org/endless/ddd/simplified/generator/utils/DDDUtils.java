@@ -39,7 +39,12 @@ public class DDDUtils {
     private static final String PROJECT_ROOT = "..";
 
     public static String domainPackage(Aggregate aggregate) {
-        return servicePackage(aggregate) + "." + aggregate.getServiceSubPackage() + "." + aggregate.getContextName().toLowerCase() + "." + convertToDot(aggregate.getDomainName());
+        String contextName = aggregate.getContextName().toLowerCase();
+        String domainPackage = aggregate.getDomainName().toLowerCase();
+        if (!contextName.equals(domainPackage)) {
+            domainPackage = convertToDot(aggregate.getDomainName()).replaceFirst(contextName + ".", "");
+        }
+        return servicePackage(aggregate) + "." + aggregate.getServiceSubPackage() + "." + aggregate.getContextName().toLowerCase() + "." + domainPackage;
     }
 
     public static String servicePackage(Aggregate aggregate) {
@@ -145,7 +150,12 @@ public class DDDUtils {
                 throw new IOException("创建目录失败 " + directory);
             }
         }
-        File file = new File(dir, className + ".java");
+        File file;
+        if (directory.contains("sql")) {
+            file = new File(dir, removeSuffix(className, 1) + ".ddl.sql");
+        } else {
+            file = new File(dir, className + ".java");
+        }
         try (FileWriter writer = new FileWriter(file)) {
             writer.write(content);
         } catch (IOException e) {

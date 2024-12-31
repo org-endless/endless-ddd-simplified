@@ -1,6 +1,6 @@
 package org.endless.ddd.simplified.starter.common.exception.model.application.query.handler;
 
-import org.endless.ddd.simplified.starter.common.utils.string.StringTools;
+import org.endless.ddd.simplified.starter.common.utils.model.string.StringTools;
 
 /**
  * QueryHandlerException

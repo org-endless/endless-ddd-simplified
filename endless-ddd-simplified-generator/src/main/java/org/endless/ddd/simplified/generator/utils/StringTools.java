@@ -112,15 +112,7 @@ public class StringTools {
         return newPrefix + removeSuffix(string, uppercase);
     }
 
-    /**
-     * 工具方法：驼峰转下划线
-     *
-     * @param string 字符串
-     * @return {@link String }
-     */
-    public static String snakeCase(String string) {
-        return string.replaceAll("([a-z])([A-Z]+)", "$1_$2").toLowerCase();
-    }
+
 
     /**
      * 工具方法： 获取最后N个大写字母后的字符串
@@ -191,13 +183,29 @@ public class StringTools {
         return "List<" + exchangeSuffix(generics(string), oldSuffix, newSuffix) + ">";
     }
 
+
     /**
+     * 工具方法：驼峰转下划线
+     *
+     * @param string 字符串
+     * @return {@link String }
+     */
+    public static String snakeCase(String camelCase) {
+        return convertToSeparator(camelCase, "_");
+    }
+        /**
      * 工具方法： 将驼峰形式的类名转换为点号形式
      *
      * @param camelCase 驼峰形式
      * @return {@link String }
      */
     public static String convertToDot(String camelCase) {
+        return convertToSeparator(camelCase, ".");
+    }
+    public static String convertToSlash(String camelCase) {
+        return convertToSeparator(camelCase, "/");
+    }
+    public static String convertToSeparator(String camelCase, String separator) {
         StringBuilder result = new StringBuilder();
 
         // 将第一个字母转换为小写并添加到结果中
@@ -209,7 +217,7 @@ public class StringTools {
 
             // 如果是大写字母，先添加点号再转换为小写
             if (Character.isUpperCase(ch)) {
-                result.append('.');
+                result.append(separator);
                 result.append(Character.toLowerCase(ch));
             } else {
                 // 否则直接添加

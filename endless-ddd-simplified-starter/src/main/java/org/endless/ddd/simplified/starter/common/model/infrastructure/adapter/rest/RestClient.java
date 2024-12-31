@@ -14,9 +14,9 @@ import org.springframework.web.client.RestTemplate;
  * @author Deng Haozhi
  * @since 1.0.0
  */
-public interface RestClient<T extends DrivenTransfer> {
+public interface RestClient {
 
-    default T get(RestTemplate restTemplate, String service, String scenes, Object... uriVariables) {
+    default <T> T get(RestTemplate restTemplate, String service, String scenes, Object... uriVariables) {
         // String url = UriComponentsBuilder.fromUriString()(service)
         //         .pathSegment(scenes)
         //         .buildAndExpand(paras)

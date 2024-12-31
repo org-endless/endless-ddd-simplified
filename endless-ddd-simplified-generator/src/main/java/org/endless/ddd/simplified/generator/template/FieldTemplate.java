@@ -42,6 +42,7 @@ public class FieldTemplate {
         if (className.endsWith("AssociationRecord") || className.endsWith("Record")) {
             fields.add(Field.builder().name("createAt").type("Long").description("创建时间").nullable(true).build());
             fields.add(Field.builder().name("modifyAt").type("Long").description("修改时间").nullable(true).build());
+            fields.add(Field.builder().name("removeAt").type("Long").description("删除时间").nullable(true).build());
         }
 
         return fields;
@@ -178,7 +179,7 @@ public class FieldTemplate {
      */
     public static void enumValues(StringBuilder stringBuilder, List<EnumValue> values, List<Field> fields, String className) {
 
-        String codeType = fields.getFirst().getType();
+        String codeType = fields.get(0).getType();
         if (!codeType.equals("String") && !codeType.equals("Integer") && !codeType.equals("Long")) {
             throw new IllegalArgumentException("无法识别的枚举类型");
         }
@@ -193,7 +194,7 @@ public class FieldTemplate {
             stringBuilder.append("    ").append(value.getCode()).append("(").append(fieldName).append(", ").append(description).append("),\n");
         }
         // 移除最后一个多余的逗号
-        if (!stringBuilder.isEmpty()) {
+        if (stringBuilder.length() > 0) {
             stringBuilder.setLength(stringBuilder.length() - 2);
         }
         stringBuilder.append(";\n\n");

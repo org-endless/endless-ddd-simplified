@@ -2,7 +2,7 @@ package org.endless.ddd.simplified.starter.common.config.data.persistence.mybati
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;
-import org.endless.ddd.simplified.starter.common.utils.time.TimeStamp;
+import org.endless.ddd.simplified.starter.common.utils.model.time.TimeStamp;
 
 /**
  * MybatisPlusMetaObjectHandler

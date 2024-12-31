@@ -44,7 +44,7 @@ public class MethodTemplate {
 
             // 函数主体
             if (id(className, 1).equals(fieldName)) {
-                stringBuilder.append("                .").append(fieldName).append("(IdGenerator.getId())\n");
+                stringBuilder.append("                .").append(fieldName).append("(IdGenerator.of())\n");
             } else if (fieldName.equals("isRemoved")) {
                 stringBuilder.append("                .").append(fieldName).append("(false)\n");
             } else if (fieldName.equals("modifyUserId")) {
@@ -189,7 +189,7 @@ public class MethodTemplate {
         String method = "add" + StringUtils.capitalize(fieldName);
         stringBuilder
                 .append("    ").append(access(className, false, true)).append(" ").append(className).append(" ").append(method).append("(").append(fieldType).append(" ").append(fieldName).append(") {\n")
-                .append("        if (").append(fieldName).append(" == null || ").append(fieldName).append(".isEmpty()) {\n");
+                .append("        if (CollectionUtils.isEmpty(").append(fieldName).append(")) {\n");
 
         addListException(stringBuilder, className, fieldType);
         stringBuilder.append("        }\n");
@@ -241,8 +241,9 @@ public class MethodTemplate {
             // 删除子实体方法
             if (entityNames.contains(fieldType) && field.getNullable()) {
                 stringBuilder
-                        .append("    ").append(access(className, false, true)).append(" void remove").append(fieldType).append("() {\n")
+                        .append("    ").append(access(className, false, true)).append(" ").append(className).append(" remove").append(fieldType).append("() {\n")
                         .append("        this.").append(fieldName).append(".remove();\n")
+                        .append("        return this;\n")
                         .append("    }\n\n");
             }
 
@@ -253,7 +254,7 @@ public class MethodTemplate {
                 String idGetter = getter(id(generics, 1));
                 // 列表删除子实体方法
                 stringBuilder
-                        .append("    ").append(access(className, false, true)).append(" void ").append(singularMethod).append("(").append(generics).append(" ").append(singularField).append(") {\n")
+                        .append("    ").append(access(className, false, true)).append(" ").append(className).append(" ").append(singularMethod).append("(").append(generics).append(" ").append(singularField).append(") {\n")
                         .append("        if (").append(singularField).append(" == null) {\n")
                         .append("            throw new AggregateRemoveItemException(\"聚合根要删除的子实体 ").append(generics).append(" 不能为 null\");\n")
                         .append("        }\n")
@@ -262,12 +263,13 @@ public class MethodTemplate {
                         .append("                .findFirst()\n")
                         .append("                .orElseThrow(() -> new AggregateRemoveItemException(\"未找到要删除的子实体 ").append(generics).append(" ID: \" + ").append(singularField).append(".").append(idGetter).append("()))\n")
                         .append("                .remove();\n")
+                        .append("        return this;\n")
                         .append("    }\n\n");
                 String method = "remove" + StringUtils.capitalize(fieldName);
                 stringBuilder
-                        .append("    ").append(access(className, false, true)).append(" void ").append(method).append("(").append(fieldType).append(" ").append(fieldName).append(") {\n")
-                        .append("        if (").append(fieldName).append(" == null || ").append(fieldName).append(".isEmpty()) {\n")
-                        .append("            throw new AggregateRemoveItemException(\"聚合根要删除的子实体列表 ").append(fieldType).append(" 不能为 null\");\n")
+                        .append("    ").append(access(className, false, true)).append(" ").append(className).append(" ").append(method).append("(").append(fieldType).append(" ").append(fieldName).append(") {\n")
+                        .append("        if (CollectionUtils.isEmpty(").append(fieldName).append(")) {\n")
+                        .append("            throw new AggregateRemoveItemException(\"聚合根要删除的子实体列表 ").append(fieldType).append(" 不能为空\");\n")
                         .append("        }\n")
                         .append("        Set<String> existIds = this.").append(fieldName).append(".stream()\n")
                         .append("                .map(").append(generics).append("::").append(idGetter).append(")\n")
@@ -281,23 +283,26 @@ public class MethodTemplate {
                         .append("                    .findFirst()\n")
                         .append("                    .ifPresent(").append(generics).append("::").append("remove);\n")
                         .append("        });\n")
+                        .append("        return this;\n")
                         .append("    }\n\n");
             } else if ("List<String>".equals(fieldType) || "List<Long>".equals(fieldType)) {
                 stringBuilder
-                        .append("    ").append(access(className, false, true)).append(" void ").append(singularMethod).append("(").append(generics).append(" ").append(singularField).append(") {\n")
+                        .append("    ").append(access(className, false, true)).append(" ").append(className).append(" ").append(singularMethod).append("(").append(generics).append(" ").append(singularField).append(") {\n")
                         .append("        if (").append(singularField).append(" == null) {\n")
                         .append("            throw new AggregateRemoveItemException(\"聚合根要删除的子实体 ").append(generics).append(" 不能为 null\");\n")
                         .append("        }\n")
                         .append("        this.").append(fieldName).append(".remove(").append(singularField).append(");\n")
+                        .append("        return this;\n")
                         .append("    }\n\n");
                 // 列表删除子实体列表方法
                 String method = "remove" + StringUtils.capitalize(fieldName);
                 stringBuilder
-                        .append("    ").append(access(className, false, true)).append(" void ").append(method).append("(").append(fieldType).append(" ").append(fieldName).append(") {\n")
-                        .append("        if (").append(fieldName).append(" == null || ").append(fieldName).append(".isEmpty()) {\n")
-                        .append("            throw new AggregateRemoveItemException(\"聚合根要删除的子实体列表 ").append(fieldType).append(" 不能为 null\");\n")
+                        .append("    ").append(access(className, false, true)).append(" ").append(className).append(" ").append(method).append("(").append(fieldType).append(" ").append(fieldName).append(") {\n")
+                        .append("        if (CollectionUtils.isEmpty(").append(fieldName).append(")) {\n")
+                        .append("            throw new AggregateRemoveItemException(\"聚合根要删除的子实体列表 ").append(fieldType).append(" 不能为空\");\n")
                         .append("        }\n")
                         .append("        this.").append(fieldName).append(".removeAll(").append(fieldName).append(");\n")
+                        .append("        return this;\n")
                         .append("    }\n\n");
             }
         }
@@ -323,7 +328,7 @@ public class MethodTemplate {
             objectParam = "entity";
         }
         stringBuilder
-                .append("    ").append(access(generics, false, true)).append(" static ").append(className).append(" from").append("(").append(generics).append(" ").append(param).append(") {\n");
+                .append("    ").append(access(generics, false, false)).append(" static ").append(className).append(" from").append("(").append(generics).append(" ").append(param).append(") {\n");
         if (generics.endsWith("Aggregate") && !className.endsWith("AssociationRecord")) {
             stringBuilder.append("        String ").append(aggregateId).append(" = ").append(param).append(".get").append(StringUtils.capitalize(aggregateId)).append("();\n");
         }
@@ -335,7 +340,7 @@ public class MethodTemplate {
             String filedGenericsRecord = exchangeSuffix(fieldGenerics, "Entity", "Record");
             String getField = "get" + StringUtils.capitalize(fieldName);
 
-            if (fieldName.equals("createAt") || fieldName.equals("modifyAt")) {
+            if (fieldName.equals("createAt") || fieldName.equals("modifyAt") || fieldName.equals("removeAt")) {
                 continue;
             } else if (fieldName.equals(id(className, 1))) {
                 if (generics.endsWith("Aggregate")) {
@@ -346,7 +351,7 @@ public class MethodTemplate {
                 }
             } else if (className.endsWith("AssociationRecord")) {
                 if (fieldName.equals("associationId")) {
-                    stringBuilder.append("                .").append(fieldName).append("(IdGenerator.getId())\n");
+                    stringBuilder.append("                .").append(fieldName).append("(IdGenerator.of())\n");
                 } else if (fieldName.equals(associationParam)) {
                     stringBuilder.append("                .").append(associationParam).append("(").append(associationParam).append(")\n");
                 } else {
@@ -377,7 +382,8 @@ public class MethodTemplate {
             }
         }
         stringBuilder
-                .append("                .build();\n")
+                .append("                .build()\n")
+                .append("                .validate();\n")
                 .append("    }\n\n");
     }
 
@@ -409,7 +415,7 @@ public class MethodTemplate {
             String fieldGenericsEntity = generics(fieldType);
             String fieldGenerics = fieldGenericsEntity.replace("Entity", getLastCamelCase(className, 1));
 
-            if (fieldName.equals("createAt") || fieldName.equals("modifyAt")) {
+            if (fieldName.equals("createAt") || fieldName.equals("modifyAt") || fieldName.equals("removeAt")) {
                 continue;
             } else if (fieldType.startsWith("List<")) {
                 if (entityNames.contains(fieldGenericsEntity)) {

@@ -3,7 +3,7 @@ package org.endless.ddd.simplified.starter.common.config.endless.properties;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.endless.ddd.simplified.starter.common.config.endless.type.CharsetType;
+import org.endless.ddd.simplified.starter.common.model.domain.type.CharsetTypeEnum;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.Arrays;
@@ -25,7 +25,7 @@ import java.util.List;
 @ConfigurationProperties(prefix = "endless")
 public class EndlessProperties {
 
-    private CharsetType charset = CharsetType.UTF8;
+    private CharsetTypeEnum charset = CharsetTypeEnum.UTF8;
 
     private List<String> jsonAllowedTypes = Arrays.asList(
             "java.lang.String",

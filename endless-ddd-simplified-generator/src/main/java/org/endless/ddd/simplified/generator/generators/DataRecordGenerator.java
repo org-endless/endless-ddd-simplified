@@ -4,6 +4,7 @@ import org.endless.ddd.simplified.generator.object.entity.Aggregate;
 import org.endless.ddd.simplified.generator.object.entity.Entity;
 import org.endless.ddd.simplified.generator.object.entity.Field;
 import org.endless.ddd.simplified.generator.object.entity.Value;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Set;
@@ -45,7 +46,7 @@ public class DataRecordGenerator {
         String tableName = aggregate.getContextName() + "_" + snakeCase(removeSuffix(aggregate.getAggregateName(), "Aggregate")) + "_" + snakeCase(removeSuffix(className, "Record"));
         String classDescription = entity.getDescription() + "数据库记录实体";
 
-        generate(aggregate, entity.getFields(), className, tableName, entity.getName(), aggregate.getAggregateName(), classDescription);
+        generate(aggregate, entity.getFields(), className, tableName, entity.getName(), aggregate.getDescription(), classDescription);
     }
 
 
@@ -83,5 +84,57 @@ public class DataRecordGenerator {
 
         deleteFileIfExists(rootPath, packageName, className);
         writeFile(rootPath, packageName, className, stringBuilder.toString());
+        generateDDL(newFields, domainPackage, className, tableName, classDescription, rootPath);
+    }
+
+    protected void generateDDL(List<Field> fields, String domainPackage, String className, String tableName, String classDescription, String rootPath) throws Exception {
+        StringBuilder stringBuilder = new StringBuilder();
+        String subPackage = "infrastructure.data.persistence.sql";
+        String packageName = domainPackage + "." + subPackage;
+        stringBuilder
+                .append("DROP TABLE IF EXISTS ").append(tableName).append(";\n")
+                .append("CREATE TABLE ").append(tableName).append(" (\n");
+        for (Field field : fields) {
+            String fieldType = field.getType();
+            String fieldName = field.getName();
+            String fieldSqlType = getSqlType(fieldType);
+            String nullAble = field.getNullable() ? "NULL" : "NOT NULL";
+            if (fieldName.equals("createAt") || fieldName.equals("modifyAt")) {
+                nullAble = "NOT NULL";
+            }
+            String primaryKey = "";
+            if (className.endsWith("AssociationRecord")) {
+                if (fieldName.equals("associationId")) {
+                    primaryKey = " PRIMARY KEY";
+                }
+            } else if (fieldName.equals(id(className, 1))) {
+                primaryKey = " PRIMARY KEY";
+            } else if (fieldName.equals("removeAt")) {
+                primaryKey = " DEFAULT 0";
+            }
+            if (StringUtils.hasText(fieldSqlType)) {
+                stringBuilder.append("    ").append(snakeCase(fieldName)).append(" ").append(fieldSqlType).append(" ").append(nullAble).append(primaryKey).append(" COMMENT '").append(field.getDescription()).append("'").append(",\n");
+            }
+        }
+        classDescription = classDescription.replace("数据库记录实体", "表");
+        stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length()).append("\n) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT '").append(classDescription).append("';");
+        deleteFileIfExists(rootPath, packageName, className);
+        writeFile(rootPath, packageName, className, stringBuilder.toString());
+    }
+
+    private String getSqlType(String fieldType) {
+        String fieldSqlType = switch (fieldType) {
+            case "String" -> "VARCHAR(255)";
+            case "Integer" -> "INT";
+            case "Long" -> "BIGINT";
+            case "Double" -> "DOUBLE";
+            case "Float" -> "FLOAT";
+            case "Boolean" -> "BOOLEAN";
+            default -> "";
+        };
+        if (fieldType.endsWith("Enum")) {
+            fieldSqlType = "VARCHAR(255)";
+        }
+        return fieldSqlType;
     }
 }

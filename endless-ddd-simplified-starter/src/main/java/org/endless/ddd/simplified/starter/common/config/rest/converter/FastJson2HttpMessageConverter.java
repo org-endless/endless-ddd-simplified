@@ -7,7 +7,7 @@ import com.alibaba.fastjson2.filter.Filter;
 import lombok.extern.slf4j.Slf4j;
 import org.endless.ddd.simplified.starter.common.config.endless.EndlessAutoConfiguration;
 import org.endless.ddd.simplified.starter.common.exception.model.sidecar.rest.RestErrorException;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.endless.ddd.simplified.starter.common.utils.model.json.JsonTools;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;
@@ -32,11 +32,14 @@ import java.nio.charset.Charset;
 @Slf4j
 public class FastJson2HttpMessageConverter<T> extends AbstractHttpMessageConverter<T> {
 
-    private EndlessAutoConfiguration configuration;
+    private final EndlessAutoConfiguration configuration;
 
+    private final Charset charset;
 
-    public FastJson2HttpMessageConverter() {
+    public FastJson2HttpMessageConverter(EndlessAutoConfiguration configuration) {
         super(MediaType.APPLICATION_JSON);
+        this.configuration = configuration;
+        this.charset = configuration.charset().getCharset();
     }
 
     @Override
@@ -55,8 +58,8 @@ public class FastJson2HttpMessageConverter<T> extends AbstractHttpMessageConvert
                 byteArrayOutputStream.write(bytes, 0, length);
             }
             // 转换为字符串
-            String string = byteArrayOutputStream.toString(charset());
-            log.trace("[Rest反序列化对象]: {}", string.replaceAll("[\\r\\n\\s]", ""));
+            String string = byteArrayOutputStream.toString(charset);
+            log.trace("[Rest反序列化对象]: {}", JsonTools.maskSensitive(string.replaceAll("[\\r\\n\\s]", "")));
             return JSON.parseObject(string, clazz, filter());
         } catch (Exception e) {
             throw new RestErrorException("Rest反序列化对象异常: " + e.getMessage(), e);
@@ -67,8 +70,8 @@ public class FastJson2HttpMessageConverter<T> extends AbstractHttpMessageConvert
     protected void writeInternal(@NonNull T t, @NonNull HttpOutputMessage outputMessage) {
         try {
             String json = JSON.toJSONString(t, filter(), JSONWriter.Feature.PrettyFormat);
-            log.trace("[Rest序列化对象]: {}", json.replaceAll("[\\r\\n\\s]", ""));
-            outputMessage.getBody().write(json.getBytes(charset()));
+            log.trace("[Rest序列化对象]: {}", JsonTools.maskSensitive(json.replaceAll("[\\r\\n\\s]", "")));
+            outputMessage.getBody().write(json.getBytes(charset));
         } catch (Exception e) {
             throw new RestErrorException("Rest序列化对象异常: " + e.getMessage(), e);
         }
@@ -78,12 +81,5 @@ public class FastJson2HttpMessageConverter<T> extends AbstractHttpMessageConvert
         return JSONReader.autoTypeFilter(configuration.jsonAllowedTypes());
     }
 
-    private Charset charset() {
-        return configuration.charset();
-    }
 
-    @Autowired
-    private void setConfiguration(EndlessAutoConfiguration configuration) {
-        this.configuration = configuration;
-    }
 }

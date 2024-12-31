@@ -1,6 +1,7 @@
 package org.endless.ddd.simplified.starter.common.exception.utils.id;
 
-import org.endless.ddd.simplified.starter.common.utils.string.StringTools;
+import org.endless.ddd.simplified.starter.common.exception.common.FailedException;
+import org.endless.ddd.simplified.starter.common.handler.result.type.ErrorCode;
 
 /**
  * MapperException
@@ -13,19 +14,23 @@ import org.endless.ddd.simplified.starter.common.utils.string.StringTools;
  * @see RuntimeException
  * @since 1.0.0
  */
-public class SnowflakeIdException extends RuntimeException {
+public class SnowflakeIdException extends FailedException {
 
-    private static final String DEFAULT_MESSAGE = "雪花ID生成异常";
+    private static final ErrorCode ERROR_CODE = ErrorCode.UTL0001;
 
-    public SnowflakeIdException(String message) {
-        super("[" + DEFAULT_MESSAGE + "]" + StringTools.addBrackets(message));
+    public SnowflakeIdException() {
+        super(ERROR_CODE);
     }
 
-    public SnowflakeIdException(String message, Throwable throwable) {
-        super("[" + DEFAULT_MESSAGE + "]" + StringTools.addBrackets(message), throwable);
+    public SnowflakeIdException(String message) {
+        super(ERROR_CODE, message);
     }
 
     public SnowflakeIdException(Throwable throwable) {
-        super("[" + DEFAULT_MESSAGE + "]" + StringTools.addBrackets(throwable.getMessage()), throwable);
+        super(ERROR_CODE, throwable);
+    }
+
+    public SnowflakeIdException(String message, Throwable throwable) {
+        super(ERROR_CODE, message, throwable);
     }
 }

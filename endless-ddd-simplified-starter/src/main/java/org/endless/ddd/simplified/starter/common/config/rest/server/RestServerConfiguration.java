@@ -1,10 +1,15 @@
 package org.endless.ddd.simplified.starter.common.config.rest.server;
 
+import org.endless.ddd.simplified.starter.common.config.endless.EndlessAutoConfiguration;
 import org.endless.ddd.simplified.starter.common.config.rest.converter.FastJson2HttpMessageConverter;
-import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import javax.validation.constraints.NotNull;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -18,15 +23,22 @@ import java.util.List;
  * @see WebMvcConfigurer
  * @since 1.0.0
  */
+@Import({FastJson2HttpMessageConverter.class})
 public class RestServerConfiguration implements WebMvcConfigurer {
 
-    @Override
-    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        converters.add(fastJsonHttpMessageConverter());
+    private final EndlessAutoConfiguration configuration;
+
+    public RestServerConfiguration(EndlessAutoConfiguration configuration) {
+        this.configuration = configuration;
     }
 
-    @Bean
-    public HttpMessageConverter<Object> fastJsonHttpMessageConverter() {
-        return new FastJson2HttpMessageConverter<>();
+    @Override
+    public void configureMessageConverters(@NotNull List<HttpMessageConverter<?>> converters) {
+        converters.clear();
+        converters.add(new ByteArrayHttpMessageConverter());
+        FastJson2HttpMessageConverter<Object> converter = new FastJson2HttpMessageConverter<>(configuration);
+        converter.setDefaultCharset(configuration.charset().getCharset());
+        converter.setSupportedMediaTypes(Collections.singletonList(MediaType.APPLICATION_JSON));
+        converters.add(converter);
     }
 }

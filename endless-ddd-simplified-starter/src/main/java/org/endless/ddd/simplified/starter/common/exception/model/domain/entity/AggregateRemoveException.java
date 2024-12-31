@@ -1,6 +1,6 @@
 package org.endless.ddd.simplified.starter.common.exception.model.domain.entity;
 
-import org.endless.ddd.simplified.starter.common.utils.string.StringTools;
+import org.endless.ddd.simplified.starter.common.utils.model.string.StringTools;
 
 /**
  * AggregateRemoveException

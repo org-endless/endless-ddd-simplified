@@ -1,6 +1,6 @@
 package org.endless.ddd.simplified.starter.common.exception.model.infrastructure.data.persistence.mapper;
 
-import org.endless.ddd.simplified.starter.common.utils.string.StringTools;
+import org.endless.ddd.simplified.starter.common.utils.model.string.StringTools;
 
 /**
  * MapperFailedException
@@ -15,7 +15,7 @@ import org.endless.ddd.simplified.starter.common.utils.string.StringTools;
  */
 public class MapperFailedException extends RuntimeException {
 
-    private static final String DEFAULT_MESSAGE = " MyBatis-Plus 数据库操作失败";
+    private static final String DEFAULT_MESSAGE = "MyBatis-Plus数据库操作失败";
 
     public MapperFailedException(String message) {
         super("[" + DEFAULT_MESSAGE + "]" + StringTools.addBrackets(message));

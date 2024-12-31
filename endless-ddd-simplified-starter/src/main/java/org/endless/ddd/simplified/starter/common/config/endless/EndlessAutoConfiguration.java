@@ -1,9 +1,8 @@
 package org.endless.ddd.simplified.starter.common.config.endless;
 
 import org.endless.ddd.simplified.starter.common.config.endless.properties.EndlessProperties;
+import org.endless.ddd.simplified.starter.common.model.domain.type.CharsetTypeEnum;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-
-import java.nio.charset.Charset;
 
 /**
  * EndlessAutoConfiguration
@@ -25,8 +24,8 @@ public class EndlessAutoConfiguration {
         this.properties = properties;
     }
 
-    public Charset charset() {
-        return properties.getCharset().getCharset();
+    public CharsetTypeEnum charset() {
+        return properties.getCharset();
     }
 
     public String[] jsonAllowedTypes() {

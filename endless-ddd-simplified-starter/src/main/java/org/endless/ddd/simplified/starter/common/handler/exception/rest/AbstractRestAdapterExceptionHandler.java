@@ -1,14 +1,22 @@
 package org.endless.ddd.simplified.starter.common.handler.exception.rest;
 
 import lombok.extern.slf4j.Slf4j;
+import org.endless.ddd.simplified.starter.common.exception.common.FailedException;
+import org.endless.ddd.simplified.starter.common.exception.model.application.query.handler.QueryHandlerNotFoundException;
 import org.endless.ddd.simplified.starter.common.exception.model.infrastructure.adapter.filesystem.FileSystemException;
 import org.endless.ddd.simplified.starter.common.exception.model.infrastructure.data.persistence.mapper.MapperException;
 import org.endless.ddd.simplified.starter.common.exception.model.sidecar.rest.RestBadRequestException;
 import org.endless.ddd.simplified.starter.common.exception.model.sidecar.rest.RestNotFoundException;
-import org.endless.ddd.simplified.starter.common.exception.model.sidecar.rest.RestUnauthorizedException;
+import org.endless.ddd.simplified.starter.common.handler.result.type.ErrorCode;
 import org.endless.ddd.simplified.starter.common.model.sidecar.rest.RestResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.NoHandlerFoundException;
+
+import static org.endless.ddd.simplified.starter.common.utils.model.string.StringTools.addBrackets;
 
 /**
  * AbstractRestAdapterExceptionHandler
@@ -26,39 +34,76 @@ public abstract class AbstractRestAdapterExceptionHandler implements RestAdapter
 
     // TODO 实现策略模式
 
-    @ExceptionHandler(RestUnauthorizedException.class)
-    public ResponseEntity<RestResponse> handleRestUnauthorizedException(RestUnauthorizedException e) {
-        log.error("[身份认证失败]{}", e.getMessage(), e);
-        return response().unauthorized(e.getMessage());
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<RestResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
+        String message = addBrackets("请求体为空: " + e.getMessage());
+        log.error("[{}]{}", ErrorCode.BAD_REQ.getDescription(), message, e);
+        return response().badRequest(ErrorCode.BAD_REQ, message);
     }
 
     @ExceptionHandler(RestBadRequestException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<RestResponse> handleRestBadRequestException(RestBadRequestException e) {
-        log.error("[请求格式或参数错误]{}", e.getMessage(), e);
-        return response().badRequest(e.getMessage());
+        String message = addBrackets(e.getMessage());
+        log.error("[{}]{}", ErrorCode.BAD_REQ.getDescription(), message, e);
+        return response().badRequest(ErrorCode.BAD_REQ, message);
+    }
+
+    @ExceptionHandler(NoHandlerFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<RestResponse> handleNoHandlerFoundException(NoHandlerFoundException e) {
+        String message = addBrackets(e.getMessage().replace("No handler found for ", ""));
+        log.error("[{}]{}", ErrorCode.NOT_FND.getDescription(), message, e);
+        return response().badRequest(ErrorCode.NOT_FND, message);
+    }
+
+    @ExceptionHandler(QueryHandlerNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<RestResponse> handleQueryHandlerNotFoundException(QueryHandlerNotFoundException e) {
+        String message = addBrackets(e.getMessage());
+        log.error("[{}]{}", ErrorCode.NOT_FND.getDescription(), message, e);
+        return response().badRequest(ErrorCode.NOT_FND, message);
     }
 
     @ExceptionHandler(RestNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<RestResponse> handleRestNotFoundException(RestNotFoundException e) {
-        log.error("[未找到相关数据]{}", e.getMessage(), e);
-        return response().notFound(e.getMessage());
+        String message = addBrackets(e.getMessage());
+        log.error("[{}]{}", ErrorCode.NOT_FND.getDescription(), message, e);
+        return response().badRequest(ErrorCode.NOT_FND, message);
     }
 
     @ExceptionHandler(MapperException.class)
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
     public ResponseEntity<RestResponse> handleMapperException(MapperException e) {
-        log.error("[服务调用异常，状态未知]{}", e.getMessage(), e);
-        return response().internalServerError(e.getMessage());
+        String message = addBrackets(e.getMessage());
+        log.error("[{}]{}", ErrorCode.UNKNOWN.getDescription(), message, e);
+        return response().unavailable(ErrorCode.UNKNOWN, message);
     }
 
     @ExceptionHandler(FileSystemException.class)
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
     public ResponseEntity<RestResponse> handleFileSystemException(FileSystemException e) {
-        log.error("[服务调用异常，状态未知]{}", e.getMessage(), e);
-        return response().internalServerError(e.getMessage());
+        String message = addBrackets(e.getMessage());
+        log.error("[{}]{}", ErrorCode.UNKNOWN.getDescription(), message, e);
+        return response().unavailable(ErrorCode.UNKNOWN, message);
+    }
+
+    @ExceptionHandler(FailedException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<RestResponse> handleFailedException(FailedException e) {
+        String message = addBrackets(e.getMessage());
+        ErrorCode errorCode = e.getErrorCode();
+        log.error("{}", message, e);
+        return response().error(errorCode, message);
     }
 
     @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<RestResponse> handleException(Exception e) {
-        log.error("[服务调用失败]{}", e.getMessage(), e);
-        return response().error(e.getMessage());
+        String message = addBrackets(e.getMessage());
+        log.error("[{}]{}", ErrorCode.FAILURE.getDescription(), message, e);
+        return response().error(ErrorCode.FAILURE, message);
     }
 }
