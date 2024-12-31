@@ -340,9 +340,7 @@ public class MethodTemplate {
             String filedGenericsRecord = exchangeSuffix(fieldGenerics, "Entity", "Record");
             String getField = "get" + StringUtils.capitalize(fieldName);
 
-            if (fieldName.equals("createAt") || fieldName.equals("modifyAt") || fieldName.equals("removeAt")) {
-                continue;
-            } else if (fieldName.equals(id(className, 1))) {
+            if (fieldName.equals(id(className, 1))) {
                 if (generics.endsWith("Aggregate")) {
                     stringBuilder.append("                .").append(fieldName).append("(").append(aggregateId).append(")\n");
                 } else {
@@ -377,7 +375,7 @@ public class MethodTemplate {
                 expandedTypes.add(fieldType);
             } else if (entityNames.contains(fieldGenerics)) {
                 stringBuilder.append("                .").append(fieldName).append("(").append(filedGenericsRecord).append(".from(").append(objectParam).append(".").append(getField).append("(), ").append(objectParam).append(".get").append(StringUtils.capitalize(aggregateId)).append("()))\n");
-            } else {
+            } else if (!fieldName.equals("createAt") && !fieldName.equals("modifyAt") && !fieldName.equals("removeAt")) {
                 stringBuilder.append("                .").append(fieldName).append("(").append(objectParam).append(".get").append(StringUtils.capitalize(fieldName)).append("())\n");
             }
         }

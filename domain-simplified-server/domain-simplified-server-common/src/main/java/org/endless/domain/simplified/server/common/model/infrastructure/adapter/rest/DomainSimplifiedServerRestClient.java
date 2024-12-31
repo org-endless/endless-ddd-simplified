@@ -15,6 +15,6 @@ import org.endless.domain.simplified.server.common.model.infrastructure.adapter.
  * @since 1.0.0
  */
 public interface DomainSimplifiedServerRestClient<T extends DomainSimplifiedServerDrivenTransfer>
-        extends RestClient<T> {
+        extends RestClient {
 
 }

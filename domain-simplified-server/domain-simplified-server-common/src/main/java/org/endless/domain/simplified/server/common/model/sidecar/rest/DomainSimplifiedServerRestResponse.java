@@ -22,20 +22,16 @@ import java.util.List;
 public class DomainSimplifiedServerRestResponse extends AbstractRestResponse {
 
 
-    private static final String SERVICE_DESCRIPTION = "自动化测试平台-服务端";
+    private static final String SERVICE_DESCRIPTION = "简易DDD框架-服务端";
 
     @Override
-    public void validate() {
+    public DomainSimplifiedServerRestResponse createInstance(String status, String errorCode, String message, Object data) {
+        return DomainSimplifiedServerRestResponse.builder().status(status).errorCode(errorCode).message(message).data(data).build();
     }
 
     @Override
-    public DomainSimplifiedServerRestResponse createInstance(int code, String msg, Object data) {
-        return DomainSimplifiedServerRestResponse.builder().code(code).msg(msg).data(data).build();
-    }
-
-    @Override
-    public DomainSimplifiedServerRestResponse createInstance(int code, String msg, List<Object> rows, Long total) {
-        return DomainSimplifiedServerRestResponse.builder().code(code).msg(msg).rows(rows).total(total).build();
+    public DomainSimplifiedServerRestResponse createInstance(String status, String errorCode, String message, List<Object> rows, Long total) {
+        return DomainSimplifiedServerRestResponse.builder().status(status).errorCode(errorCode).message(message).rows(rows).total(total).build();
     }
 
     @Override
