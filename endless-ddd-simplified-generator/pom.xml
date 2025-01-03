@@ -92,6 +92,7 @@
                     <compilerArgs>
                         <arg>-parameters</arg>
                     </compilerArgs>
+                    <compilerArgument>-Xlint:-options</compilerArgument>
                 </configuration>
             </plugin>
         </plugins>

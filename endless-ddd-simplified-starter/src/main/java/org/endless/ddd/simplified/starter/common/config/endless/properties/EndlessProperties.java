@@ -27,6 +27,10 @@ public class EndlessProperties {
 
     private CharsetTypeEnum charset = CharsetTypeEnum.UTF8;
 
+    private String datePattern = "yyyy-MM-dd";
+
+    private String dateTimePattern = "yyyy-MM-dd HH:mm:ss:SSS";
+
     private List<String> jsonAllowedTypes = Arrays.asList(
             "java.lang.String",
             "java.lang.Integer",
@@ -34,4 +38,6 @@ public class EndlessProperties {
             "java.util.List",
             "java.util.Map"
     );
+
+    private String springdocPath = "/springdoc";
 }

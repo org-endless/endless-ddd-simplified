@@ -40,10 +40,10 @@ body {
     grid-gap: 10px;
 }
 
-.entity-container .entities,
-.enum-container .enums,
-.value-container .values,
-.method-container .methods,
+.entities-container .entities,
+.enums-container .enums,
+.values-container .values,
+.methods-container .methods,
 .transfers-container .transfers {
     padding: 15px;
     margin: 10px 0;

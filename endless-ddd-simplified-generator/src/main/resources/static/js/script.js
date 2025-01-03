@@ -101,24 +101,24 @@ $(document).ready(function () {
                         $('.field-container .fields').append(fieldHtml);
                     });
                     // 实体信息回显
-                    $('.entity-container').empty();
+                    $('.entities-container').empty();
                     data.entities?.forEach((item = {}, index) => {
-                        addDynamicElement('.entity-container', 'entities', item, index)
+                        addDynamicElement('.entities-container', 'entities', item, index)
                     })
                     // 枚举信息回显
-                    $('.enum-container').empty();
+                    $('.enums-container').empty();
                     data.enums?.forEach((item = {}, index) => {
-                        addDynamicElement('.enum-container', 'enums', item, index)
+                        addDynamicElement('.enums-container', 'enums', item, index)
                     })
                     // 值对象信息回显
-                    $('.value-container').empty();
+                    $('.values-container').empty();
                     data.values?.forEach((item = {}, index) => {
-                        addDynamicElement('.value-container', 'values', item, index)
+                        addDynamicElement('.values-container', 'values', item, index)
                     })
                     // 方法信息回显
-                    $('.method-container').empty();
+                    $('.methods-container').empty();
                     data.methods?.forEach((item = {}, index) => {
-                        addDynamicElement('.method-container', 'methods', item, index)
+                        addDynamicElement('.methods-container', 'methods', item, index)
                     })
                     // 方法信息回显
                     $('.transfers-container').empty();
@@ -191,8 +191,8 @@ $(document).ready(function () {
     $('#yamlForm').submit(function (e) {
         e.preventDefault()
         window.formdata = new FormData(document.querySelector('#yamlForm'))
-        document.querySelectorAll('input[type=checkbox]').forEach(item=>{
-            if(!item.checked){
+        document.querySelectorAll('input[type=checkbox]').forEach(item => {
+            if (!item.checked) {
                 formdata.append(item.name, false)
             }
         })
@@ -226,24 +226,24 @@ $(document).ready(function () {
         const index = $('#aggregate .fields').children().length;
         addField('#aggregate .fields', `fields[${index}]`)
     })
-    $('.add-entity').click(function () {
-        const index = $('.entity-container').children().length;
-        addDynamicElement('.entity-container', 'entities', {}, index);
+    $('.add-entities').click(function (e) {
+        const index = $('.entities-container').children().length;
+        addDynamicElement('.entities-container', 'entities', {}, index);
     });
 
     $('.add-enum').click(function () {
-        const index = $('.enum-container').children().length;
-        addDynamicElement('.enum-container', 'enums', {}, index);
+        const index = $('.enums-container').children().length;
+        addDynamicElement('.enums-container', 'enums', {}, index);
     });
 
     $('.add-value').click(function () {
-        const index = $('.value-container').children().length;
-        addDynamicElement('.value-container', 'values', {}, index);
+        const index = $('.values-container').children().length;
+        addDynamicElement('.values-container', 'values', {}, index);
     });
 
     $('.add-method').click(function () {
-        const index = $('.method-container').children().length;
-        addDynamicElement('.method-container', 'methods', {}, index);
+        const index = $('.methods-container').children().length;
+        addDynamicElement('.methods-container', 'methods', {}, index);
     });
 
     $('.add-transfers').click(function () {
@@ -278,27 +278,27 @@ $(document).ready(function () {
     });
 
     $(document).on('click', '.remove-entities', function () {
-        const parent = $(this).closest('.entity-container')
+        const parent = $(this).closest('.entities-container')
         $(this).closest('.entities').remove();
-        updateIndex([...parent.children()],'entities')
+        updateIndex([...parent.children()], 'entities')
     });
 
     $(document).on('click', '.remove-enums', function () {
-        const parent = $(this).closest('.enum-container')
+        const parent = $(this).closest('.enums-container')
         $(this).closest('.enums').remove();
-        updateIndex([...parent.children()],'enums')
+        updateIndex([...parent.children()], 'enums')
     });
 
     $(document).on('click', '.remove-values', function () {
-        const parent = $(this).closest('.value-container')
+        const parent = $(this).closest('.values-container')
         $(this).closest('.values').remove();
         updateIndex([...parent.children()], 'values')
     });
 
     $(document).on('click', '.remove-methods', function () {
-        const parent = $(this).closest('.method-container')
+        const parent = $(this).closest('.methods-container')
         $(this).closest('.methods').remove();
-        updateIndex([...parent.children()],'methods')
+        updateIndex([...parent.children()], 'methods')
     });
 
     $(document).on('click', '.remove-transfers', function () {
@@ -306,6 +306,19 @@ $(document).ready(function () {
         $(this).closest('.transfers').remove();
         updateIndex([...parent.children()], 'transfers')
     });
+
+    window.handlerAllCheckedChange = function () {
+        document.querySelector('#all-checked-1').checked = [...document.querySelectorAll('#all-1 input[type=checkbox]')].every(item => {
+            return item.checked
+        })
+    }
+    window.handlerAllChecked = function () {
+        const checked = document.querySelector('#all-checked-1').checked
+        document.querySelectorAll('#all-1 input[type=checkbox]').forEach(item => {
+            item.checked = checked
+        })
+    }
+    handlerAllCheckedChange()
 
     function showMessage(msg) {
         // 更新模态框内容

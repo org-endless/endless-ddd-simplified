@@ -1,9 +1,5 @@
 const typeNameMap = {
-    entities: '实体名',
-    enums: '枚举名',
-    values: '值对象名',
-    methods: '方法名',
-    transfers: '传输对象名',
+    entities: '实体名', enums: '枚举名', values: '值对象名', methods: '方法名', transfers: '传输对象名',
 }
 
 // 动态添加实体、枚举和值对象
@@ -25,9 +21,7 @@ function addDynamicElement(container, type, data = {}, index) {
                     <div class="fields">${data.fields.map((item, i) => genFieldHtml(item, pKey + '.fields[' + i + ']')).join('\n')}</div>`
     const enumValues = function () {
         const t = [{name: 'code', type: 'String', description: '枚举代码'}, {
-            name: 'description',
-            type: 'String',
-            description: '枚举描述'
+            name: 'description', type: 'String', description: '枚举描述'
         }]
         if (!data.fields.length) data.fields = t
         return `
@@ -64,15 +58,16 @@ function addDynamicElement(container, type, data = {}, index) {
                     </div>`
 
     const differHtmlMap = {
-        methods,
-        enums: valueType,
-        transfers
+        methods, enums: valueType, transfers
     }
     const elementHtml = `
             <div class="${type}">
                 <h5 style="display: flex;justify-content: space-between">
                     <span class="title">${typeNameMap[type].slice(0, -1) + '-' + (index + 1)}</span>
-                    <button type="button" class="btn btn-danger remove-${type}">-</button>
+                    <div>
+                        <button type="button" class="btn btn-primary add-${type}-item">+</button>
+                        <button type="button" class="btn btn-danger remove-${type}">-</button>
+                    </div>
                 </h5>
                 <div class="form-floating mb-2">
                     <input type="text" name="${pKey}.name" id="${pKey}.name" placeholder="${typeNameMap[type]}" required class="form-control" value="${data.name}">
@@ -88,14 +83,18 @@ function addDynamicElement(container, type, data = {}, index) {
                 </div>
                 
             </div>`;
-    $(container).append(elementHtml);
+    if ($(container + ` .${type}`)[index - 1]) {
+        $($(container + ` .${type}`)[index - 1]).after(elementHtml);
+    } else {
+        $(container).append(elementHtml)
+    }
 
-    $(container + ' #addField').last().click(function () {
+    $(container + ' #addField')[index]?.addEventListener('click', function () {
         const selector = this.parentNode.querySelector('.fields')
         const i = selector.children.length
         addField(selector, pKey + '.fields[' + i + ']')
     })
-    $(container + ' #addEnumValue').last().click(function () {
+    $(container + ' #addEnumValue')[index]?.addEventListener('click', function () {
         const selector = this.parentNode.querySelector('.enumValues')
         const i = selector.children.length
         // let obj = {...data.enumValues[0]}
@@ -103,10 +102,14 @@ function addDynamicElement(container, type, data = {}, index) {
         //     obj[key] = ''
         // })
         const obj = {
-            code: '',
-            description: ''
+            code: '', description: ''
         }
         addEnumValue(selector, obj, pKey + '.enumValues[' + i + ']')
+    })
+    $(`.add-${type}-item`)[index].addEventListener('click', function () {
+        addDynamicElement(`.${type}-container`, type, {}, index + 1);
+        const parent = $(this).closest(`.${type}-container`)
+        updateIndex([...parent.children()], type)
     })
 }
 
@@ -147,12 +150,7 @@ function genFieldHtml(data = {}, pKey) {
                 <input type="checkbox" name="${pKey}.nullable" class="form-check-input" id="${pKey}.nullable" ${data.nullable ? 'checked' : ''}>
                 <label class="form-check-label" for="${pKey}.nullable">可空</label>
             </div>
-            ${pKey.startsWith('enums') ? '' :
-        '<div>' +
-        '<button type="button" class="btn btn-primary add-field">+</button>&nbsp;&nbsp;' +
-        '<button type="button" class="btn btn-danger remove-field">-</button>' +
-        '</div>'
-    }
+            ${pKey.startsWith('enums') ? '' : '<div>' + '<button type="button" class="btn btn-primary add-field">+</button>&nbsp;&nbsp;' + '<button type="button" class="btn btn-danger remove-field">-</button>' + '</div>'}
         </div>`
 }
 
@@ -166,15 +164,13 @@ function updateFieldOrEnumValue(selectors, type = 'fields') {
     selectors.map((item, index) => {
         item.querySelectorAll('input').forEach(input => {
             const attr = input.getAttribute('name')
-            const name = type === 'fields' ? attr.replace(/fields\[\d+]/, `fields[${index}]`) :
-                attr.replace(/enumValues\[\d+]/, `enumValues[${index}]`)
+            const name = type === 'fields' ? attr.replace(/fields\[\d+]/, `fields[${index}]`) : attr.replace(/enumValues\[\d+]/, `enumValues[${index}]`)
             input.setAttribute('name', name)
             input.setAttribute('id', name)
         })
         item.querySelectorAll('label').forEach(label => {
             const attr = label.getAttribute('for')
-            const name = type === 'fields' ? attr.replace(/fields\[\d+]/, `fields[${index}]`) :
-                attr.replace(/enumValues\[\d+]/, `enumValues[${index}]`)
+            const name = type === 'fields' ? attr.replace(/fields\[\d+]/, `fields[${index}]`) : attr.replace(/enumValues\[\d+]/, `enumValues[${index}]`)
             label.setAttribute('for', name)
         })
     })

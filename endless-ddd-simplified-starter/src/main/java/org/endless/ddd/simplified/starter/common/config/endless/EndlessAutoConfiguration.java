@@ -28,7 +28,19 @@ public class EndlessAutoConfiguration {
         return properties.getCharset();
     }
 
+    public String datePattern() {
+        return properties.getDatePattern();
+    }
+
+    public String dateTimePattern() {
+        return properties.getDateTimePattern();
+    }
+
     public String[] jsonAllowedTypes() {
         return properties.getJsonAllowedTypes().toArray(new String[0]);
+    }
+
+    public String springdoc() {
+        return properties.getSpringdocPath();
     }
 }

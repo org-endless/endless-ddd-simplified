@@ -65,7 +65,11 @@
                 <h4 style="padding-bottom: 10px; margin-bottom: 10px; width: 100%; display: block;line-height: 1.5;">
                     选择要生成的组件
                 </h4>
-                <div>
+                <div class="form-check col-auto me-3">
+                    <input class="form-check-input" type="checkbox" id="all-checked-1" onclick="handlerAllChecked()">
+                    <label class="form-check-label" for="all-checked-1">全选</label>
+                </div>
+                <div onchange="handlerAllCheckedChange()" id="all-1">
                     <div class="mb-4">
                         <div class="group"
                              style="border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 10px; width: 100%; display: block;">
@@ -282,26 +286,26 @@
 
                         <div class="tab-pane fade" id="entities" role="tabpanel">
                             <h2>实体信息</h2>
-                            <button class="btn btn-primary add-entity " type="button">添加实体</button>
-                            <div class="entity-container"></div>
+                            <button class="btn btn-primary add-entities" type="button">添加实体</button>
+                            <div class="entities-container"></div>
                         </div>
 
                         <div class="tab-pane fade" id="enums" role="tabpanel">
                             <h2>枚举信息</h2>
                             <button class="btn btn-primary add-enum" type="button">添加枚举</button>
-                            <div class="enum-container"></div>
+                            <div class="enums-container"></div>
                         </div>
 
                         <div class="tab-pane fade" id="values" role="tabpanel">
                             <h2>值对象信息</h2>
                             <button class="btn btn-primary add-value" type="button">添加值对象</button>
-                            <div class="value-container"></div>
+                            <div class="values-container"></div>
                         </div>
 
                         <div class="tab-pane fade" id="methods" role="tabpanel">
                             <h2>方法信息</h2>
                             <button class="btn btn-primary add-method" type="button">添加方法</button>
-                            <div class="method-container"></div>
+                            <div class="methods-container"></div>
                         </div>
 
                         <div class="tab-pane fade" id="transfers" role="tabpanel">
