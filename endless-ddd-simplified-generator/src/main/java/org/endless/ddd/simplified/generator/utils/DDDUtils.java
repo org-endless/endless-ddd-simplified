@@ -200,7 +200,12 @@ public class DDDUtils {
     public static void deleteFileIfExists(String rootPath, String packageName, String className) throws IOException {
         String directory = PROJECT_ROOT + "/" + rootPath + "/src/main/java/" + packageName.replace(".", "/") + "/";
         // 构建文件路径
-        Path filePath = Paths.get(directory, className + ".java");
+        Path filePath;
+        if (directory.contains("sql")) {
+            filePath = Paths.get(directory, removeSuffix(className, 1) + ".ddl.sql");
+        } else {
+            filePath = Paths.get(directory, className + ".java");
+        }
         File file = filePath.toFile();
 
         // 如果文件存在
