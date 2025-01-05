@@ -1,5 +1,6 @@
 package org.endless.ddd.simplified.starter.common.config.rest.client;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.endless.ddd.simplified.starter.common.config.endless.EndlessAutoConfiguration;
 import org.endless.ddd.simplified.starter.common.config.rest.converter.FastJson2HttpMessageConverter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -7,7 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * RestClientConfigutration

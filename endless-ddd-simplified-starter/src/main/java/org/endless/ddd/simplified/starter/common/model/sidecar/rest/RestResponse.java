@@ -29,7 +29,6 @@ public interface RestResponse extends Response {
 
     RestResponse createInstance(String status, String errorCode, String message, Object data);
 
-    RestResponse createInstance(String status, String errorCode, String message, List<Object> rows, Long total);
 
     String getStatus();
 
@@ -44,22 +43,10 @@ public interface RestResponse extends Response {
     default ResponseEntity<RestResponse> response(String status, String errorCode, String message, Object data) {
         message = addBrackets(message);
         return new ResponseEntity<>(createInstance(status, errorCode, message, data), HttpStatus.valueOf(Integer.parseInt(status)));
-    }
 
-    default ResponseEntity<RestResponse> response(String status, String errorCode, String message, List<Object> rows, Long total) {
-        message = addBrackets(message);
-        return new ResponseEntity<>(createInstance(status, errorCode, message, rows, total), HttpStatus.valueOf(Integer.parseInt(status)));
-    }
 
-    default ResponseEntity<RestResponse> page(List<Object> rows, Long total) {
-        String message = "[分页查询" + ErrorCode.SUCCESS.getDescription() + "]";
-        return response(String.valueOf(HttpStatus.OK.value()), ErrorCode.SUCCESS.getCode(), message, rows, total);
 
-    }
 
-    default ResponseEntity<RestResponse> page(String message, List<Object> rows, Long total) {
-        message = "[分页查询" + ErrorCode.SUCCESS.getDescription() + "]" + addBrackets(message);
-        return response(String.valueOf(HttpStatus.OK.value()), ErrorCode.SUCCESS.getCode(), message, rows, total);
     }
 
     default ResponseEntity<RestResponse> success() {

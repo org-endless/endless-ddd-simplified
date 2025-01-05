@@ -4,8 +4,6 @@ import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 import org.endless.ddd.simplified.starter.common.model.sidecar.rest.AbstractRestResponse;
 
-import java.util.List;
-
 /**
  * DomainSimplifiedServerRestResponse
  * <p>
@@ -27,11 +25,6 @@ public class DomainSimplifiedServerRestResponse extends AbstractRestResponse {
     @Override
     public DomainSimplifiedServerRestResponse createInstance(String status, String errorCode, String message, Object data) {
         return DomainSimplifiedServerRestResponse.builder().status(status).errorCode(errorCode).message(message).data(data).build();
-    }
-
-    @Override
-    public DomainSimplifiedServerRestResponse createInstance(String status, String errorCode, String message, List<Object> rows, Long total) {
-        return DomainSimplifiedServerRestResponse.builder().status(status).errorCode(errorCode).message(message).rows(rows).total(total).build();
     }
 
     @Override

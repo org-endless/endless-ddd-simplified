@@ -39,19 +39,13 @@ public abstract class AbstractRestResponse implements RestResponse {
     @Schema(description = "响应数据", implementation = Object.class)
     private final Object data;
 
-    @Schema(description = "分页数据", implementation = Object.class)
-    private final List<Object> rows;
 
-    @Schema(description = "总记录数", example = "100")
-    private final Long total;
 
     protected AbstractRestResponse(AbstractRestResponseBuilder<?, ?> builder) {
         this.status = builder.status;
         this.errorCode = builder.errorCode;
         this.message = builder.message;
         this.data = builder.data;
-        this.rows = builder.rows;
-        this.total = builder.total;
 
     }
 

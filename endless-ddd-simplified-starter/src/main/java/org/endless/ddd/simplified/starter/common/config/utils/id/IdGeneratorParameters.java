@@ -1,8 +1,8 @@
 package org.endless.ddd.simplified.starter.common.config.utils.id;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 
-import javax.annotation.PostConstruct;
 
 /**
  * IdGeneratorParameters
