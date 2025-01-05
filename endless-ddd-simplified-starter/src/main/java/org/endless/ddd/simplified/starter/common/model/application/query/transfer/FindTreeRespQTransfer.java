@@ -4,7 +4,6 @@ import com.alibaba.fastjson2.annotation.JSONType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
-import org.endless.ddd.simplified.starter.common.model.common.Transfer;
 import org.endless.ddd.simplified.starter.common.utils.model.tree.TreeNode;
 
 import java.util.List;
@@ -32,7 +31,7 @@ public class FindTreeRespQTransfer implements TreeRespQTransfer {
     private final List<TreeNode> treeNodes;
 
     @Override
-    public Transfer validate() {
+    public FindTreeRespQTransfer validate() {
         return this;
     }
 }

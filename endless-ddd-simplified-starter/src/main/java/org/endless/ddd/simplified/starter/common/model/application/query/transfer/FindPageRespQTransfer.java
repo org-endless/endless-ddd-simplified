@@ -24,9 +24,9 @@ import java.util.List;
 @ToString
 @Builder
 @JSONType(orders = {"transfers", "total"})
-public class FindPageRespQTransfer<T extends Transfer> implements PageRespQTransfer {
+public class FindPageRespQTransfer implements PageRespQTransfer {
 
-    private final List<T> rows;
+    private final List<? extends Transfer> rows;
 
     private final Long total;
 
@@ -35,7 +35,7 @@ public class FindPageRespQTransfer<T extends Transfer> implements PageRespQTrans
     private final Integer pageNum;
 
     @Override
-    public Transfer validate() {
+    public FindPageRespQTransfer validate() {
         validateTotal();
         validatePageSize();
         validatePageNum();

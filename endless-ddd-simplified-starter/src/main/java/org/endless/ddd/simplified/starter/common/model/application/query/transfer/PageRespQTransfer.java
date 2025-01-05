@@ -18,10 +18,11 @@ import java.util.List;
  */
 public interface PageRespQTransfer extends QueryTransfer {
 
-    <T extends Transfer> List<T> getRows();
+    List<? extends Transfer> getRows();
 
     Long getTotal();
 
     Integer getPageSize();
+
     Integer getPageNum();
 }
