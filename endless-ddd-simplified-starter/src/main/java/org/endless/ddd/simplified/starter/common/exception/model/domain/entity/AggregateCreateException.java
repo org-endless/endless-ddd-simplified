@@ -11,7 +11,7 @@ import org.endless.ddd.simplified.starter.common.utils.model.string.StringTools;
  *
  * @author Deng Haozhi
  * @see AggregateException
- * @since 2.0.0
+ * @since 1.0.0
  */
 public class AggregateCreateException extends AggregateException {
 

@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
  * update 2024/11/28 23:06
  *
  * @author Deng Haozhi
- * @since 2.0.0
+ * @since 1.0.0
  */
 public class RedisQueue<T> {
 

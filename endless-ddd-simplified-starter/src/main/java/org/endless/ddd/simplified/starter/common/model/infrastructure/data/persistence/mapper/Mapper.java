@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
  *
  * @author Deng Haozhi
  * @see BaseMapper
- * @since 2.0.0
+ * @since 1.0.0
  */
 public interface Mapper<R extends DataRecord<? extends Entity>> extends BaseMapper<R> {
 

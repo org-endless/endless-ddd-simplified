@@ -13,7 +13,7 @@ import org.endless.ddd.simplified.starter.common.utils.model.string.StringTools;
  * update 2024/11/19 01:39
  *
  * @author Deng Haozhi
- * @since 2.0.0
+ * @since 1.0.0
  */
 public class JsonTools {
 

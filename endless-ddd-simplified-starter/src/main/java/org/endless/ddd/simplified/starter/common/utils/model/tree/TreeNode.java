@@ -15,7 +15,7 @@ import java.util.Map;
  * update 2024/12/18 12:45
  *
  * @author Deng Haozhi
- * @since 2.0.0
+ * @since 1.0.0
  */
 public record TreeNode(Object parentId, List<TreeNode> children, Map<String, Object> fields) {
 

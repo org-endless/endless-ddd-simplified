@@ -18,13 +18,13 @@ import java.util.List;
  *
  * @author Deng Haozhi
  * @see QueryTransfer
- * @since 2.0.0
+ * @since 1.0.0
  */
 @Getter
 @ToString
 @Builder
 @JSONType(orders = {"treeNodes"})
-public class FindTreeRespQTransfer implements QueryTransfer {
+public class FindTreeRespQTransfer implements TreeRespQTransfer {
 
     /**
      * 树节点列表

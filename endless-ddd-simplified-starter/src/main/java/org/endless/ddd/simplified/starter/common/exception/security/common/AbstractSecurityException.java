@@ -14,7 +14,7 @@ import org.springframework.security.core.AuthenticationException;
  *
  * @author Deng Haozhi
  * @see AuthenticationException
- * @since 2.0.0
+ * @since 1.0.0
  */
 @Getter
 public class AbstractSecurityException extends AuthenticationException {

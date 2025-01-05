@@ -12,7 +12,7 @@ import org.endless.ddd.simplified.starter.common.handler.result.type.ErrorCode;
  * update 2024/12/05 17:58
  *
  * @author Deng Haozhi
- * @since 2.0.0
+ * @since 1.0.0
  */
 @Getter
 public class InitialPasswordException extends SecurityFailedException {

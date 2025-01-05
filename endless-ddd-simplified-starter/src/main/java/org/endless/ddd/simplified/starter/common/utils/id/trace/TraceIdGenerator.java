@@ -12,7 +12,7 @@ import org.endless.ddd.simplified.starter.common.utils.id.IdGenerator;
  *
  * @author Deng Haozhi
  * @see TLogIdGenerator
- * @since 2.0.0
+ * @since 1.0.0
  */
 public class TraceIdGenerator extends TLogIdGenerator {
 

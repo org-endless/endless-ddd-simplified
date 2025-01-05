@@ -11,7 +11,7 @@ import org.endless.ddd.simplified.starter.common.handler.result.type.ErrorCode;
  * update 2024/12/25 13:57
  *
  * @author Deng Haozhi
- * @since 2.0.0
+ * @since 1.0.0
  */
 public class TokenExpiredException extends SecurityFailedException {
 

@@ -13,7 +13,7 @@ import org.endless.ddd.simplified.starter.common.utils.model.string.StringTools;
  *
  * @author Deng Haozhi
  * @see RuntimeException
- * @since 2.0.0
+ * @since 1.0.0
  */
 @Getter
 public class AbstractException extends RuntimeException {

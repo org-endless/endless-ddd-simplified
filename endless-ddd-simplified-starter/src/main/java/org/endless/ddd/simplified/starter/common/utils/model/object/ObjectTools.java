@@ -18,7 +18,7 @@ import static org.endless.ddd.simplified.starter.common.config.endless.constant.
  * update 2024/11/19 02:13
  *
  * @author Deng Haozhi
- * @since 2.0.0
+ * @since 1.0.0
  */
 public class ObjectTools {
 

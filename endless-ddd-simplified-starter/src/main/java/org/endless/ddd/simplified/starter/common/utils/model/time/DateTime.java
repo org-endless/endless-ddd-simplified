@@ -13,7 +13,7 @@ import java.util.Date;
  * update 2024/10/31 14:57
  *
  * @author Deng Haozhi
- * @since 2.0.0
+ * @since 1.0.0
  */
 public class DateTime {
 

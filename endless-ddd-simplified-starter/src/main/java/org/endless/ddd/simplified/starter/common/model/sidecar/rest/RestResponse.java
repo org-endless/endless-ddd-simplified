@@ -6,8 +6,6 @@ import org.endless.ddd.simplified.starter.common.model.common.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.List;
-
 import static org.endless.ddd.simplified.starter.common.utils.model.string.StringTools.addBrackets;
 
 
@@ -22,7 +20,7 @@ import static org.endless.ddd.simplified.starter.common.utils.model.string.Strin
  *
  * @author Deng Haozhi
  * @see Response
- * @since 2.0.0
+ * @since 1.0.0
  */
 @Schema(description = "通用的响应格式", name = "Response", implementation = AbstractRestResponse.class)
 public interface RestResponse extends Response {
@@ -43,8 +41,6 @@ public interface RestResponse extends Response {
     default ResponseEntity<RestResponse> response(String status, String errorCode, String message, Object data) {
         message = addBrackets(message);
         return new ResponseEntity<>(createInstance(status, errorCode, message, data), HttpStatus.valueOf(Integer.parseInt(status)));
-
-
 
 
     }

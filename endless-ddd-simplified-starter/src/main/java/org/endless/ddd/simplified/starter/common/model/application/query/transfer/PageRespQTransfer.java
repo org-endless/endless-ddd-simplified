@@ -1,5 +1,7 @@
 package org.endless.ddd.simplified.starter.common.model.application.query.transfer;
 
+import org.endless.ddd.simplified.starter.common.model.common.Transfer;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -14,17 +16,12 @@ import java.util.List;
  * @see Serializable
  * @since 1.0.0
  */
-public interface PageTransfer extends Serializable {
+public interface PageRespQTransfer extends QueryTransfer {
 
-    void validateTemplate();
-
-    void validate();
-
-    List<Object> getRows();
+    <T extends Transfer> List<T> getRows();
 
     Long getTotal();
 
     Integer getPageSize();
-
     Integer getPageNum();
 }

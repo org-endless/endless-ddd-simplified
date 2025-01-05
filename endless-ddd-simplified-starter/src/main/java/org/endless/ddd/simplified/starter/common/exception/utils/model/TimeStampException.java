@@ -10,7 +10,7 @@ import org.endless.ddd.simplified.starter.common.utils.model.string.StringTools;
  * update 2024/12/04 14:45
  *
  * @author Deng Haozhi
- * @since 2.0.0
+ * @since 1.0.0
  */
 public class TimeStampException extends RuntimeException {
 

@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Bean;
  * update 2024/11/22 15:47
  *
  * @author Deng Haozhi
- * @since 2.0.0
+ * @since 1.0.0
  */
 @AutoConfiguration
 public class OpenApiAutoConfiguration {

@@ -18,7 +18,7 @@ import java.util.Base64;
  * update 2024/11/16 01:25
  *
  * @author Deng Haozhi
- * @since 2.0.0
+ * @since 1.0.0
  */
 @Getter
 @Builder

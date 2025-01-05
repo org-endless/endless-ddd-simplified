@@ -14,7 +14,7 @@ import static org.endless.ddd.simplified.starter.common.config.endless.constant.
  * update 2024/11/01 23:14
  *
  * @author Deng Haozhi
- * @since 2.0.0
+ * @since 1.0.0
  */
 public class StringTools {
 

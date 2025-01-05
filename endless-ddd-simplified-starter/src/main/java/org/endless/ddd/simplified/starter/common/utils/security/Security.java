@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
  * update 2024/12/13 16:47
  *
  * @author Deng Haozhi
- * @since 2.0.0
+ * @since 1.0.0
  */
 public class Security {
 

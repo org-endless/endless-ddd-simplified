@@ -13,7 +13,7 @@ import java.util.stream.Stream;
  * update 2024/11/19 01:58
  *
  * @author Deng Haozhi
- * @since 2.0.0
+ * @since 1.0.0
  */
 public class EndlessConstant {
 

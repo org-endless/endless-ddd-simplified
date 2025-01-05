@@ -8,7 +8,7 @@ package org.endless.ddd.simplified.starter.common.utils.crypto.mac;
  * update 2024/11/18 15:05
  *
  * @author Deng Haozhi
- * @since 2.0.0
+ * @since 1.0.0
  */
 public class Mac8583 {
 
