@@ -1,0 +1,148 @@
+author: Deng HaoZhi
+version: 0.0.1
+groupId: org.endless
+serviceName: GycdpServer
+rootPath: gycdp-server/gycdp-server-supporting
+serviceSubPackage: supporting
+contextName: document
+domainName: IndividualDocument
+aggregateName: IndividualDocumentAggregate
+description: 个人证件
+fields:
+  - name: individualDocumentId
+    type: String
+    description: 个人证件ID
+    nullable: false
+  - name: number
+    type: String
+    description: 个人证件编号
+    nullable: false
+  - name: type
+    type: IndividualDocumentTypeEnum
+    description: 客户证件类型
+    nullable: false
+  - name: issuer
+    type: String
+    description: 个人证件发证机关
+    nullable: false
+  - name: expiryDate
+    type: String
+    description: 个人证件过期日期(YYYY-MM-dd)
+    nullable: false
+  - name: photos
+    type: List<IndividualDocumentPhotoEntity>
+    description: 个人证件照片列表
+    nullable: false
+  - name: description
+    type: String
+    description: 个人证件描述
+    nullable: true
+entities:
+  - name: IndividualDocumentPhotoEntity
+    description: 个人证件照片
+    fields:
+      - name: individualDocumentPhotoId
+        type: String
+        description: 个人证件照片ID
+        nullable: false
+      - name: type
+        type: IndividualDocumentPhotoTypeEnum
+        description: 个人证件照片类型
+        nullable: false
+      - name: attachmentId
+        type: String
+        description: 个人证件照片附件ID
+        nullable: false
+enums:
+  - name: IndividualDocumentTypeEnum
+    valueType: String
+    description: 个人证件类型枚举
+    fields:
+      - name: code
+        type: String
+        description: 枚举代码
+        nullable: false
+      - name: description
+        type: String
+        description: 枚举描述
+        nullable: false
+    enumValues:
+      - code: ID_CARD
+        description: 居民身份证
+      - code: HOUSEHOLD_REGISTER
+        description: 户口簿
+      - code: DRIVER_LICENSE
+        description: 驾驶证
+      - code: PASSPORT
+        description: 护照
+      - code: HK_MACAO_PASS
+        description: 港澳居民来往内地通行证
+      - code: TAIWAN_PASS
+        description: 台湾居民来往大陆通行证
+      - code: FOREIGN_RESIDENCE_PERMIT
+        description: 外国人永久居留证
+      - code: POLICE_OFFICER_ID
+        description: 警官证
+      - code: MILITARY_ID
+        description: 军人身份证件
+      - code: TEMP_ID_CARD
+        description: 临时身份证
+      - code: OTHER
+        description: 其他证件
+  - name: IndividualDocumentPhotoTypeEnum
+    valueType: String
+    description: 个人证件照片类型
+    fields:
+      - name: code
+        type: String
+        description: 枚举代码
+        nullable: false
+      - name: description
+        type: String
+        description: 枚举描述
+        nullable: false
+    enumValues:
+      - code: ID_CARD_FRONT
+        description: 身份证正面（人像面）
+      - code: ID_CARD_BACK
+        description: 身份证反面（国徽面）
+      - code: HOUSEHOLD_REGISTER_FRONT
+        description: 户口簿首页
+      - code: HOUSEHOLD_REGISTER_PERSONAL_PAGE
+        description: 户口簿个人信息页
+      - code: DRIVER_LICENSE_FRONT
+        description: 驾驶证正本（正面）
+      - code: DRIVER_LICENSE_BACK
+        description: 驾驶证副本（反面）
+      - code: PASSPORT_PERSONAL_PAGE
+        description: 护照个人信息页
+      - code: PASSPORT_VISA_PAGE
+        description: 护照签证页
+      - code: HK_MACAO_PASS_PERSONAL_PAGE
+        description: 港澳通行证个人信息页
+      - code: HK_MACAO_PASS_VISA_PAGE
+        description: 港澳通行证签注页
+      - code: TAIWAN_PASS_PERSONAL_PAGE
+        description: 台湾通行证个人信息页
+      - code: TAIWAN_PASS_VISA_PAGE
+        description: 台湾通行证签注页
+      - code: FOREIGN_RESIDENCE_PERMIT_FRONT
+        description: 外国人永久居留证正面
+      - code: FOREIGN_RESIDENCE_PERMIT_BACK
+        description: 外国人永久居留证反面
+      - code: POLICE_OFFICER_ID_FRONT
+        description: 警官证正面
+      - code: POLICE_OFFICER_ID_BACK
+        description: 警官证反面
+      - code: MILITARY_ID_FRONT
+        description: 军人身份证件正面
+      - code: MILITARY_ID_BACK
+        description: 军人身份证件反面
+      - code: TEMP_ID_CARD_FRONT
+        description: 临时身份证正面
+      - code: TEMP_ID_CARD_BACK
+        description: 临时身份证反面
+      - code: OTHER_DOCUMENT_FRONT
+        description: 其他证件正面
+      - code: OTHER_DOCUMENT_BACK
+        description: 其他证件反面

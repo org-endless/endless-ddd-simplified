@@ -41,10 +41,13 @@ public class DDDUtils {
     public static String domainPackage(Aggregate aggregate) {
         String contextName = aggregate.getContextName().toLowerCase();
         String domainPackage = aggregate.getDomainName().toLowerCase();
-        if (!contextName.equals(domainPackage)) {
-            domainPackage = convertToDot(aggregate.getDomainName()).replaceFirst(contextName + ".", "");
+        if (domainPackage.contains(contextName)) {
+            domainPackage = convertToDot(aggregate.getDomainName()).replace("." + contextName, "").replace(contextName + ".", "");
         }
-        return servicePackage(aggregate) + "." + aggregate.getServiceSubPackage() + "." + aggregate.getContextName().toLowerCase() + "." + domainPackage;
+        if (!contextName.equals(domainPackage)) {
+            domainPackage = convertToDot(aggregate.getDomainName()).replace("." + contextName, "").replace(contextName + ".", "");
+        }
+        return servicePackage(aggregate) + "." + aggregate.getServiceSubPackage() + "." + contextName + "." + domainPackage;
     }
 
     public static String servicePackage(Aggregate aggregate) {

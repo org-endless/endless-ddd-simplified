@@ -35,7 +35,8 @@ public class DataRecordGenerator {
 
     public void generateAggregate(Aggregate aggregate) throws Exception {
         String className = exchangeSuffix(aggregate.getAggregateName(), "Record", 1);
-        String tableName = aggregate.getContextName() + "_" + snakeCase(removeSuffix(className, "Record"));
+        String contextTableName = aggregate.getContextName();
+        String tableName = aggregate.getContextName() + "_" + snakeCase(removeSuffix(className, "Record")).replace(contextTableName + "_", "").replace("_" + contextTableName, "");
         String classDescription = aggregate.getDescription() + "数据库记录实体";
 
         generate(aggregate, aggregate.getFields(), className, tableName, aggregate.getAggregateName(), aggregate.getDescription(), classDescription);
@@ -43,7 +44,12 @@ public class DataRecordGenerator {
 
     public void generateEntity(Aggregate aggregate, Entity entity) throws Exception {
         String className = exchangeSuffix(entity.getName(), "Record", 1);
-        String tableName = aggregate.getContextName() + "_" + snakeCase(removeSuffix(aggregate.getAggregateName(), "Aggregate")) + "_" + snakeCase(removeSuffix(className, "Record"));
+        String contextTableName = aggregate.getContextName();
+        String domainTableName = snakeCase(aggregate.getDomainName());
+        String entityTableName = snakeCase(removeSuffix(className, "Record"));
+        String tableName = contextTableName + "_"
+                + domainTableName.replace("_" + aggregate.getContextName(), "").replace(contextTableName + "_", "") + "_"
+                + entityTableName.replace("_" + domainTableName, "").replace(domainTableName + "_", "");
         String classDescription = entity.getDescription() + "数据库记录实体";
 
         generate(aggregate, entity.getFields(), className, tableName, entity.getName(), aggregate.getDescription(), classDescription);

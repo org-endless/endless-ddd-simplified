@@ -2,6 +2,7 @@ package org.endless.ddd.simplified.starter.common.utils.model.string;
 
 import org.springframework.util.StringUtils;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static org.endless.ddd.simplified.starter.common.config.endless.constant.EndlessConstant.SENSITIVE_KEYS;
@@ -37,6 +38,13 @@ public class StringTools {
         }
         String emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
         return Pattern.matches(emailRegex, string);
+    }
+
+    public static boolean isMobilePhoneNumber(String mobile) {
+        String regex = "^1[3-9]\\d{9}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(mobile);
+        return matcher.matches();
     }
 
     public static String addBrackets(String string) {
