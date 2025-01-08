@@ -41,7 +41,7 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
     Set<Class<?>> MAPPER_MODIFY_SUPPORTED_TYPES = new HashSet<>(Arrays.asList(
             Integer.class, int.class, Long.class, long.class, Double.class, double.class,
             Float.class, float.class, Boolean.class, boolean.class, String.class,
-            byte[].class, Byte[].class, Date.class, java.sql.Date.class,
+            byte[].class, Byte[].class, Date.class, Enum.class, java.sql.Date.class,
             java.sql.Timestamp.class, BigDecimal.class
     ));
 
