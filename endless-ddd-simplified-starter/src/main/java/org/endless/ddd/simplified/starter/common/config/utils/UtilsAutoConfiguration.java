@@ -1,6 +1,6 @@
 package org.endless.ddd.simplified.starter.common.config.utils;
 
-import org.endless.ddd.simplified.starter.common.config.utils.id.IdGeneratorParameters;
+import org.endless.ddd.simplified.starter.common.config.utils.id.IdGenerator;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Import;
 
@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Import;
  * @since 1.0.0
  */
 @AutoConfiguration
-@Import({IdGeneratorParameters.class})
+@Import({IdGenerator.class})
 public class UtilsAutoConfiguration {
 
 }

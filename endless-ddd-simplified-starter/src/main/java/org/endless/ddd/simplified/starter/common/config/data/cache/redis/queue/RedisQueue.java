@@ -1,6 +1,6 @@
 package org.endless.ddd.simplified.starter.common.config.data.cache.redis.queue;
 
-import org.endless.ddd.simplified.starter.common.utils.id.IdGenerator;
+import org.endless.ddd.simplified.starter.common.config.utils.id.IdGenerator;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.List;

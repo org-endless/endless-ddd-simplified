@@ -3,3 +3,4 @@ org.endless.ddd.simplified.starter.common.config.endless.EndlessAutoConfiguratio
 org.endless.ddd.simplified.starter.common.config.log.LogAutoConfiguration
 org.endless.ddd.simplified.starter.common.config.minio.MinioAutoConfiguration
 org.endless.ddd.simplified.starter.common.config.rest.RestAutoConfiguration
+org.endless.ddd.simplified.starter.common.config.utils.UtilsAutoConfiguration

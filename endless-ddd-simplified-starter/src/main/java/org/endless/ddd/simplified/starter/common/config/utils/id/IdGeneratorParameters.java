@@ -1,6 +1,6 @@
 package org.endless.ddd.simplified.starter.common.config.utils.id;
 
-import jakarta.annotation.PostConstruct;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 
 
@@ -14,29 +14,12 @@ import org.springframework.beans.factory.annotation.Value;
  * @author Deng Haozhi
  * @since 1.0.0
  */
+@Getter
 public class IdGeneratorParameters {
 
-    private static Long cachedDataCenterId;
-
-    private static Long cachedWorkerId;
-
-    @Value("${server.data-center-id}")
+    @Value("${server.data-center-id:1}")
     private Long dataCenterId;
 
-    @Value("${server.worker-id}")
+    @Value("${server.worker-id:1}")
     private Long workerId;
-
-    public static Long getDataCenterId() {
-        return cachedDataCenterId;
-    }
-
-    public static Long getWorkerId() {
-        return cachedWorkerId;
-    }
-
-    @PostConstruct
-    public void init() {
-        cachedDataCenterId = dataCenterId;
-        cachedWorkerId = workerId;
-    }
 }

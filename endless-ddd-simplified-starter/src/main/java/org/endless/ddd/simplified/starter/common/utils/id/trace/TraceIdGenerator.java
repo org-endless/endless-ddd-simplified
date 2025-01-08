@@ -1,7 +1,7 @@
 package org.endless.ddd.simplified.starter.common.utils.id.trace;
 
 import com.yomahub.tlog.id.TLogIdGenerator;
-import org.endless.ddd.simplified.starter.common.utils.id.IdGenerator;
+import org.endless.ddd.simplified.starter.common.config.utils.id.IdGenerator;
 
 /**
  * TraceIdGenerator

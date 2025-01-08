@@ -59,6 +59,9 @@ public class SnowflakeIdGenerator {
 
 
     private void validateIds(Long dataCenterId, Long workerId) {
+        if (dataCenterId == null || workerId == null) {
+            throw new SnowflakeIdException("数据中心ID和服务器ID不能为空");
+        }
         if (dataCenterId < 0 || dataCenterId > MAX_DATA_CENTER_ID) {
             throw new SnowflakeIdException("数据中心ID无效或超出 0-15 范围: " + dataCenterId);
         }

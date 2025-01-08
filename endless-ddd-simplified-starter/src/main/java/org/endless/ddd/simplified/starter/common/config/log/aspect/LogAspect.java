@@ -45,7 +45,6 @@ public class LogAspect {
         String message = annotation.message();
         String value = annotation.value();
 
-        // 处理默认值
         if (!StringUtils.hasText(message)) {
             message = methodName;
         }
@@ -130,10 +129,15 @@ public class LogAspect {
     private Map<String, Object> fieldsMap(ProceedingJoinPoint joinPoint) {
         Map<String, Object> params = new HashMap<>();
         Object[] args = joinPoint.getArgs();
-        String[] names = ((MethodSignature) joinPoint.getSignature()).getParameterNames();
-        for (int i = 0; i < args.length; i++) {
-            if (names[i] != null) {
-                params.put(names[i], args[i]);
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        String[] names = signature.getParameterNames();
+        if (names != null && args != null && names.length == args.length) {
+            for (int i = 0; i < args.length; i++) {
+                if (names[i] != null) {
+                    params.put(names[i], args[i]);
+                } else {
+                    params.put("param" + i, args[i]);
+                }
             }
         }
         return params;
