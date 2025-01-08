@@ -29,30 +29,26 @@
         <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
 
         <!-- Framework -->
-        <spring-boot.version>3.3.5</spring-boot.version>
-        <druid.version>1.2.23</druid.version>
-        <mybatis-plus.version>3.5.7</mybatis-plus.version>
+        <spring-boot.version>3.4.1</spring-boot.version>
+        <druid.version>1.2.24</druid.version>
+        <mybatis-plus.version>3.5.9</mybatis-plus.version>
         <pagehelper.version>2.1.0</pagehelper.version>
         <tlog-all.version>1.5.2</tlog-all.version>
-        <springfox.version>3.0.0</springfox.version>
-        <openapi.version>1.8.0</openapi.version>
-        <therapi-javadoc.version>0.15.0</therapi-javadoc.version>
 
         <!-- Infrastructure -->
-        <minio.version>8.5.13</minio.version>
-        <mysql.version>9.0.0</mysql.version>
+        <minio.version>8.5.14</minio.version>
+        <mysql.version>9.1.0</mysql.version>
 
-        <jna.version>5.14.0</jna.version>
-        <user-agent-utils.version>1.21</user-agent-utils.version>
+        <user-agent-utils.version>1.2.3</user-agent-utils.version>
 
         <!-- Utils -->
         <jjwt.version>0.12.6</jjwt.version>
         <bcprov.version>1.79</bcprov.version>
-        <fastjson2.version>2.0.52</fastjson2.version>
-        <snakeyaml.version>2.2</snakeyaml.version>
+        <fastjson2.version>2.0.53</fastjson2.version>
+        <snakeyaml.version>2.3</snakeyaml.version>
 
         <!-- Dev -->
-        <lombok.version>1.18.34</lombok.version>
+        <lombok.version>1.18.36</lombok.version>
     </properties>
 
     <!-- 依赖声明 -->
@@ -99,27 +95,6 @@
                 <artifactId>tlog-all-spring-boot-starter</artifactId>
                 <version>${tlog-all.version}</version>
             </dependency>
-            <!-- Springdoc OpenAPI 依赖 -->
-            <dependency>
-                <groupId>org.springdoc</groupId>
-                <artifactId>springdoc-openapi-ui</artifactId>
-                <version>${openapi.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springdoc</groupId>
-                <artifactId>springdoc-openapi-security</artifactId>
-                <version>${openapi.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springdoc</groupId>
-                <artifactId>springdoc-openapi-javadoc</artifactId>
-                <version>${openapi.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.therapi</groupId>
-                <artifactId>therapi-runtime-javadoc-scribe</artifactId>
-                <version>${therapi-javadoc.version}</version>
-            </dependency>
             <!-- Infrastructure -->
             <!-- Adapter -->
             <!-- MinIO -->
@@ -135,12 +110,6 @@
                 <version>${mysql.version}</version>
             </dependency>
             <!-- OS -->
-            <!-- Jna  -->
-            <dependency>
-                <groupId>net.java.dev.jna</groupId>
-                <artifactId>jna</artifactId>
-                <version>${jna.version}</version>
-            </dependency>
             <!-- UserAgentUtils 客户端操作系统、浏览器 -->
             <dependency>
                 <groupId>eu.bitwalker</groupId>

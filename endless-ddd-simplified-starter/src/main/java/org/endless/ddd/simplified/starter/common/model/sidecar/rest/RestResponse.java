@@ -1,6 +1,5 @@
 package org.endless.ddd.simplified.starter.common.model.sidecar.rest;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import org.endless.ddd.simplified.starter.common.handler.result.type.ErrorCode;
 import org.endless.ddd.simplified.starter.common.model.common.Response;
 import org.springframework.http.HttpStatus;
@@ -22,7 +21,6 @@ import static org.endless.ddd.simplified.starter.common.utils.model.string.Strin
  * @see Response
  * @since 1.0.0
  */
-@Schema(description = "通用的响应格式", name = "Response", implementation = AbstractRestResponse.class)
 public interface RestResponse extends Response {
 
     RestResponse createInstance(String status, String errorCode, String message, Object data);

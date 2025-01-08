@@ -1,6 +1,5 @@
 package org.endless.ddd.simplified.starter.common.config.rest.server;
 
-import jakarta.validation.constraints.NotNull;
 import org.endless.ddd.simplified.starter.common.config.endless.EndlessAutoConfiguration;
 import org.endless.ddd.simplified.starter.common.config.rest.converter.FastJson2HttpMessageConverter;
 import org.springframework.context.annotation.Import;
@@ -33,7 +32,7 @@ public class RestServerConfiguration implements WebMvcConfigurer {
     }
 
     @Override
-    public void configureMessageConverters(@NotNull List<HttpMessageConverter<?>> converters) {
+    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         converters.clear();
         converters.add(new ByteArrayHttpMessageConverter());
         FastJson2HttpMessageConverter<Object> converter = new FastJson2HttpMessageConverter<>(configuration);

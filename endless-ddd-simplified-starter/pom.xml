@@ -67,21 +67,6 @@
             <artifactId>tlog-all-spring-boot-starter</artifactId>
         </dependency>
         <!-- Springdoc OpenAPI 依赖 -->
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-security</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-javadoc</artifactId>
-            <optional>true</optional>
-        </dependency>
         <!-- Infrastructure -->
         <dependency>
             <groupId>io.minio</groupId>
