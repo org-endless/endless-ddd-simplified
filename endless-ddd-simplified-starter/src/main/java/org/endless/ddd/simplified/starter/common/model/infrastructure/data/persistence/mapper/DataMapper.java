@@ -19,31 +19,30 @@ import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Mapper
+ * DataMapper
  * <p>DDD-Mybatis-plus Mapper类型模版
  * <p>
  * create 2024/09/03 09:35
  * <p>
  * update 2024/11/03 13:48
  *
- * @author Deng Haozhi
  * @see BaseMapper
  * @since 1.0.0
  */
-public interface Mapper<R extends DataRecord<? extends Entity>> extends BaseMapper<R> {
+public interface DataMapper<R extends DataRecord<? extends Entity>> extends BaseMapper<R> {
 
-    Logger log = LoggerFactory.getLogger(Mapper.class);
+    Logger log = LoggerFactory.getLogger(DataMapper.class);
+
 
     Set<Class<?>> MAPPER_MODIFY_SUPPORTED_TYPES = new HashSet<>(Arrays.asList(
             Integer.class, int.class, Long.class, long.class, Double.class, double.class,
             Float.class, float.class, Boolean.class, boolean.class, String.class,
             byte[].class, Byte[].class, Date.class, java.sql.Date.class,
-            Timestamp.class, BigDecimal.class
+            java.sql.Timestamp.class, BigDecimal.class
     ));
 
     Set<String> MAPPER_MODIFY_EXCLUDED_FIELDS = new HashSet<>(Arrays.asList(

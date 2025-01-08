@@ -19,7 +19,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableAsync
 @EnableAspectJAutoProxy
 @SpringBootApplication
-@MapperScan("org.endless.domain.simplified.server.**.mapper")
+@MapperScan("org.endless.**.mapper")
 public class DomainSimplifiedApplication {
 
     public static void main(String[] args) {

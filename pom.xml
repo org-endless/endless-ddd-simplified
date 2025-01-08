@@ -39,7 +39,7 @@
         <minio.version>8.5.14</minio.version>
         <mysql.version>9.1.0</mysql.version>
 
-        <user-agent-utils.version>1.2.3</user-agent-utils.version>
+        <user-agent-utils.version>1.21</user-agent-utils.version>
 
         <!-- Utils -->
         <jjwt.version>0.12.6</jjwt.version>
@@ -80,7 +80,7 @@
             <!-- Mybatis Plus -->
             <dependency>
                 <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
                 <version>${mybatis-plus.version}</version>
             </dependency>
             <!-- Page Helper 分页 -->

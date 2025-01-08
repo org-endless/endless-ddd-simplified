@@ -102,3 +102,5 @@ io:
   netty:
     noUnsafe: true # 禁用 Netty 的 Unsafe 代码，提升性能
     noPreferDirect: true # 禁用 Netty 的直接缓冲区，提升性能
+mybatis-plus:
+  type-aliases-package: org.endless.**.mapper
