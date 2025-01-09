@@ -71,7 +71,7 @@ public class MethodTemplate {
     public static void remove(StringBuilder stringBuilder, Set<String> entityNames, List<Field> fields, String className, String classDescription) {
 
 
-        stringBuilder.append("    ").append(access(className, false, true)).append(" ").append(className).append(" remove() {\n");
+        stringBuilder.append("    ").append(access(className, false, true)).append(" ").append(className).append(" remove(String modifyUserId) {\n");
 
 
         // 判断是否已经被删除
@@ -114,6 +114,7 @@ public class MethodTemplate {
         }
         stringBuilder
                 .append("        this.isRemoved = true;\n")
+                .append("        this.modifyUserId = modifyUserId;\n")
                 .append("        return this;\n")
                 .append("    }\n\n");
 
