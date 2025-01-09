@@ -4,33 +4,33 @@ import org.endless.ddd.simplified.starter.common.exception.common.FailedExceptio
 import org.endless.ddd.simplified.starter.common.handler.result.type.ErrorCode;
 
 /**
- * RespTransferValidateException
+ * TransferValidateException
  * <p>
- * create 2025/01/02 14:35
+ * create 2025/01/02 14:30
  * <p>
- * update 2025/01/02 14:35
+ * update 2025/01/02 14:31
  *
  * @author Deng Haozhi
  * @see FailedException
  * @since 1.0.0
  */
-public class RespTransferValidateException extends FailedException {
+public class TransferValidateException extends FailedException {
 
-    private static final ErrorCode ERROR_CODE = ErrorCode.DTR0001;
+    private static final ErrorCode ERROR_CODE = ErrorCode.DTO0001;
 
-    public RespTransferValidateException() {
+    public TransferValidateException() {
         super(ERROR_CODE);
     }
 
-    public RespTransferValidateException(String message) {
+    public TransferValidateException(String message) {
         super(ERROR_CODE, message);
     }
 
-    public RespTransferValidateException(Throwable throwable) {
+    public TransferValidateException(Throwable throwable) {
         super(ERROR_CODE, throwable);
     }
 
-    public RespTransferValidateException(String message, Throwable throwable) {
+    public TransferValidateException(String message, Throwable throwable) {
         super(ERROR_CODE, message, throwable);
     }
 }

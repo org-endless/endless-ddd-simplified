@@ -4,7 +4,7 @@ import org.endless.ddd.simplified.starter.common.exception.common.FailedExceptio
 import org.endless.ddd.simplified.starter.common.handler.result.type.ErrorCode;
 
 /**
- * DrivenReqTransferValidateException
+ * DrivenTransferValidateException
  * <p>
  * create 2025/01/09 17:55
  * <p>
@@ -14,23 +14,23 @@ import org.endless.ddd.simplified.starter.common.handler.result.type.ErrorCode;
  * @see FailedException
  * @since 2.0.0
  */
-public class DrivenRespTransferValidateException extends FailedException {
+public class DrivenTransferValidateException extends FailedException {
 
-    private static final ErrorCode ERROR_CODE = ErrorCode.DTR0301;
+    private static final ErrorCode ERROR_CODE = ErrorCode.DTO0301;
 
-    public DrivenRespTransferValidateException() {
+    public DrivenTransferValidateException() {
         super(ERROR_CODE);
     }
 
-    public DrivenRespTransferValidateException(String message) {
+    public DrivenTransferValidateException(String message) {
         super(ERROR_CODE, message);
     }
 
-    public DrivenRespTransferValidateException(Throwable throwable) {
+    public DrivenTransferValidateException(Throwable throwable) {
         super(ERROR_CODE, throwable);
     }
 
-    public DrivenRespTransferValidateException(String message, Throwable throwable) {
+    public DrivenTransferValidateException(String message, Throwable throwable) {
         super(ERROR_CODE, message, throwable);
     }
 }

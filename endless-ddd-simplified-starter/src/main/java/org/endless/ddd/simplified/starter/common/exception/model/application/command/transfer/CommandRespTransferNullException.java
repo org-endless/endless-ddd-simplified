@@ -16,7 +16,7 @@ import org.endless.ddd.simplified.starter.common.handler.result.type.ErrorCode;
  */
 public class CommandRespTransferNullException extends FailedException {
 
-    private static final ErrorCode ERROR_CODE = ErrorCode.DTR0101;
+    private static final ErrorCode ERROR_CODE = ErrorCode.DTR0100;
 
     public CommandRespTransferNullException() {
         super(ERROR_CODE);

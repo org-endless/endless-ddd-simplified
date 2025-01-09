@@ -4,7 +4,7 @@ import org.endless.ddd.simplified.starter.common.exception.common.FailedExceptio
 import org.endless.ddd.simplified.starter.common.handler.result.type.ErrorCode;
 
 /**
- * QueryReqTransferValidateException
+ * QueryTransferValidateException
  * <p>
  * create 2024/09/29 10:55
  * <p>
@@ -14,23 +14,23 @@ import org.endless.ddd.simplified.starter.common.handler.result.type.ErrorCode;
  * @see FailedException
  * @since 1.0.0
  */
-public class QueryReqTransferValidateException extends FailedException {
+public class QueryTransferValidateException extends FailedException {
 
-    private static final ErrorCode ERROR_CODE = ErrorCode.DTS0201;
+    private static final ErrorCode ERROR_CODE = ErrorCode.DTO0201;
 
-    public QueryReqTransferValidateException() {
+    public QueryTransferValidateException() {
         super(ERROR_CODE);
     }
 
-    public QueryReqTransferValidateException(String message) {
+    public QueryTransferValidateException(String message) {
         super(ERROR_CODE, message);
     }
 
-    public QueryReqTransferValidateException(Throwable throwable) {
+    public QueryTransferValidateException(Throwable throwable) {
         super(ERROR_CODE, throwable);
     }
 
-    public QueryReqTransferValidateException(String message, Throwable throwable) {
+    public QueryTransferValidateException(String message, Throwable throwable) {
         super(ERROR_CODE, message, throwable);
     }
 }

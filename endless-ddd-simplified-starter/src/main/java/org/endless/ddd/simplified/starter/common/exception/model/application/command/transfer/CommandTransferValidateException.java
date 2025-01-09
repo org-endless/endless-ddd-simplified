@@ -4,7 +4,7 @@ import org.endless.ddd.simplified.starter.common.exception.common.FailedExceptio
 import org.endless.ddd.simplified.starter.common.handler.result.type.ErrorCode;
 
 /**
- * CommandReqTransferValidateException
+ * CommandTransferValidateException
  * <p>
  * create 2024/09/29 10:55
  * <p>
@@ -14,23 +14,23 @@ import org.endless.ddd.simplified.starter.common.handler.result.type.ErrorCode;
  * @see FailedException
  * @since 1.0.0
  */
-public class CommandRespReqTransferValidateException extends FailedException {
+public class CommandTransferValidateException extends FailedException {
 
-    private static final ErrorCode ERROR_CODE = ErrorCode.DTR0100;
+    private static final ErrorCode ERROR_CODE = ErrorCode.DTO0101;
 
-    public CommandRespReqTransferValidateException() {
+    public CommandTransferValidateException() {
         super(ERROR_CODE);
     }
 
-    public CommandRespReqTransferValidateException(String message) {
+    public CommandTransferValidateException(String message) {
         super(ERROR_CODE, message);
     }
 
-    public CommandRespReqTransferValidateException(Throwable throwable) {
+    public CommandTransferValidateException(Throwable throwable) {
         super(ERROR_CODE, throwable);
     }
 
-    public CommandRespReqTransferValidateException(String message, Throwable throwable) {
+    public CommandTransferValidateException(String message, Throwable throwable) {
         super(ERROR_CODE, message, throwable);
     }
 }

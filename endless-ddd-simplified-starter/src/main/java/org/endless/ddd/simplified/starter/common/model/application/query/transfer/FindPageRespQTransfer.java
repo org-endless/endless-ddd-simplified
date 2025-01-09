@@ -4,7 +4,7 @@ import com.alibaba.fastjson2.annotation.JSONType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
-import org.endless.ddd.simplified.starter.common.exception.model.common.RespTransferValidateException;
+import org.endless.ddd.simplified.starter.common.exception.model.common.TransferValidateException;
 import org.endless.ddd.simplified.starter.common.model.common.Transfer;
 
 import java.util.List;
@@ -44,19 +44,19 @@ public class FindPageRespQTransfer implements PageRespQTransfer {
 
     private void validateTotal() {
         if (total == null || total < 0) {
-            throw new RespTransferValidateException("查询总条数不正确");
+            throw new TransferValidateException("查询总条数不正确");
         }
     }
 
     private void validatePageSize() {
         if (pageSize == null || pageSize < 1) {
-            throw new RespTransferValidateException("分页大小不正确");
+            throw new TransferValidateException("分页大小不正确");
         }
     }
 
     private void validatePageNum() {
         if (pageNum == null || pageNum < 1) {
-            throw new RespTransferValidateException("页码不正确");
+            throw new TransferValidateException("页码不正确");
         }
     }
 }
