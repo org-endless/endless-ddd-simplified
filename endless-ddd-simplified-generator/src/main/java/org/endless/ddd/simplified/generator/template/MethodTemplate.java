@@ -106,9 +106,9 @@ public class MethodTemplate {
                 stringBuilder.append("        this.").append(fieldName).append(".remove();\n");
             }
             if (fieldType.startsWith("List<")) {
-                String singularField = removePrefix(fieldType, "s");
+                String singularField = removePrefix(fieldName, "s");
                 if (entityNames.contains(generics)) {
-                    stringBuilder.append("        this.").append(fieldName).append(".forEach(").append(singularField).append(" -> ").append(singularField).append(".remove());\n");
+                    stringBuilder.append("        this.").append(fieldName).append(".forEach(").append(singularField).append(" -> ").append(singularField).append(".remove(modifyUserId));\n");
                 } else {
                     stringBuilder.append("        this.").append(fieldName).append(".clear();\n");
                 }
@@ -164,8 +164,11 @@ public class MethodTemplate {
     private static void appendAddMethod(StringBuilder stringBuilder, String className, String generics, String fieldName) {
         String singularField = removeSuffix(fieldName, "s");
         String method = "add" + StringUtils.capitalize(singularField);
-
-        stringBuilder.append("    ").append(access(className, false, true)).append(" ").append(className).append(" ").append(method).append("(").append(generics).append(" ").append(singularField).append(") {\n");
+        String modifyUserIdParma = ", String modifyUserId";
+        if (className.endsWith("Record")) {
+            modifyUserIdParma = "";
+        }
+        stringBuilder.append("    ").append(access(className, false, true)).append(" ").append(className).append(" ").append(method).append("(").append(generics).append(" ").append(singularField).append(modifyUserIdParma).append(") {\n");
 
         if ("String".equals(generics)) {
             stringBuilder.append("        if (!StringUtils.hasText(").append(singularField).append(")) {\n");
@@ -183,6 +186,9 @@ public class MethodTemplate {
             stringBuilder.append("        this.").append(fieldName).append(".add(").append(singularField).append(");\n");
 
         }
+        if (!className.endsWith("Record")) {
+            stringBuilder.append("        this.modifyUserId = modifyUserId;\n");
+        }
         stringBuilder
                 .append("        return this;\n")
                 .append("    }\n\n");
@@ -190,8 +196,12 @@ public class MethodTemplate {
 
     private static void appendAddAllMethod(StringBuilder stringBuilder, String className, String fieldType, String fieldName) {
         String method = "add" + StringUtils.capitalize(fieldName);
+        String modifyUserIdParma = ", String modifyUserId";
+        if (className.endsWith("Record")) {
+            modifyUserIdParma = "";
+        }
         stringBuilder
-                .append("    ").append(access(className, false, true)).append(" ").append(className).append(" ").append(method).append("(").append(fieldType).append(" ").append(fieldName).append(") {\n")
+                .append("    ").append(access(className, false, true)).append(" ").append(className).append(" ").append(method).append("(").append(fieldType).append(" ").append(fieldName).append(modifyUserIdParma).append(") {\n")
                 .append("        if (CollectionUtils.isEmpty(").append(fieldName).append(")) {\n");
 
         addListException(stringBuilder, className, fieldType);
@@ -204,10 +214,12 @@ public class MethodTemplate {
             stringBuilder.append("            }\n")
                     .append("        }\n");
         }
-
         stringBuilder
-                .append("        this.").append(fieldName).append(".addAll(").append(fieldName).append(");\n")
-                .append("        return this;\n")
+                .append("        this.").append(fieldName).append(".addAll(").append(fieldName).append(");\n");
+        if (!className.endsWith("Record")) {
+            stringBuilder.append("        this.modifyUserId = modifyUserId;\n");
+        }
+        stringBuilder.append("        return this;\n")
                 .append("    }\n\n");
     }
 
@@ -267,6 +279,7 @@ public class MethodTemplate {
                         .append("                .findFirst()\n")
                         .append("                .orElseThrow(() -> new AggregateRemoveItemException(\"未找到要删除的子实体 ").append(generics).append(" ID: \" + ").append(singularField).append(".").append(idGetter).append("()))\n")
                         .append("                .remove(modifyUserId);\n")
+                        .append("        this.modifyUserId = modifyUserId;\n")
                         .append("        return this;\n")
                         .append("    }\n\n");
                 String method = "remove" + StringUtils.capitalize(fieldName);
@@ -285,8 +298,9 @@ public class MethodTemplate {
                         .append("            this.").append(fieldName).append(".stream()\n")
                         .append("                    .filter(exist -> exist.").append(idGetter).append("().equals(remove.").append(idGetter).append("()))\n")
                         .append("                    .findFirst()\n")
-                        .append("                    .ifPresent(").append(singularField).append(" -> ").append(singularField).append("remove(modifyUserId));\n")
+                        .append("                    .ifPresent(").append(singularField).append(" -> ").append(singularField).append(".remove(modifyUserId));\n")
                         .append("        });\n")
+                        .append("        this.modifyUserId = modifyUserId;\n")
                         .append("        return this;\n")
                         .append("    }\n\n");
             } else if ("List<String>".equals(fieldType) || "List<Long>".equals(fieldType)) {
@@ -296,6 +310,7 @@ public class MethodTemplate {
                         .append("            throw new AggregateRemoveItemException(\"聚合根要删除的子实体 ").append(generics).append(" 不能为 null\");\n")
                         .append("        }\n")
                         .append("        this.").append(fieldName).append(".remove(").append(singularField).append(");\n")
+                        .append("        this.modifyUserId = modifyUserId;\n")
                         .append("        return this;\n")
                         .append("    }\n\n");
                 // 列表删除子实体列表方法
@@ -306,6 +321,7 @@ public class MethodTemplate {
                         .append("            throw new AggregateRemoveItemException(\"聚合根要删除的子实体列表 ").append(fieldType).append(" 不能为空\");\n")
                         .append("        }\n")
                         .append("        this.").append(fieldName).append(".removeAll(").append(fieldName).append(");\n")
+                        .append("        this.modifyUserId = modifyUserId;\n")
                         .append("        return this;\n")
                         .append("    }\n\n");
             }
