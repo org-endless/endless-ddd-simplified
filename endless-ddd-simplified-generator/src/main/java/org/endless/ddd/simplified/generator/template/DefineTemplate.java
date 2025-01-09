@@ -64,13 +64,14 @@ public class DefineTemplate {
 
     public static void controllerDefine(StringBuilder stringBuilder, String className, String superClassName, String domainName, String contextName) {
         if (className.endsWith("Controller")) {
-            if (domainName.contains(contextName)) {
-                domainName = domainName.replace(contextName, "");
+            String url = convertToSlash(contextName) + "/" + convertToSlash(domainName);
+            if (domainName.toLowerCase().contains(contextName)) {
+                url = convertToSlash(contextName) + "/" + convertToSlash(domainName).replace("/" + contextName, "").replace(contextName + "/", "");
             }
             stringBuilder
                     .append("@Lazy\n")
                     .append("@RestController\n")
-                    .append("@RequestMapping(\"/").append(convertToSlash(contextName)).append("/").append(convertToSlash(domainName)).append("\")\n");
+                    .append("@RequestMapping(\"/").append(url).append("\")\n");
         }
         classDefineEnd(stringBuilder, className, superClassName);
     }
