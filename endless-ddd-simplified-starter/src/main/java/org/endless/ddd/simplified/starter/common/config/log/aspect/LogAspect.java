@@ -34,14 +34,12 @@ import java.util.stream.Collectors;
 @Aspect
 public class LogAspect {
 
-
     @Around("execution(* *.*(..)) && @annotation(annotation)")
     public Object logging(ProceedingJoinPoint joinPoint, Log annotation) throws Throwable {
         long start = TimeStamp.now();
         String className = joinPoint.getSignature().getDeclaringTypeName(); // 获取类名
         String methodName = joinPoint.getSignature().getName();
         Object[] args = joinPoint.getArgs();
-
         String message = annotation.message();
         String value = annotation.value();
 

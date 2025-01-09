@@ -372,7 +372,12 @@ public class MethodTemplate {
                 for (Field valueField : value.getFields()) {
                     String valueFieldName = valueField.getName();
                     String getValueField = "get" + StringUtils.capitalize(valueFieldName);
-                    stringBuilder.append("                .").append(fieldName).append(StringUtils.capitalize(valueFieldName)).append("(").append(objectParam).append(".").append(getField).append("().").append(getValueField).append("())\n");
+                    if (field.getNullable()) {
+                        stringBuilder.append("                .").append(fieldName).append(StringUtils.capitalize(valueFieldName)).append("(").append(objectParam).append(".").append(getField).append("() == null ? null : ").append(objectParam).append(".").append(getField).append("().").append(getValueField).append("())\n");
+                    } else {
+                        stringBuilder.append("                .").append(fieldName).append(StringUtils.capitalize(valueFieldName)).append("(").append(objectParam).append(".").append(getField).append("().").append(getValueField).append("())\n");
+                    }
+
                 }
                 expandedTypes.add(fieldType);
             } else if (entityNames.contains(fieldGenerics)) {
