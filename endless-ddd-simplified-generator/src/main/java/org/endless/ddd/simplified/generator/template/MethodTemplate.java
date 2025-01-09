@@ -103,7 +103,7 @@ public class MethodTemplate {
             String fieldName = field.getName();
             String generics = generics(fieldType);
             if (entityNames.contains(fieldType)) {
-                stringBuilder.append("        this.").append(fieldName).append(".remove();\n");
+                stringBuilder.append("        this.").append(fieldName).append(".remove(modifyUserId);\n");
             }
             if (fieldType.startsWith("List<")) {
                 String singularField = removePrefix(fieldName, "s");
