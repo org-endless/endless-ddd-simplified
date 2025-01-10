@@ -2,6 +2,7 @@ package org.endless.ddd.simplified.starter.common.handler.exception.rest;
 
 import lombok.extern.slf4j.Slf4j;
 import org.endless.ddd.simplified.starter.common.exception.common.FailedException;
+import org.endless.ddd.simplified.starter.common.exception.common.UnknownException;
 import org.endless.ddd.simplified.starter.common.exception.model.application.query.handler.QueryHandlerNotFoundException;
 import org.endless.ddd.simplified.starter.common.exception.model.infrastructure.adapter.filesystem.FileSystemException;
 import org.endless.ddd.simplified.starter.common.exception.model.infrastructure.data.persistence.mapper.MapperException;
@@ -34,13 +35,11 @@ import static org.endless.ddd.simplified.starter.common.utils.model.string.Strin
 @Slf4j
 public abstract class AbstractRestAdapterExceptionHandler implements RestAdapterExceptionHandler {
 
-    // TODO 实现策略模式
-
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<RestResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
-        String message = addBrackets("请求体为空: " + e.getMessage());
-        log.error("[{}]{}", ErrorCode.BAD_REQ.getDescription(), message, e);
+        String message = addBrackets(e.getMessage());
+        log.error("[{}][{}]{}", ErrorCode.BAD_REQ.getCode(), ErrorCode.BAD_REQ.getDescription(), message, e);
         return response().badRequest(ErrorCode.BAD_REQ, message);
     }
 
@@ -48,15 +47,15 @@ public abstract class AbstractRestAdapterExceptionHandler implements RestAdapter
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<RestResponse> handleRestBadRequestException(RestBadRequestException e) {
         String message = addBrackets(e.getMessage());
-        log.error("[{}]{}", ErrorCode.BAD_REQ.getDescription(), message, e);
+        log.error("[{}][{}]{}", ErrorCode.BAD_REQ.getCode(), ErrorCode.BAD_REQ.getDescription(), message, e);
         return response().badRequest(ErrorCode.BAD_REQ, message);
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<RestResponse> handleNoHandlerFoundException(NoHandlerFoundException e) {
-        String message = addBrackets(e.getMessage().replace("No handler found for ", ""));
-        log.error("[{}]{}", ErrorCode.NOT_FND.getDescription(), message, e);
+        String message = addBrackets(e.getMessage());
+        log.error("[{}][{}]{}", ErrorCode.NOT_FND.getCode(), ErrorCode.NOT_FND.getDescription(), message, e);
         return response().badRequest(ErrorCode.NOT_FND, message);
     }
 
@@ -64,7 +63,7 @@ public abstract class AbstractRestAdapterExceptionHandler implements RestAdapter
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<RestResponse> handleQueryHandlerNotFoundException(QueryHandlerNotFoundException e) {
         String message = addBrackets(e.getMessage());
-        log.error("[{}]{}", ErrorCode.NOT_FND.getDescription(), message, e);
+        log.error("[{}][{}]{}", ErrorCode.NOT_FND.getCode(), ErrorCode.NOT_FND.getDescription(), message, e);
         return response().badRequest(ErrorCode.NOT_FND, message);
     }
 
@@ -72,7 +71,7 @@ public abstract class AbstractRestAdapterExceptionHandler implements RestAdapter
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<RestResponse> handleRestNotFoundException(RestNotFoundException e) {
         String message = addBrackets(e.getMessage());
-        log.error("[{}]{}", ErrorCode.NOT_FND.getDescription(), message, e);
+        log.error("[{}][{}]{}", ErrorCode.NOT_FND.getCode(), ErrorCode.NOT_FND.getDescription(), message, e);
         return response().badRequest(ErrorCode.NOT_FND, message);
     }
 
@@ -88,17 +87,26 @@ public abstract class AbstractRestAdapterExceptionHandler implements RestAdapter
     @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
     public ResponseEntity<RestResponse> handleFileSystemException(FileSystemException e) {
         String message = addBrackets(e.getMessage());
-        log.error("[{}]{}", ErrorCode.UNKNOWN.getDescription(), message, e);
+        log.error("[{}][{}]{}", ErrorCode.UNKNOWN.getCode(), ErrorCode.UNKNOWN.getDescription(), message, e);
         return response().unavailable(ErrorCode.UNKNOWN, message);
     }
 
-    @ExceptionHandler(SecurityUnknownException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<RestResponse> handleFailedException(SecurityUnknownException e) {
+    @ExceptionHandler(UnknownException.class)
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+    public ResponseEntity<RestResponse> handleUnknownException(UnknownException e) {
         String message = addBrackets(e.getMessage());
         ErrorCode errorCode = e.getErrorCode();
-        log.error("{}", message, e);
-        return response().error(errorCode, message);
+        log.error("[{}][{}]{}", errorCode.getCode(), ErrorCode.UNKNOWN.getDescription(), message, e);
+        return response().unavailable(errorCode, message);
+    }
+
+    @ExceptionHandler(SecurityUnknownException.class)
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+    public ResponseEntity<RestResponse> handleSecurityUnknownException(SecurityUnknownException e) {
+        String message = addBrackets(e.getMessage());
+        ErrorCode errorCode = e.getErrorCode();
+        log.error("[{}][{}]{}", errorCode.getCode(), ErrorCode.UNKNOWN.getDescription(), message, e);
+        return response().unavailable(errorCode, message);
     }
 
     @ExceptionHandler(FailedException.class)
@@ -106,16 +114,16 @@ public abstract class AbstractRestAdapterExceptionHandler implements RestAdapter
     public ResponseEntity<RestResponse> handleFailedException(FailedException e) {
         String message = addBrackets(e.getMessage());
         ErrorCode errorCode = e.getErrorCode();
-        log.error("{}", message, e);
+        log.error("[{}][{}]{}", errorCode.getCode(), ErrorCode.FAILURE.getDescription(), message, e);
         return response().error(errorCode, message);
     }
 
     @ExceptionHandler(SecurityFailedException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<RestResponse> handleFailedException(SecurityFailedException e) {
+    public ResponseEntity<RestResponse> handleSecurityFailedException(SecurityFailedException e) {
         String message = addBrackets(e.getMessage());
         ErrorCode errorCode = e.getErrorCode();
-        log.error("{}", message, e);
+        log.error("[{}][{}]{}", errorCode.getCode(), ErrorCode.FAILURE.getDescription(), message, e);
         return response().error(errorCode, message);
     }
 
@@ -123,7 +131,7 @@ public abstract class AbstractRestAdapterExceptionHandler implements RestAdapter
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<RestResponse> handleException(Exception e) {
         String message = addBrackets(e.getMessage());
-        log.error("[{}]{}", ErrorCode.FAILURE.getDescription(), message, e);
+        log.error("[{}][{}]{}", ErrorCode.FAILURE.getCode(), ErrorCode.FAILURE.getDescription(), message, e);
         return response().error(ErrorCode.FAILURE, message);
     }
 }

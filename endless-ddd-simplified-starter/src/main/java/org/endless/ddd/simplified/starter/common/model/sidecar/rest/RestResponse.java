@@ -63,102 +63,132 @@ public interface RestResponse extends Response {
     }
 
     default ResponseEntity<RestResponse> error(ErrorCode errorCode) {
-        String message = "[" + errorCode.getDescription() + "]";
+        String message = "[" + ErrorCode.FAILURE.getDescription() + "]";
+        if (errorCode != ErrorCode.FAILURE) {
+            message = message + addBrackets(errorCode.getDescription());
+        }
         return response(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()), errorCode.getCode(), message, null);
     }
 
     default ResponseEntity<RestResponse> error(ErrorCode errorCode, String message) {
-        message = "[" + errorCode.getDescription() + "]" + addBrackets(message);
+        message = "[" + ErrorCode.FAILURE.getDescription() + "]" + addBrackets(message);
         return response(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()), errorCode.getCode(), message, null);
     }
 
     default ResponseEntity<RestResponse> error(ErrorCode errorCode, Object data) {
-        String message = "[" + errorCode.getDescription() + "]";
+        String message = "[" + ErrorCode.FAILURE.getDescription() + "]";
+        if (errorCode != ErrorCode.FAILURE) {
+            message = message + addBrackets(errorCode.getDescription());
+        }
         return response(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()), errorCode.getCode(), message, data);
     }
 
     default ResponseEntity<RestResponse> error(ErrorCode errorCode, String message, Object data) {
-        message = "[" + errorCode.getDescription() + "]" + addBrackets(message);
+        message = "[" + ErrorCode.FAILURE.getDescription() + "]" + addBrackets(message);
         return response(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()), errorCode.getCode(), message, data);
     }
 
     default ResponseEntity<RestResponse> unavailable(ErrorCode errorCode) {
-        String message = "[" + errorCode.getDescription() + "]";
+        String message = "[" + ErrorCode.UNKNOWN.getDescription() + "]";
+        if (errorCode != ErrorCode.UNKNOWN) {
+            message = message + addBrackets(errorCode.getDescription());
+        }
         return response(String.valueOf(HttpStatus.SERVICE_UNAVAILABLE.value()), errorCode.getCode(), message, null);
     }
 
     default ResponseEntity<RestResponse> unavailable(ErrorCode errorCode, String message) {
-        message = "[" + errorCode.getDescription() + "]" + addBrackets(message);
+        message = "[" + ErrorCode.UNKNOWN.getDescription() + "]" + addBrackets(message);
         return response(String.valueOf(HttpStatus.SERVICE_UNAVAILABLE.value()), errorCode.getCode(), message, null);
     }
 
     default ResponseEntity<RestResponse> unavailable(ErrorCode errorCode, Object data) {
-        String message = "[" + errorCode.getDescription() + "]";
+        String message = "[" + ErrorCode.UNKNOWN.getDescription() + "]";
+        if (errorCode != ErrorCode.UNKNOWN) {
+            message = message + addBrackets(errorCode.getDescription());
+        }
         return response(String.valueOf(HttpStatus.SERVICE_UNAVAILABLE.value()), errorCode.getCode(), message, data);
     }
 
     default ResponseEntity<RestResponse> unavailable(ErrorCode errorCode, String message, Object data) {
-        message = "[" + errorCode.getDescription() + "]" + addBrackets(message);
+        message = "[" + ErrorCode.UNKNOWN.getDescription() + "]" + addBrackets(message);
         return response(String.valueOf(HttpStatus.SERVICE_UNAVAILABLE.value()), errorCode.getCode(), message, data);
     }
 
     default ResponseEntity<RestResponse> unauthorized(ErrorCode errorCode) {
-        String message = "[" + errorCode.getDescription() + "]";
+        String message = "[" + ErrorCode.UN_AUTH.getDescription() + "]";
+        if (errorCode != ErrorCode.UN_AUTH) {
+            message = message + addBrackets(errorCode.getDescription());
+        }
         return response(String.valueOf(HttpStatus.UNAUTHORIZED.value()), errorCode.getCode(), message, null);
     }
 
     default ResponseEntity<RestResponse> unauthorized(ErrorCode errorCode, String message) {
-        message = "[" + errorCode.getDescription() + "]" + addBrackets(message);
+        message = "[" + ErrorCode.UN_AUTH.getDescription() + "]" + addBrackets(message);
         return response(String.valueOf(HttpStatus.UNAUTHORIZED.value()), errorCode.getCode(), message, null);
     }
 
     default ResponseEntity<RestResponse> unauthorized(ErrorCode errorCode, Object data) {
-        String message = "[" + errorCode.getDescription() + "]";
+        String message = "[" + ErrorCode.UN_AUTH.getDescription() + "]";
+        if (errorCode != ErrorCode.UN_AUTH) {
+            message = message + addBrackets(errorCode.getDescription());
+        }
         return response(String.valueOf(HttpStatus.UNAUTHORIZED.value()), errorCode.getCode(), message, data);
     }
 
     default ResponseEntity<RestResponse> unauthorized(ErrorCode errorCode, String message, Object data) {
-        message = "[" + errorCode.getDescription() + "]" + addBrackets(message);
+        message = "[" + ErrorCode.UN_AUTH.getDescription() + "]" + addBrackets(message);
         return response(String.valueOf(HttpStatus.UNAUTHORIZED.value()), errorCode.getCode(), message, data);
     }
 
     default ResponseEntity<RestResponse> badRequest(ErrorCode errorCode) {
-        String message = "[" + errorCode.getDescription() + "]";
+        String message = "[" + ErrorCode.BAD_REQ.getDescription() + "]";
+        if (errorCode != ErrorCode.BAD_REQ) {
+            message = message + addBrackets(errorCode.getDescription());
+        }
         return response(String.valueOf(HttpStatus.BAD_REQUEST.value()), errorCode.getCode(), message, null);
     }
 
     default ResponseEntity<RestResponse> badRequest(ErrorCode errorCode, String message) {
-        message = "[" + errorCode.getDescription() + "]" + addBrackets(message);
+        message = "[" + ErrorCode.BAD_REQ.getDescription() + "]" + addBrackets(message);
         return response(String.valueOf(HttpStatus.BAD_REQUEST.value()), errorCode.getCode(), message, null);
     }
 
     default ResponseEntity<RestResponse> badRequest(ErrorCode errorCode, Object data) {
-        String message = "[" + errorCode.getDescription() + "]";
+        String message = "[" + ErrorCode.BAD_REQ.getDescription() + "]";
+        if (errorCode != ErrorCode.BAD_REQ) {
+            message = message + addBrackets(errorCode.getDescription());
+        }
         return response(String.valueOf(HttpStatus.BAD_REQUEST.value()), errorCode.getCode(), message, data);
     }
 
     default ResponseEntity<RestResponse> badRequest(ErrorCode errorCode, String message, Object data) {
-        message = "[" + errorCode.getDescription() + "]" + addBrackets(message);
+        message = "[" + ErrorCode.BAD_REQ.getDescription() + "]" + addBrackets(message);
         return response(String.valueOf(HttpStatus.BAD_REQUEST.value()), errorCode.getCode(), message, data);
     }
 
     default ResponseEntity<RestResponse> notFound(ErrorCode errorCode) {
-        String message = "[" + errorCode.getDescription() + "]";
+        String message = "[" + ErrorCode.NOT_FND.getDescription() + "]";
+        if (errorCode != ErrorCode.NOT_FND) {
+            message = message + addBrackets(errorCode.getDescription());
+        }
         return response(String.valueOf(HttpStatus.NOT_FOUND.value()), errorCode.getCode(), message, null);
     }
 
     default ResponseEntity<RestResponse> notFound(ErrorCode errorCode, String message) {
-        message = "[" + errorCode.getDescription() + "]" + addBrackets(message);
+        message = "[" + ErrorCode.NOT_FND.getDescription() + "]" + addBrackets(message);
         return response(String.valueOf(HttpStatus.NOT_FOUND.value()), errorCode.getCode(), message, null);
     }
 
     default ResponseEntity<RestResponse> notFound(ErrorCode errorCode, Object data) {
-        String message = "[" + errorCode.getDescription() + "]";
+        String message = "[" + ErrorCode.NOT_FND.getDescription() + "]";
+        if (errorCode != ErrorCode.NOT_FND) {
+            message = message + addBrackets(errorCode.getDescription());
+        }
         return response(String.valueOf(HttpStatus.NOT_FOUND.value()), errorCode.getCode(), message, data);
     }
 
     default ResponseEntity<RestResponse> notFound(ErrorCode errorCode, String message, Object data) {
-        message = "[" + errorCode.getDescription() + "]" + addBrackets(message);
+        message = "[" + ErrorCode.NOT_FND.getDescription() + "]" + addBrackets(message);
         return response(String.valueOf(HttpStatus.NOT_FOUND.value()), errorCode.getCode(), message, data);
     }
 }
