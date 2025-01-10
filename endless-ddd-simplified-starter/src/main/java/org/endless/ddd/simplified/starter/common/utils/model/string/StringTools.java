@@ -41,10 +41,27 @@ public class StringTools {
     }
 
     public static boolean isMobilePhoneNumber(String mobile) {
+        if (!StringUtils.hasText(mobile)) {
+            return false;
+        }
         String regex = "^1[3-9]\\d{9}$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(mobile);
         return matcher.matches();
+    }
+
+    /**
+     * 中文字符及允许的全角间隔符“·”，长度限制为 2-30 个字符
+     *
+     * @param nameZh 中文名称
+     * @return {@link Boolean }
+     */
+    public static Boolean isNameZh(String nameZh) {
+        if (!StringUtils.hasText(nameZh)) {
+            return false;
+        }
+        String regex = "^[\\u4e00-\\u9fa5·]{2,30}$";
+        return nameZh.matches(regex);
     }
 
     public static String addBrackets(String string) {
