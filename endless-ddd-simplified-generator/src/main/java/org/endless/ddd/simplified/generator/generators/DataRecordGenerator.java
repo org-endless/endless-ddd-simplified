@@ -8,6 +8,8 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.endless.ddd.simplified.generator.template.CommentTemplate.comment;
 import static org.endless.ddd.simplified.generator.template.DefineTemplate.classDefineRecord;
@@ -54,7 +56,6 @@ public class DataRecordGenerator {
 
         generate(aggregate, entity.getFields(), className, tableName, entity.getName(), aggregate.getDescription(), classDescription);
     }
-
 
     protected void generate(Aggregate aggregate, List<Field> fields, String className, String tableName, String generics, String genericDescription, String classDescription) throws Exception {
 
@@ -103,7 +104,7 @@ public class DataRecordGenerator {
         for (Field field : fields) {
             String fieldType = field.getType();
             String fieldName = field.getName();
-            String fieldSqlType = getSqlType(fieldType);
+            String fieldSqlType = getSqlType(fieldType, field.getDescription());
             String nullAble = field.getNullable() ? "NULL" : "NOT NULL";
             if (fieldName.equals("createAt") || fieldName.equals("modifyAt")) {
                 nullAble = "NOT NULL";
@@ -128,7 +129,7 @@ public class DataRecordGenerator {
         writeFile(rootPath, packageName, className, stringBuilder.toString());
     }
 
-    private String getSqlType(String fieldType) {
+    private String getSqlType(String fieldType, String fieldDescription) {
         String fieldSqlType = switch (fieldType) {
             case "String" -> "VARCHAR(255)";
             case "Integer" -> "INT";
@@ -136,11 +137,32 @@ public class DataRecordGenerator {
             case "Double" -> "DOUBLE";
             case "Float" -> "FLOAT";
             case "Boolean" -> "BOOLEAN";
+            case "BigDecimal" -> "DECIMAL" + toDecimal(fieldDescription);
             default -> "";
         };
         if (fieldType.endsWith("Enum")) {
             fieldSqlType = "VARCHAR(255)";
         }
         return fieldSqlType;
+    }
+
+    private String toDecimal(String input) {
+        String regex = "\\((\\d+),\\s*(\\d+)\\)";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(input);
+
+        if (matcher.find()) {
+            String M = matcher.group(1);
+            String D = matcher.group(2);
+            return "DECIMAL(" + M + ", " + D + ")";
+        }
+        regex = "\\((\\d+),(\\d+)\\)";
+        matcher = Pattern.compile(regex).matcher(input);
+        if (matcher.find()) {
+            String M = matcher.group(1);
+            String D = matcher.group(2);
+            return "DECIMAL(" + M + ", " + D + ")";
+        }
+        throw new IllegalArgumentException("请在描述中添加正确的BigDecimal类型，格式为：(M, D)");
     }
 }
