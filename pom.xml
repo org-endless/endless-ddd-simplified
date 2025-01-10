@@ -38,7 +38,6 @@
         <!-- Infrastructure -->
         <minio.version>8.5.14</minio.version>
         <mysql.version>9.1.0</mysql.version>
-
         <user-agent-utils.version>1.21</user-agent-utils.version>
 
         <!-- Utils -->
@@ -49,6 +48,8 @@
 
         <!-- Dev -->
         <lombok.version>1.18.36</lombok.version>
+        <springdoc.version>2.8.1</springdoc.version>
+        <therapi-javadoc.version>0.15.0</therapi-javadoc.version>
     </properties>
 
     <!-- 依赖声明 -->
@@ -148,6 +149,16 @@
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${springdoc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.therapi</groupId>
+                <artifactId>therapi-runtime-javadoc-scribe</artifactId>
+                <version>${therapi-javadoc.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

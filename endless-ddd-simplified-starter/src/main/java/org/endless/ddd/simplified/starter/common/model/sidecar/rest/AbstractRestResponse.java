@@ -1,5 +1,6 @@
 package org.endless.ddd.simplified.starter.common.model.sidecar.rest;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
@@ -21,14 +22,19 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @ToString
 @SuperBuilder
+@Schema(description = "Rest适配器响应信息", name = "RestResponse")
 public abstract class AbstractRestResponse implements RestResponse {
 
+    @Schema(description = "响应状态", example = "200")
     private final String status;
 
+    @Schema(description = "响应错误码", example = "SUCCESS")
     private final String errorCode;
 
+    @Schema(description = "响应信息", example = "服务调用响应信息")
     private final String message;
 
+    @Schema(description = "响应数据", implementation = Object.class)
     private final Object data;
 
 
