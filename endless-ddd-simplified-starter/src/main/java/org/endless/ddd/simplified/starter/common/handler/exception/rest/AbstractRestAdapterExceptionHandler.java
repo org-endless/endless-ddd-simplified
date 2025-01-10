@@ -7,6 +7,8 @@ import org.endless.ddd.simplified.starter.common.exception.model.infrastructure.
 import org.endless.ddd.simplified.starter.common.exception.model.infrastructure.data.persistence.mapper.MapperException;
 import org.endless.ddd.simplified.starter.common.exception.model.sidecar.rest.RestBadRequestException;
 import org.endless.ddd.simplified.starter.common.exception.model.sidecar.rest.RestNotFoundException;
+import org.endless.ddd.simplified.starter.common.exception.security.common.SecurityFailedException;
+import org.endless.ddd.simplified.starter.common.exception.security.common.SecurityUnknownException;
 import org.endless.ddd.simplified.starter.common.handler.result.type.ErrorCode;
 import org.endless.ddd.simplified.starter.common.model.sidecar.rest.RestResponse;
 import org.springframework.http.HttpStatus;
@@ -90,9 +92,27 @@ public abstract class AbstractRestAdapterExceptionHandler implements RestAdapter
         return response().unavailable(ErrorCode.UNKNOWN, message);
     }
 
+    @ExceptionHandler(SecurityUnknownException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<RestResponse> handleFailedException(SecurityUnknownException e) {
+        String message = addBrackets(e.getMessage());
+        ErrorCode errorCode = e.getErrorCode();
+        log.error("{}", message, e);
+        return response().error(errorCode, message);
+    }
+
     @ExceptionHandler(FailedException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<RestResponse> handleFailedException(FailedException e) {
+        String message = addBrackets(e.getMessage());
+        ErrorCode errorCode = e.getErrorCode();
+        log.error("{}", message, e);
+        return response().error(errorCode, message);
+    }
+
+    @ExceptionHandler(SecurityFailedException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<RestResponse> handleFailedException(SecurityFailedException e) {
         String message = addBrackets(e.getMessage());
         ErrorCode errorCode = e.getErrorCode();
         log.error("{}", message, e);
