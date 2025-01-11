@@ -1,10 +1,7 @@
 package org.endless.ddd.simplified.starter.common.utils.model.decimal;
 
 import org.endless.ddd.simplified.starter.common.exception.common.FailedException;
-import org.endless.ddd.simplified.starter.common.exception.utils.model.DecimalCalculationException;
-import org.endless.ddd.simplified.starter.common.exception.utils.model.DecimalDivisionByZeroException;
-import org.endless.ddd.simplified.starter.common.exception.utils.model.DecimalEmptyException;
-import org.endless.ddd.simplified.starter.common.exception.utils.model.DecimalFormatException;
+import org.endless.ddd.simplified.starter.common.exception.utils.model.*;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -13,7 +10,6 @@ import java.math.RoundingMode;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 /**
@@ -34,61 +30,108 @@ public class Decimal {
 
     private static final RoundingMode ROUNDING_MODE = RoundingMode.HALF_EVEN;
 
-    public static Boolean isAmount(String amount) {
-        String regex = "^\\d{1,15}(\\.\\d{1,2})?$";
-        Pattern pattern = Pattern.compile(regex);
-        return isDecimal(amount, pattern, "金额不能为空", "金额格式错误，最多15位整数，2位小数");
+    public static void validateAmount(String amount) {
+        validateNonNegative(amount, "金额");
+        validateDecimal(amount, 17, 2, "金额");
     }
 
-    public static Boolean isAmount(BigDecimal amount) {
-        return isDecimal(amount, 17, 2, "金额不能为空", "金额格式错误，最多15位整数，2位小数");
+    public static void validateAmount(BigDecimal amount) {
+        validateNonNegative(amount, "金额");
+        validateDecimal(amount, 17, 2, "金额");
     }
 
-    public static Boolean isRate(String rate) {
-        String regex = "^\\d{1,3}(\\.\\d{1,5})?$";
-        Pattern pattern = Pattern.compile(regex);
-        return isDecimal(rate, pattern, "比率不能为空", "比率格式错误，最多3位整数，5位小数");
+    public static void validateRate(String rate) {
+        validateNonNegative(rate, "比率");
+        validateDecimal(rate, 8, 5, "比率");
     }
 
-    public static Boolean isRate(BigDecimal rate) {
-        return isDecimal(rate, 8, 5, "比率不能为空", "比率格式错误，最多3位整数，5位小数");
+    public static void validateRate(BigDecimal rate) {
+        validateNonNegative(rate, "比率");
+        validateDecimal(rate, 8, 5, "比率");
     }
 
-    public static Boolean isPercentage(String percentage) {
-        String regex = "^\\d{1,3}(\\.\\d{1,2})?$";
-        Pattern pattern = Pattern.compile(regex);
-        return isDecimal(percentage, pattern, "百分比不能为空", "百分比格式错误，最多3位整数，2位小数");
+    public static void validatePercentage(String percentage) {
+        validateNonNegative(percentage, "百分比");
+        validateDecimal(percentage, 5, 2, "百分比");
     }
 
-    public static Boolean isPercentage(BigDecimal percentage) {
-        return isDecimal(percentage, 5, 2, "百分比不能为空", "百分比格式错误，最多3位整数，2位小数");
+    public static void validatePercentage(BigDecimal percentage) {
+        validateNonNegative(percentage, "百分比");
+        validateDecimal(percentage, 5, 2, "百分比");
     }
 
-    public static Boolean isDecimal(String decimal, Pattern pattern, String emptyMessage, String formatMessage) {
-        Optional.ofNullable(decimal)
+    /**
+     * 校验BigDecimal是否为非负数
+     *
+     * @param decimalString 精度值
+     * @param errorMessage  具体错误信息头
+     */
+    public static void validateNonNegative(String decimalString, String errorMessage) {
+        Optional.ofNullable(decimalString)
                 .filter(StringUtils::hasText)
-                .orElseThrow(() -> new DecimalEmptyException(emptyMessage));
-        if (pattern.matcher(decimal).matches()) {
-            return true;
-        } else {
-            throw new DecimalFormatException(formatMessage);
+                .orElseThrow(() -> new DecimalEmptyException(errorMessage + "不能为空"));
+        try {
+            BigDecimal decimal = new BigDecimal(decimalString);
+            validateNonNegative(decimal, errorMessage);
+        } catch (NumberFormatException e) {
+            throw new DecimalFormatException(errorMessage + "格式错误，输入的值不是有效的数字");
         }
     }
 
-    public static Boolean isDecimal(BigDecimal decimal, Integer precision, Integer scale, String emptyMessage, String formatMessage) {
-        if (decimal == null) {
-            throw new DecimalEmptyException(emptyMessage);
+    /**
+     * 校验BigDecimal是否为非负数
+     *
+     * @param decimal      精度值
+     * @param errorMessage 具体错误信息头
+     */
+    public static void validateNonNegative(BigDecimal decimal, String errorMessage) {
+        Optional.ofNullable(decimal)
+                .orElseThrow(() -> new DecimalEmptyException(errorMessage + "不能为空"));
+        if (decimal.compareTo(BigDecimal.ZERO) < 0) {
+            throw new DecimalOutOfRangeException(errorMessage + "不能小于0");
         }
+    }
+
+    /**
+     * 校验BigDecimal精度
+     *
+     * @param decimalString 精度值
+     * @param precision     总精度
+     * @param scale         小数精度
+     * @param errorMessage  具体错误信息头
+     */
+    public static void validateDecimal(String decimalString, Integer precision, Integer scale, String errorMessage) {
+        Optional.ofNullable(decimalString)
+                .filter(StringUtils::hasText)
+                .orElseThrow(() -> new DecimalEmptyException(errorMessage + "不能为空"));
+        try {
+            BigDecimal decimal = new BigDecimal(decimalString);
+            validateDecimal(decimal, precision, scale, errorMessage);
+        } catch (NumberFormatException e) {
+            throw new DecimalFormatException(errorMessage + "格式错误，输入的值不是有效的数字");
+        }
+    }
+
+    /**
+     * 校验BigDecimal精度
+     *
+     * @param decimal      精度值
+     * @param precision    总精度
+     * @param scale        小数精度
+     * @param errorMessage 具体错误信息头
+     */
+    public static void validateDecimal(BigDecimal decimal, Integer precision, Integer scale, String errorMessage) {
+        Optional.ofNullable(decimal)
+                .orElseThrow(() -> new DecimalEmptyException(errorMessage + "不能为空"));
         BigDecimal abs = decimal.abs();
         int actualScale = abs.scale();
         if (actualScale > scale) {
-            throw new DecimalFormatException(formatMessage);
+            throw new DecimalFormatException(errorMessage + "格式错误，小数位数不能超过" + scale + "位。");
         }
         int integerPartLength = abs.precision() - actualScale;
         if (integerPartLength > (precision - scale)) {
-            throw new DecimalFormatException(formatMessage);
+            throw new DecimalFormatException(errorMessage + "格式错误，整数位数不能超过" + (precision - scale) + "位。");
         }
-        return true;
     }
 
     public static BigDecimal format(BigDecimal decimal) {

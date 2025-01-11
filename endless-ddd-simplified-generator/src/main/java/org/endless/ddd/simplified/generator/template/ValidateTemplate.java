@@ -1,6 +1,7 @@
 package org.endless.ddd.simplified.generator.template;
 
 import org.endless.ddd.simplified.generator.object.entity.Field;
+import org.endless.ddd.simplified.generator.utils.DDDUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
@@ -30,8 +31,8 @@ public class ValidateTemplate {
                 .append("    @Override\n")
                 .append("    public ").append(className).append(" validate() {\n");
         for (Field field : fields) {
-            if (!field.getNullable()) {
-                stringBuilder.append("        validate").append(StringUtils.capitalize(field.getName())).append("();\n");
+            if (!field.nullable() || field.type().equals("BigDecimal")) {
+                stringBuilder.append("        validate").append(StringUtils.capitalize(field.name())).append("();\n");
             }
         }
         stringBuilder
@@ -49,17 +50,21 @@ public class ValidateTemplate {
     public static void validateMethods(StringBuilder stringBuilder, List<Field> fields, String className) {
 
         for (Field field : fields) {
-            String fieldName = field.getName();
-            String fieldType = field.getType();
-            String fieldDescription = field.getDescription();
+            String fieldName = field.name();
+            String fieldType = field.type();
+            String fieldDescription = field.description();
 
             // 检查条件，如果符合，则生成校验方法
-            if (!field.getNullable()) {
+            if (!field.nullable() || DDDUtils.isValidateDecimalField(fieldType, fieldName, fieldDescription)) {
 
                 stringBuilder.append("    private void validate").append(StringUtils.capitalize(fieldName)).append("() {\n");
 
                 // 针对不同类型进行校验逻辑生成
-                if ("String".equals(fieldType)) {
+                if (DDDUtils.isValidateDecimalField(fieldType, fieldName, fieldDescription) && field.nullable()) {
+                    appendBigDecimalNullableValidation(stringBuilder, className, fieldName, fieldDescription);
+                } else if (DDDUtils.isValidateDecimalField(fieldType, fieldName, fieldDescription)) {
+                    appendBigDecimalValidation(stringBuilder, className, fieldName, fieldDescription);
+                } else if ("String".equals(fieldType)) {
                     appendStringValidation(stringBuilder, className, fieldName, fieldDescription);
                 } else if (isNumericType(fieldType)) {
                     appendNumericValidation(stringBuilder, className, fieldName, fieldDescription);
@@ -95,6 +100,32 @@ public class ValidateTemplate {
     private static void appendDefaultValidation(StringBuilder stringBuilder, String className, String fieldName, String fieldDescription) {
         stringBuilder.append("        if (").append(fieldName).append(" == null) {\n");
         validateException(stringBuilder, className, "不能为 null \"", fieldDescription);
+        stringBuilder.append("        }\n");
+    }
+
+    private static void appendBigDecimalValidation(StringBuilder stringBuilder, String className, String fieldName, String fieldDescription) {
+        if (fieldName.endsWith("Amount") || fieldName.equals("amount")) {
+            stringBuilder.append("        Decimal.validateAmount(").append(fieldName).append(");\n");
+        }
+        if (fieldName.endsWith("Rate") || fieldName.equals("rate")) {
+            stringBuilder.append("        Decimal.validateRate(").append(fieldName).append(");\n");
+        }
+        if (fieldName.endsWith("Percentage") || fieldName.equals("percentage")) {
+            stringBuilder.append("        Decimal.validatePercentage(").append(fieldName).append(");\n");
+        }
+    }
+
+    private static void appendBigDecimalNullableValidation(StringBuilder stringBuilder, String className, String fieldName, String fieldDescription) {
+        stringBuilder.append("        if (").append(fieldName).append(" != null) {\n");
+        if (fieldName.endsWith("Amount") || fieldName.equals("amount")) {
+            stringBuilder.append("            Decimal.validateAmount(").append(fieldName).append(");\n");
+        }
+        if (fieldName.endsWith("Rate") || fieldName.equals("rate")) {
+            stringBuilder.append("            Decimal.validateRate(").append(fieldName).append(");\n");
+        }
+        if (fieldName.endsWith("Percentage") || fieldName.equals("percentage")) {
+            stringBuilder.append("            Decimal.validatePercentage(").append(fieldName).append(");\n");
+        }
         stringBuilder.append("        }\n");
     }
 

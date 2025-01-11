@@ -85,7 +85,7 @@ public class DefineTemplate {
                     .append("@Builder\n")
                     .append("@JSONType(orders = {");
             for (Field field : fields) {
-                stringBuilder.append("\"").append(field.getName()).append("\", ");
+                stringBuilder.append("\"").append(field.name()).append("\", ");
             }
             stringBuilder
                     .delete(stringBuilder.length() - 2, stringBuilder.length())

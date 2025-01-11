@@ -146,7 +146,7 @@ public class Aggregate {
             fields.stream()
                     .peek(Field::validate)  // 执行每个字段的 validate 方法
                     .filter(field -> {
-                        String fieldType = field.getType();
+                        String fieldType = field.type();
                         String generics = StringTools.generics(fieldType);
                         return fieldType.startsWith("List<")
                                 && !generics.endsWith("Entity")
@@ -155,7 +155,7 @@ public class Aggregate {
                     })
                     .findAny()
                     .ifPresent(field -> {
-                        throw new IllegalArgumentException(field.getType() + " 类型字段 " + field.getName() + " 泛型必须为 Entity、String、Long！");
+                        throw new IllegalArgumentException(field.type() + " 类型字段 " + field.name() + " 泛型必须为 Entity、String、Long！");
                     });
         } else {
             throw new IllegalArgumentException("字段不能为空！");

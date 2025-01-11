@@ -46,8 +46,8 @@ public class ConstructorTemplate {
         StringBuilder body = new StringBuilder();
 
         for (Field field : fields) {
-            String fieldType = field.getType();
-            String fieldName = field.getName();
+            String fieldType = field.type();
+            String fieldName = field.name();
             if (!className.endsWith("Aggregate") && !className.endsWith("Entity")) {
                 fieldType = fieldType.replace("Entity", getLastCamelCase(className, 1));
                 if (fieldName.equals("createAt") || fieldName.equals("modifyAt")) {
@@ -92,8 +92,8 @@ public class ConstructorTemplate {
 
 
         for (Field field : fields) {
-            String fieldType = field.getType();
-            String fieldName = field.getName();
+            String fieldType = field.type();
+            String fieldName = field.name();
             String filedValue = entityName + ".get" + fieldMethod(fieldName);
             String generic = generics(fieldType);
 

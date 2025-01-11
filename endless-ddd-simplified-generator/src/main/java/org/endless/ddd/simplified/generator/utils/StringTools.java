@@ -1,5 +1,10 @@
 package org.endless.ddd.simplified.generator.utils;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * StringTools
  * <p>
@@ -228,5 +233,46 @@ public class StringTools {
         }
 
         return result.toString();
+    }
+
+    public static Map<String, Integer> toDecimal(String decimal) {
+        // 正则表达式：匹配 "(M, D)"，M 和 D 为整数
+        // 1. (\\d+) 表示匹配一个或多个数字
+        // 2. (,\\s*) 匹配逗号后可选的空格，\\s* 表示空格出现零次或多次
+        String regex = "\\((\\d+),\\s*(\\d+)\\)|\\((\\d+),(\\d+)\\)"; // 两种情况
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(decimal);
+        Map<String, Integer> result = toDecimal(matcher);
+
+        if (result != null) {
+            return result;
+        }
+        // 如果没有匹配到，抛出异常
+        throw new IllegalArgumentException("请在描述中添加正确的BigDecimal类型，格式为：(M, D) 或 (M,D)");
+    }
+
+    private static Map<String, Integer> toDecimal(Matcher matcher) {
+        // 匹配并提取精度和小数位数
+        if (matcher.find()) {
+            // 如果匹配到了带空格的情况
+            if (matcher.group(1) != null && matcher.group(2) != null) {
+                Integer M = Integer.parseInt(matcher.group(1));
+                Integer D = Integer.parseInt(matcher.group(2));
+                Map<String, Integer> result = new HashMap<>();
+                result.put("precision", M);
+                result.put("scale", D);
+                return result;
+            }
+            // 如果匹配到了不带空格的情况
+            else if (matcher.group(3) != null && matcher.group(4) != null) {
+                Integer M = Integer.parseInt(matcher.group(3));
+                Integer D = Integer.parseInt(matcher.group(4));
+                Map<String, Integer> result = new HashMap<>();
+                result.put("precision", M);
+                result.put("scale", D);
+                return result;
+            }
+        }
+        return null;
     }
 }

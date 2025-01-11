@@ -59,8 +59,8 @@ public class FieldTemplate {
         Set<String> expandedTypes = new HashSet<>(); // 用于记录已展开的类型
 
         for (Field field : oldFields) {
-            String fieldName = field.getName();
-            String fieldType = field.getType();
+            String fieldName = field.name();
+            String fieldType = field.type();
             if (generics.endsWith("Entity") && fieldName.equals(id(className, 1))) {
                 fields.add(field);
                 fields.add(Field.builder().name(id(aggregateName, 1)).type("String").description(genericDescription + "ID").nullable(false).build());
@@ -73,10 +73,10 @@ public class FieldTemplate {
                 // 展开 value 中的字段并添加到 fields 列表
                 for (Field valueField : value.getFields()) {
                     fields.add(Field.builder()
-                            .name(fieldName + StringUtils.capitalize(valueField.getName()))
-                            .type(valueField.getType())
-                            .description(valueField.getDescription())
-                            .nullable(valueField.getNullable())
+                            .name(fieldName + StringUtils.capitalize(valueField.name()))
+                            .type(valueField.type())
+                            .description(valueField.description())
+                            .nullable(valueField.nullable())
                             .build());
                 }
                 // 将已经展开的类型记录下来，避免后续重复展开
@@ -103,10 +103,10 @@ public class FieldTemplate {
         Set<String> definedFieldNames = new HashSet<>();
 
         for (Field field : fields) {
-            String fieldName = field.getName();
-            String fieldType = field.getType();
+            String fieldName = field.name();
+            String fieldType = field.type();
             String generics = generics(fieldType);
-            stringBuilder.append("    /**\n").append("     * ").append(field.getDescription()).append("\n     */\n");
+            stringBuilder.append("    /**\n").append("     * ").append(field.description()).append("\n     */\n");
             if (!className.endsWith("Aggregate") && !className.endsWith("Entity")) {
                 if (entityNames.contains(generics)) {
                     fieldType = fieldType.replace("Entity", getLastCamelCase(className, 1));
@@ -132,7 +132,7 @@ public class FieldTemplate {
                         stringBuilder.append("    @TableField(fill = FieldFill.INSERT_UPDATE)\n");
                     }
                     stringBuilder.append("    private ").append(fieldType).append(" ").append(fieldName).append(";\n\n");
-                    definedFieldNames.add(field.getName());
+                    definedFieldNames.add(field.name());
                     continue;
                 }
                 stringBuilder.append("    private final ").append(fieldType).append(" ").append(fieldName).append(";\n\n");
@@ -143,7 +143,7 @@ public class FieldTemplate {
                     stringBuilder.append("    private ").append(fieldType).append(" ").append(fieldName).append(";\n\n");
                 }
             }
-            definedFieldNames.add(field.getName());
+            definedFieldNames.add(field.name());
         }
 
         if (className.endsWith("AssociationRecord") && !definedFieldNames.contains("associationId")) {
@@ -166,7 +166,7 @@ public class FieldTemplate {
     public static void enumFields(StringBuilder stringBuilder, List<Field> fields) {
 
         for (Field field : fields) {
-            stringBuilder.append("    private final ").append(field.getType()).append(" ").append(field.getName()).append(";\n\n");
+            stringBuilder.append("    private final ").append(field.type()).append(" ").append(field.name()).append(";\n\n");
         }
     }
 
@@ -179,7 +179,7 @@ public class FieldTemplate {
      */
     public static void enumValues(StringBuilder stringBuilder, List<EnumValue> values, List<Field> fields, String className) {
 
-        String codeType = fields.getFirst().getType();
+        String codeType = fields.getFirst().type();
         if (!codeType.equals("String") && !codeType.equals("Integer") && !codeType.equals("Long")) {
             throw new IllegalArgumentException("无法识别的枚举类型");
         }

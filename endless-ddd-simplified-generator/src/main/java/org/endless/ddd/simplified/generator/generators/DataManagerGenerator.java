@@ -80,11 +80,11 @@ public class DataManagerGenerator {
                 }
             }
             for (Field aggregateField : aggregate.getFields()) {
-                String aggregateFieldType = aggregateField.getType();
+                String aggregateFieldType = aggregateField.type();
                 if (("List<String>".equals(aggregateFieldType) || "List<Long>".equals(aggregateFieldType))) {
-                    String associationClassName = StringUtils.capitalize(removeSuffix(aggregateField.getName(), "Ids"));
+                    String associationClassName = StringUtils.capitalize(removeSuffix(aggregateField.name(), "Ids"));
                     String associationMapper = removeSuffix(aggregateName, "Aggregate") + associationClassName + "AssociationMapper";
-                    String associationDescription = aggregate.getDescription() + "-" + removeSuffix(aggregateField.getDescription(), "ID列表");
+                    String associationDescription = aggregate.getDescription() + "-" + removeSuffix(aggregateField.description(), "ID列表");
                     fields.add(Field.builder().name(StringUtils.uncapitalize(associationMapper)).type(associationMapper).description(associationDescription + "关系 Mybatis-Plus 数据访问对象").nullable(false).build());
                 }
             }

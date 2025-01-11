@@ -2,8 +2,7 @@ package org.endless.ddd.simplified.generator.object.entity;
 
 import com.alibaba.fastjson2.annotation.JSONType;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import org.endless.ddd.simplified.generator.utils.StringTools;
 import org.springframework.util.StringUtils;
 
 /**
@@ -16,19 +15,9 @@ import org.springframework.util.StringUtils;
  * @author Deng Haozhi
  * @since 1.0.0
  */
-@Getter
 @Builder
-@ToString
 @JSONType(orders = {"name", "type", "description", "nullable"})
-public class Field {
-
-    private final String name;
-
-    private final String type;
-
-    private final String description;
-
-    private final Boolean nullable;
+public record Field(String name, String type, String description, Boolean nullable) {
 
     public Field(String name, String type, String description, Boolean nullable) {
         this.name = name;
@@ -52,6 +41,7 @@ public class Field {
         if (name.endsWith("Value") || name.endsWith("Entity")) {
             throw new IllegalArgumentException("字段名称不能以Value或Entity结尾，请修改:  " + name);
         }
+
     }
 
     private void validateType() {
@@ -80,6 +70,9 @@ public class Field {
     private void validateDescription() {
         if (!StringUtils.hasText(description)) {
             throw new IllegalArgumentException("字段描述不能为空，当前值为: " + description);
+        }
+        if (type.equals("BigDecimal")) {
+            StringTools.toDecimal(description);
         }
     }
 

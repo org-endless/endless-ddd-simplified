@@ -38,6 +38,15 @@ public class DDDUtils {
 
     private static final String PROJECT_ROOT = "..";
 
+    public static Boolean isValidateDecimalField(String type, String name, String description) {
+        if (type.equals("BigDecimal") || type.equals("String")) {
+            return name.endsWith("Amount") || name.equals("amount") ||
+                    name.endsWith("Rate") || name.equals("rate") ||
+                    name.endsWith("Percentage") || name.equals("percentage");
+        }
+        return false;
+    }
+
     public static String domainPackage(Aggregate aggregate) {
         String contextName = aggregate.getContextName().toLowerCase();
         String domainPackage = aggregate.getDomainName().toLowerCase();
@@ -57,7 +66,6 @@ public class DDDUtils {
     public static String packageName(Aggregate aggregate, String subPackage) {
         return domainPackage(aggregate) + "." + subPackage;
     }
-
 
     /**
      * 工具方法：获取类的ID属性名

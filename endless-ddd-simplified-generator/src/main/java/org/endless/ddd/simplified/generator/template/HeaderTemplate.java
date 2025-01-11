@@ -42,6 +42,7 @@ public class HeaderTemplate {
                 .append("import lombok.ToString;\n")
                 .append("import org.springframework.util.CollectionUtils;\n")
                 .append("import org.springframework.util.StringUtils;\n\n")
+                .append("import java.math.BigDecimal;\n")
                 .append("import java.util.ArrayList;\n")
                 .append("import java.util.List;\n")
                 .append("import java.util.Set;\n")
@@ -68,6 +69,7 @@ public class HeaderTemplate {
                 .append("import lombok.*;\n")
                 .append("import org.springframework.util.CollectionUtils;\n")
                 .append("import org.springframework.util.StringUtils;\n\n")
+                .append("import java.math.BigDecimal;\n")
                 .append("import java.util.ArrayList;\n")
                 .append("import java.util.List;\n")
                 .append("import java.util.stream.Collectors;\n\n");
@@ -87,7 +89,8 @@ public class HeaderTemplate {
                 .append("import lombok.Getter;\n")
                 .append("import lombok.ToString;\n")
                 .append("import org.springframework.util.CollectionUtils;\n")
-                .append("import org.springframework.util.StringUtils;\n\n");
+                .append("import org.springframework.util.StringUtils;\n\n")
+                .append("import java.math.BigDecimal;\n\n");
     }
 
     /**
@@ -158,6 +161,7 @@ public class HeaderTemplate {
                 .append("import lombok.ToString;\n")
                 .append("import org.springframework.util.CollectionUtils;\n")
                 .append("import org.springframework.util.StringUtils;\n\n")
+                .append("import java.math.BigDecimal;\n")
                 .append("import java.util.ArrayList;\n")
                 .append("import java.util.List;\n")
                 .append("import java.util.stream.Collectors;\n\n");

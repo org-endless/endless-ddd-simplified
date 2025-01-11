@@ -36,9 +36,9 @@ public class MethodTemplate {
                 .append("        return builder\n");
 
         for (Field field : fields) {
-            String fieldName = field.getName();
-            String fieldType = field.getType();
-            if (field.getNullable() && !fieldType.startsWith("List<")) {
+            String fieldName = field.name();
+            String fieldType = field.type();
+            if (field.nullable() && !fieldType.startsWith("List<")) {
                 continue;
             }
 
@@ -99,8 +99,8 @@ public class MethodTemplate {
         // 删除方法主体
         for (Field field : fields) {
 
-            String fieldType = field.getType();
-            String fieldName = field.getName();
+            String fieldType = field.type();
+            String fieldName = field.name();
             String generics = generics(fieldType);
             if (entityNames.contains(fieldType)) {
                 stringBuilder.append("        this.").append(fieldName).append(".remove(modifyUserId);\n");
@@ -138,9 +138,9 @@ public class MethodTemplate {
 
         for (Field field : fields) {
 
-            String fieldType = field.getType();
-            String fieldTypeEntity = field.getType();
-            String fieldName = field.getName();
+            String fieldType = field.type();
+            String fieldTypeEntity = field.type();
+            String fieldName = field.name();
             String generics = generics(fieldType);
 
             if (className.endsWith("Record") && !fieldType.startsWith("List<String>")) {
@@ -250,11 +250,11 @@ public class MethodTemplate {
     public static void removeItem(StringBuilder stringBuilder, Set<String> entityNames, List<Field> fields, String className) {
         for (final Field field : fields) {
 
-            String fieldType = field.getType();
-            String fieldName = field.getName();
+            String fieldType = field.type();
+            String fieldName = field.name();
             String generics = generics(fieldType);
             // 删除子实体方法
-            if (entityNames.contains(fieldType) && field.getNullable()) {
+            if (entityNames.contains(fieldType) && field.nullable()) {
                 stringBuilder
                         .append("    ").append(access(className, false, true)).append(" ").append(className).append(" remove").append(fieldType).append("(String modifyUserId) {\n")
                         .append("        this.").append(fieldName).append(".remove(modifyUserId);\n")
@@ -354,8 +354,8 @@ public class MethodTemplate {
         }
         stringBuilder.append("        return ").append(className).append(".builder()\n");
         for (Field field : fields) {
-            String fieldName = field.getName();
-            String fieldType = field.getType();
+            String fieldName = field.name();
+            String fieldType = field.type();
             String fieldGenerics = generics(fieldType);
             String filedGenericsRecord = exchangeSuffix(fieldGenerics, "Entity", "Record");
             String getField = "get" + StringUtils.capitalize(fieldName);
@@ -390,9 +390,9 @@ public class MethodTemplate {
                 Value value = valueMap.get(fieldType);
 
                 for (Field valueField : value.getFields()) {
-                    String valueFieldName = valueField.getName();
+                    String valueFieldName = valueField.name();
                     String getValueField = "get" + StringUtils.capitalize(valueFieldName);
-                    if (field.getNullable()) {
+                    if (field.nullable()) {
                         stringBuilder.append("                .").append(fieldName).append(StringUtils.capitalize(valueFieldName)).append("(").append(objectParam).append(".").append(getField).append("() == null ? null : ").append(objectParam).append(".").append(getField).append("().").append(getValueField).append("())\n");
                     } else {
                         stringBuilder.append("                .").append(fieldName).append(StringUtils.capitalize(valueFieldName)).append("(").append(objectParam).append(".").append(getField).append("().").append(getValueField).append("())\n");
@@ -435,8 +435,8 @@ public class MethodTemplate {
                     .append("        return ").append(generics).append(".builder()\n");
         }
         for (Field field : fields) {
-            String fieldName = field.getName();
-            String fieldType = field.getType();
+            String fieldName = field.name();
+            String fieldType = field.type();
             String fieldGenericsEntity = generics(fieldType);
             String fieldGenerics = fieldGenericsEntity.replace("Entity", getLastCamelCase(className, 1));
 
@@ -456,7 +456,7 @@ public class MethodTemplate {
                 String valueName = value.getName();
                 stringBuilder.append("                .").append(fieldName).append("(").append(valueName).append(".builder()\n");
                 for (Field valueFiled : value.getFields()) {
-                    String valueFiledName = valueFiled.getName();
+                    String valueFiledName = valueFiled.name();
                     stringBuilder.append("                        .").append(valueFiledName).append("(").append(fieldName).append(StringUtils.capitalize(valueFiledName)).append(")\n");
                 }
                 stringBuilder.append("                        .innerBuild())\n");
@@ -479,8 +479,8 @@ public class MethodTemplate {
      * @param fields        字段列表
      */
     public static void fromCode(StringBuilder stringBuilder, List<Field> fields, String className, String classDescription) {
-        String codeType = fields.getFirst().getType();
-        String codeName = fields.getFirst().getName();
+        String codeType = fields.getFirst().type();
+        String codeName = fields.getFirst().name();
         stringBuilder
                 .append("    public static ").append(className).append(" fromCode(").append(codeType).append(" code) {\n")
                 .append("        for (").append(className).append(" type : values()) {\n")

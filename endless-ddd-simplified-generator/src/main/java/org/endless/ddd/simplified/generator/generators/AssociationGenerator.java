@@ -30,9 +30,9 @@ public class AssociationGenerator {
 
         List<Field> fields = aggregate.getFields();
         for (Field field : fields) {
-            String fieldType = field.getType();
-            String fieldName = field.getName();
-            String fieldDescription = field.getDescription();
+            String fieldType = field.type();
+            String fieldName = field.name();
+            String fieldDescription = field.description();
             String generics = generics(fieldType);
             if (fieldType.startsWith("List<") && !entityNames(aggregate).contains(generics)) {
                 String associationDescription = removeSuffix(fieldDescription, "ID列表");

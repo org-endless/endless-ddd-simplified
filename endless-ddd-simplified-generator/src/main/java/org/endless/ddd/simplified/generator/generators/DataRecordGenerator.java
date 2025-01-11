@@ -4,12 +4,11 @@ import org.endless.ddd.simplified.generator.object.entity.Aggregate;
 import org.endless.ddd.simplified.generator.object.entity.Entity;
 import org.endless.ddd.simplified.generator.object.entity.Field;
 import org.endless.ddd.simplified.generator.object.entity.Value;
+import org.endless.ddd.simplified.generator.utils.StringTools;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static org.endless.ddd.simplified.generator.template.CommentTemplate.comment;
 import static org.endless.ddd.simplified.generator.template.DefineTemplate.classDefineRecord;
@@ -102,10 +101,10 @@ public class DataRecordGenerator {
                 .append("DROP TABLE IF EXISTS ").append(tableName).append(";\n")
                 .append("CREATE TABLE ").append(tableName).append(" (\n");
         for (Field field : fields) {
-            String fieldType = field.getType();
-            String fieldName = field.getName();
-            String fieldSqlType = getSqlType(fieldType, field.getDescription());
-            String nullAble = field.getNullable() ? "NULL" : "NOT NULL";
+            String fieldType = field.type();
+            String fieldName = field.name();
+            String fieldSqlType = getSqlType(fieldType, field.description());
+            String nullAble = field.nullable() ? "NULL" : "NOT NULL";
             if (fieldName.equals("createAt") || fieldName.equals("modifyAt")) {
                 nullAble = "NOT NULL";
             }
@@ -120,7 +119,7 @@ public class DataRecordGenerator {
                 primaryKey = " DEFAULT 0";
             }
             if (StringUtils.hasText(fieldSqlType)) {
-                stringBuilder.append("    ").append(snakeCase(fieldName)).append(" ").append(fieldSqlType).append(" ").append(nullAble).append(primaryKey).append(" COMMENT '").append(field.getDescription()).append("'").append(",\n");
+                stringBuilder.append("    ").append(snakeCase(fieldName)).append(" ").append(fieldSqlType).append(" ").append(nullAble).append(primaryKey).append(" COMMENT '").append(field.description()).append("'").append(",\n");
             }
         }
         classDescription = classDescription.replace("数据库记录实体", "表");
@@ -137,32 +136,13 @@ public class DataRecordGenerator {
             case "Double" -> "DOUBLE";
             case "Float" -> "FLOAT";
             case "Boolean" -> "BOOLEAN";
-            case "BigDecimal" -> toDecimal(fieldDescription);
+            case "BigDecimal" ->
+                    "DECIMAL(" + StringTools.toDecimal(fieldDescription).get("precision") + ", " + StringTools.toDecimal(fieldDescription).get("scale") + " , 2)";
             default -> "";
         };
         if (fieldType.endsWith("Enum")) {
             fieldSqlType = "VARCHAR(255)";
         }
         return fieldSqlType;
-    }
-
-    private String toDecimal(String input) {
-        String regex = "\\((\\d+),\\s*(\\d+)\\)";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(input);
-
-        if (matcher.find()) {
-            String M = matcher.group(1);
-            String D = matcher.group(2);
-            return "DECIMAL(" + M + ", " + D + ")";
-        }
-        regex = "\\((\\d+),(\\d+)\\)";
-        matcher = Pattern.compile(regex).matcher(input);
-        if (matcher.find()) {
-            String M = matcher.group(1);
-            String D = matcher.group(2);
-            return "DECIMAL(" + M + ", " + D + ")";
-        }
-        throw new IllegalArgumentException("请在描述中添加正确的BigDecimal类型，格式为：(M, D)");
     }
 }

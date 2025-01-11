@@ -57,10 +57,10 @@ public class Entity {
         if (fields != null && !fields.isEmpty()) {
             fields.stream()
                     .peek(Field::validate)  // 执行每个字段的 validate 方法
-                    .filter(field -> field.getType().startsWith("List") || field.getType().endsWith("Entity"))
+                    .filter(field -> field.type().startsWith("List") || field.type().endsWith("Entity"))
                     .findAny()
                     .ifPresent(field -> {
-                        throw new IllegalArgumentException("实体字段 " + field.getName() + " 不支持类型: " + field.getType());
+                        throw new IllegalArgumentException("实体字段 " + field.name() + " 不支持类型: " + field.type());
                     });
         } else {
             throw new IllegalArgumentException("实体字段不能为空");
