@@ -137,7 +137,7 @@ public class DataRecordGenerator {
             case "Float" -> "FLOAT";
             case "Boolean" -> "BOOLEAN";
             case "BigDecimal" ->
-                    "DECIMAL(" + StringTools.toDecimal(fieldDescription).get("precision") + ", " + StringTools.toDecimal(fieldDescription).get("scale") + " , 2)";
+                    "DECIMAL(" + StringTools.toDecimal(fieldDescription).get("precision") + ", " + StringTools.toDecimal(fieldDescription).get("scale") + ")";
             default -> "";
         };
         if (fieldType.endsWith("Enum")) {

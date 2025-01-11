@@ -40,7 +40,7 @@ public class CacheConfiguration implements CachingConfigurer {
                         RedisCacheConfiguration.defaultCacheConfig()
                                 .disableCachingNullValues()
                                 .entryTtl(Duration.ofMinutes(60))
-                                .prefixCacheNameWith("atp:")
+                                .prefixCacheNameWith("endless:")
                                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(redisSerializer)))
                 .transactionAware()
                 .build();
