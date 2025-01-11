@@ -40,16 +40,28 @@ public class Decimal {
         return isDecimal(amount, pattern, "金额不能为空", "金额格式错误，最多15位整数，2位小数");
     }
 
+    public static Boolean isAmount(BigDecimal amount) {
+        return isDecimal(amount, 17, 2, "金额不能为空", "金额格式错误，最多15位整数，2位小数");
+    }
+
     public static Boolean isRate(String rate) {
         String regex = "^\\d{1,3}(\\.\\d{1,5})?$";
         Pattern pattern = Pattern.compile(regex);
         return isDecimal(rate, pattern, "比率不能为空", "比率格式错误，最多3位整数，5位小数");
     }
 
+    public static Boolean isRate(BigDecimal rate) {
+        return isDecimal(rate, 8, 5, "比率不能为空", "比率格式错误，最多3位整数，5位小数");
+    }
+
     public static Boolean isPercentage(String percentage) {
         String regex = "^\\d{1,3}(\\.\\d{1,2})?$";
         Pattern pattern = Pattern.compile(regex);
         return isDecimal(percentage, pattern, "百分比不能为空", "百分比格式错误，最多3位整数，2位小数");
+    }
+
+    public static Boolean isPercentage(BigDecimal percentage) {
+        return isDecimal(percentage, 5, 2, "百分比不能为空", "百分比格式错误，最多3位整数，2位小数");
     }
 
     public static Boolean isDecimal(String decimal, Pattern pattern, String emptyMessage, String formatMessage) {
@@ -61,6 +73,22 @@ public class Decimal {
         } else {
             throw new DecimalFormatException(formatMessage);
         }
+    }
+
+    public static Boolean isDecimal(BigDecimal decimal, Integer precision, Integer scale, String emptyMessage, String formatMessage) {
+        if (decimal == null) {
+            throw new DecimalEmptyException(emptyMessage);
+        }
+        BigDecimal abs = decimal.abs();
+        int actualScale = abs.scale();
+        if (actualScale > scale) {
+            throw new DecimalFormatException(formatMessage);
+        }
+        int integerPartLength = abs.precision() - actualScale;
+        if (integerPartLength > (precision - scale)) {
+            throw new DecimalFormatException(formatMessage);
+        }
+        return true;
     }
 
     public static BigDecimal format(BigDecimal decimal) {
