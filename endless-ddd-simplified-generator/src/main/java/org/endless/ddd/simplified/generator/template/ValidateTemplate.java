@@ -31,7 +31,7 @@ public class ValidateTemplate {
                 .append("    @Override\n")
                 .append("    public ").append(className).append(" validate() {\n");
         for (Field field : fields) {
-            if (!field.nullable() || field.type().equals("BigDecimal")) {
+            if (!field.nullable() || DDDUtils.isValidateDecimalField(field.type(), field.name(), field.description())) {
                 stringBuilder.append("        validate").append(StringUtils.capitalize(field.name())).append("();\n");
             }
         }
