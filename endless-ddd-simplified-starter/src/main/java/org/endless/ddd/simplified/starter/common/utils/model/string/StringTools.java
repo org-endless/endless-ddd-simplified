@@ -51,7 +51,7 @@ public class StringTools {
     }
 
     /**
-     * 中文字符及允许的全角间隔符“·”，长度限制为 2-30 个字符
+     * 中文字符及允许的全角间隔符“·”，长度限制为 2-50 个字符
      *
      * @param nameZh 中文名称
      * @return {@link Boolean }
@@ -60,7 +60,7 @@ public class StringTools {
         if (!StringUtils.hasText(nameZh)) {
             return false;
         }
-        String regex = "^[\\u4e00-\\u9fa5·]{2,30}$";
+        String regex = "^[\\u4e00-\\u9fa5·]{2,50}$";
         return nameZh.matches(regex);
     }
 

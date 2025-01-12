@@ -26,12 +26,24 @@ import java.util.List;
 @JSONType(orders = {"transfers", "total"})
 public class FindPageRespQTransfer implements PageRespQTransfer {
 
+    /**
+     * 查询结果
+     */
     private final List<? extends Transfer> rows;
 
+    /**
+     * 查询总条数
+     */
     private final Long total;
 
+    /**
+     * 分页大小
+     */
     private final Integer pageSize;
 
+    /**
+     * 页码
+     */
     private final Integer pageNum;
 
     @Override
