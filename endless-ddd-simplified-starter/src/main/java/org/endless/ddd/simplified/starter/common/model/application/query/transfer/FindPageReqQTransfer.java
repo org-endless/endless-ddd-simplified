@@ -7,8 +7,6 @@ import lombok.ToString;
 import org.endless.ddd.simplified.starter.common.exception.model.common.TransferValidateException;
 import org.endless.ddd.simplified.starter.common.model.common.Transfer;
 
-import java.util.List;
-
 /**
  * FindPageRespTransfer
  * <p>
@@ -23,18 +21,13 @@ import java.util.List;
 @Getter
 @ToString
 @Builder
-@JSONType(orders = {"rows", "total", "pageSize", "pageNum"})
-public class FindPageRespQTransfer implements PageRespQTransfer {
+@JSONType(orders = {"reqTransfer", "pageSize", "pageNum"})
+public class FindPageReqQTransfer<T extends QueryTransfer> implements PageReqQTransfer<T> {
 
     /**
-     * 查询结果
+     * 查询传输对象
      */
-    private final List<? extends Transfer> rows;
-
-    /**
-     * 查询总条数
-     */
-    private final Long total;
+    private final T reqTransfer;
 
     /**
      * 分页大小
@@ -47,17 +40,10 @@ public class FindPageRespQTransfer implements PageRespQTransfer {
     private final Integer pageNum;
 
     @Override
-    public FindPageRespQTransfer validate() {
-        validateTotal();
+    public FindPageReqQTransfer<T> validate() {
         validatePageSize();
         validatePageNum();
         return this;
-    }
-
-    private void validateTotal() {
-        if (total == null || total < 0) {
-            throw new TransferValidateException("查询总条数不正确");
-        }
     }
 
     private void validatePageSize() {

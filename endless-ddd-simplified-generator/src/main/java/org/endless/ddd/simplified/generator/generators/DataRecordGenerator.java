@@ -130,7 +130,7 @@ public class DataRecordGenerator {
 
     private String getSqlType(String fieldType, String fieldDescription) {
         String fieldSqlType = switch (fieldType) {
-            case "String" -> "VARCHAR(255)";
+            case "String" -> "VARCHAR(" + StringTools.getLength(fieldDescription) + ")";
             case "Integer" -> "INT";
             case "Long" -> "BIGINT";
             case "Double" -> "DOUBLE";

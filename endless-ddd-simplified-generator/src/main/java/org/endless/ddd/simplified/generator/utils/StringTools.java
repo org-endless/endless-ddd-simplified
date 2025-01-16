@@ -235,6 +235,18 @@ public class StringTools {
         return result.toString();
     }
 
+    public static String getLength(String description) {
+        String regex = "消息内容\\((\\d+)B\\)";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(description);
+
+        if (matcher.find()) {
+            return String.valueOf(Integer.parseInt(matcher.group(1)));
+        } else {
+            return "255";
+        }
+    }
+
     public static Map<String, Integer> toDecimal(String decimal) {
         // 正则表达式：匹配 "(M, D)"，M 和 D 为整数
         // 1. (\\d+) 表示匹配一个或多个数字
