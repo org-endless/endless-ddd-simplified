@@ -37,14 +37,15 @@ public class FindPageRespQTransfer implements PageRespQTransfer {
     private final Long total;
 
     /**
+     * 页码
+     */
+    private final Integer pageNum;
+
+    /**
      * 分页大小
      */
     private final Integer pageSize;
 
-    /**
-     * 页码
-     */
-    private final Integer pageNum;
 
     @Override
     public FindPageRespQTransfer validate() {
@@ -60,15 +61,16 @@ public class FindPageRespQTransfer implements PageRespQTransfer {
         }
     }
 
+    private void validatePageNum() {
+        if (pageNum == null || pageNum < 1) {
+            throw new TransferValidateException("页码不正确");
+        }
+    }
+
     private void validatePageSize() {
         if (pageSize == null || pageSize < 1) {
             throw new TransferValidateException("分页大小不正确");
         }
     }
 
-    private void validatePageNum() {
-        if (pageNum == null || pageNum < 1) {
-            throw new TransferValidateException("页码不正确");
-        }
-    }
 }

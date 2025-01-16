@@ -30,14 +30,15 @@ public class FindPageReqQTransfer<T extends QueryTransfer> implements PageReqQTr
     private final T reqTransfer;
 
     /**
+     * 页码
+     */
+    private final Integer pageNum;
+
+    /**
      * 分页大小
      */
     private final Integer pageSize;
 
-    /**
-     * 页码
-     */
-    private final Integer pageNum;
 
     @Override
     public FindPageReqQTransfer<T> validate() {
@@ -46,15 +47,16 @@ public class FindPageReqQTransfer<T extends QueryTransfer> implements PageReqQTr
         return this;
     }
 
+    private void validatePageNum() {
+        if (pageNum == null || pageNum < 1) {
+            throw new TransferValidateException("页码不正确");
+        }
+    }
+
     private void validatePageSize() {
         if (pageSize == null || pageSize < 1) {
             throw new TransferValidateException("分页大小不正确");
         }
     }
 
-    private void validatePageNum() {
-        if (pageNum == null || pageNum < 1) {
-            throw new TransferValidateException("页码不正确");
-        }
-    }
 }
