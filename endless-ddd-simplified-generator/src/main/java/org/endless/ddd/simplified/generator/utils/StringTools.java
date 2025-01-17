@@ -236,7 +236,7 @@ public class StringTools {
     }
 
     public static String getLength(String description) {
-        String regex = "消息内容\\((\\d+)B\\)";
+        String regex = "\\((\\d+)B\\)";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(description);
 

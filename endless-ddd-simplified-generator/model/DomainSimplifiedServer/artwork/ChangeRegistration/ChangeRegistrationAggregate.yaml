@@ -1,0 +1,295 @@
+author: Lanruirui
+version: 0.0.1
+groupId: org.endless
+serviceName: GycdpServer
+rootPath: gycdp-server/gycdp-server-components
+serviceSubPackage: components
+contextName: artwork
+domainName: ChangeRegistration
+aggregateName: ChangeRegistrationAggregate
+description: 艺术品变更登记
+fields:
+  - name: changeRegistrationId
+    type: String
+    description: 艺术品变更登记ID
+    nullable: false
+  - name: artworkId
+    type: String
+    description: 艺术品ID
+    nullable: false
+  - name: changeArtworkId
+    type: String
+    description: 变更艺术品ID
+    nullable: false
+  - name: reason
+    type: String
+    description: 艺术品变更登记原因(600B)
+    nullable: false
+  - name: confirmations
+    type: List<ChangeRegistrationConfirmationEntity>
+    description: 艺术品变更登记确认列表
+    nullable: false
+  - name: approvals
+    type: List<ChangeRegistrationApprovalEntity>
+    description: 艺术品变更登记审批列表
+    nullable: false
+entities:
+  - name: ChangeRegistrationConfirmationEntity
+    description: 艺术品变更登记确认
+    fields:
+      - name: changeRegistrationConfirmationId
+        type: String
+        description: 艺术品变更登记确认ID
+        nullable: false
+      - name: customerId
+        type: String
+        description: 艺术品变更登记确认客户ID
+        nullable: false
+      - name: isConfirmed
+        type: Boolean
+        description: 艺术品变更登记是否已确认
+        nullable: false
+  - name: ChangeRegistrationApprovalEntity
+    description: 艺术品变更登记审批
+    fields:
+      - name: changeRegistrationApprovalId
+        type: String
+        description: 艺术品变更登记审批ID
+        nullable: false
+      - name: status
+        type: ChangeArtworkApprovalStatusEnum
+        description: 艺术品变更登记审批状态
+        nullable: false
+      - name: reason
+        type: String
+        description: 艺术品变更登记审批原因(600B)
+        nullable: false
+enums:
+  - name: ChangeArtworkApprovalStatusEnum
+    valueType: String
+    description: 审批状态
+    fields:
+      - name: code
+        type: String
+        description: 枚举代码
+        nullable: false
+      - name: description
+        type: String
+        description: 枚举描述
+        nullable: false
+    enumValues:
+      - code: PENDING
+        description: 待审批
+      - code: APPROVED
+        description: 已批准
+      - code: REJECTED
+        description: 已拒绝
+transfers:
+  - name: ChangeArtworkRegistrationReqCTransfer
+    adapterType: DRIVING
+    cqrsType: COMMAND
+    messageType: REQUEST
+    description: 变更艺术品登记命令请求传输对象
+    fields:
+      - name: artworkId
+        type: String
+        description: 艺术品ID
+        nullable: false
+      - name: changeArtworkId
+        type: String
+        description: 要变更的艺术品ID
+        nullable: false
+      - name: reason
+        type: String
+        description: 变更艺术品登记原因(600B)
+        nullable: false
+      - name: confirmations
+        type: ChangeConfirmationsReqCTransfer
+        description: 变更艺术品登记确认列表
+        nullable: false
+      - name: approvals
+        type: ChangeApprovalsReqCTransfer
+        description: 变更艺术品登记审批列表
+        nullable: false
+  - name: ChangeConfirmationsReqCTransfer
+    adapterType: DRIVING
+    cqrsType: COMMAND
+    messageType: REQUEST
+    description: 变更艺术品登记确认信息列表命令请求传输对象
+    fields:
+      - name: confirmations
+        type: List<ChangeConfirmationReqCTransfer>
+        description: 变更艺术品登记确认列表
+        nullable: false
+  - name: ChangeConfirmationReqCTransfer
+    adapterType: DRIVING
+    cqrsType: COMMAND
+    messageType: REQUEST
+    description: 变更艺术品登记确认信息命令请求传输对象
+    fields:
+      - name: customerId
+        type: String
+        description: 艺术品变更登记确认客户ID
+        nullable: false
+      - name: isConfirmed
+        type: Boolean
+        description: 艺术品变更登记是否已确认
+        nullable: false
+  - name: ChangeApprovalsReqCTransfer
+    adapterType: DRIVING
+    cqrsType: COMMAND
+    messageType: REQUEST
+    description: 变更艺术品登记审批信息列表命令请求传输对象
+    fields:
+      - name: approvals
+        type: List<ChangeApprovalReqCTransfer>
+        description: 变更艺术品登记审批列表
+        nullable: false
+  - name: ChangeApprovalReqCTransfer
+    adapterType: DRIVING
+    cqrsType: COMMAND
+    messageType: REQUEST
+    description: 变更艺术品登记审批命令请求传输对象
+    fields:
+      - name: status
+        type: String
+        description: 艺术品变更登记审批状态
+        nullable: false
+      - name: reason
+        type: String
+        description: 艺术品变更登记审批原因(600B)
+        nullable: false
+  - name: ChangeConfirmationStatusReqCTransfer
+    adapterType: DRIVING
+    cqrsType: COMMAND
+    messageType: REQUEST
+    description: 艺术品登记确认修改状态命令请求传输对象
+    fields:
+      - name: artworkId
+        type: String
+        description: 艺术品ID
+        nullable: false
+      - name: customerId
+        type: String
+        description: 艺术品登记确认客户ID
+        nullable: false
+      - name: isConfirm
+        type: Boolean
+        description: 是否确认
+        nullable: false
+  - name: ChangeApprovalStatusReqCTransfer
+    adapterType: DRIVING
+    cqrsType: COMMAND
+    messageType: REQUEST
+    description: 艺术品登记审批修改状态命令请求传输对象
+    fields:
+      - name: artworkId
+        type: String
+        description: 艺术品ID
+        nullable: false
+      - name: status
+        type: String
+        description: 艺术品登记审批状态
+        nullable: false
+      - name: rejectedReason
+        type: String
+        description: 备注(600B)
+        nullable: true
+  - name: ChangeRegistrationFindPageByCustomerIdReqQTransfer
+    adapterType: DRIVING
+    cqrsType: QUERY
+    messageType: REQUEST
+    description: 根据客户ID分页查询艺术品变更登记列表查询请求传输对象
+    fields:
+      - name: customerId
+        type: String
+        description: 客户ID
+        nullable: false
+      - name: isConfirm
+        type: Boolean
+        description: status
+        nullable: true
+      - name: pageNum
+        type: Integer
+        description: 页码
+        nullable: false
+      - name: pageSize
+        type: Integer
+        description: 页大小
+        nullable: false
+  - name: ChangeRegistrationFindPageByCustomerIdRespQTransfer
+    adapterType: DRIVING
+    cqrsType: QUERY
+    messageType: RESPONSE
+    description: 根据客户ID分页查询艺术品变更登记列表查询响应传输对象
+    fields:
+      - name: changeRegistrationId
+        type: String
+        description: 变更登记ID
+        nullable: false
+      - name: artworkId
+        type: String
+        description: 艺术品ID
+        nullable: false
+      - name: approvalStatus
+        type: String
+        description: 艺术品变更登记审批状态
+        nullable: false
+      - name: ownershipIds
+        type: List<String>
+        description: 权利人列表
+        nullable: false
+      - name: isConfirmed
+        type: Boolean
+        description: 艺术品变更登记是否已确认
+        nullable: false
+      - name: createTime
+        type: String
+        description: 创建时间
+        nullable: false
+  - name: ChangeRegistrationConfirmByCustomerIdRespQTransfer
+    adapterType: DRIVING
+    cqrsType: QUERY
+    messageType: RESPONSE
+    description: 查询用户确认信息查询响应传输对象
+    fields:
+      - name: changeRegistrationId
+        type: String
+        description: 艺术品变更登记ID
+        nullable: false
+      - name: isConfirmed
+        type: Boolean
+        description: 艺术品变更登记是否已确认
+        nullable: false
+  - name: ChangeRegistrationApprovalByCustomerIdRespQTransfer
+    adapterType: DRIVING
+    cqrsType: QUERY
+    messageType: RESPONSE
+    description: 查询审批信息查询响应传输对象
+    fields:
+      - name: status
+        type: String
+        description: 审批状态
+        nullable: false
+      - name: reason
+        type: String
+        description: 原因
+        nullable: true
+      - name: changeRegistrationId
+        type: String
+        description: 艺术品变更登记ID
+        nullable: false
+  - name: ArtworkOwnershipFindByArtwokIdRespQTransfer
+    adapterType: DRIVING
+    cqrsType: QUERY
+    messageType: RESPONSE
+    description: 根据艺术品ID列表查询权属人信息查询响应传输对象
+    fields:
+      - name: ownershipId
+        type: String
+        description: 权属人ID
+        nullable: false
+      - name: artworkId
+        type: String
+        description: 艺术品ID
+        nullable: false

@@ -10,7 +10,7 @@ spring:
       livereload:
         port: 35731
 server:
-  port: 60002
+  port: 60003
   error:
     whitelabel:
       enabled: false
