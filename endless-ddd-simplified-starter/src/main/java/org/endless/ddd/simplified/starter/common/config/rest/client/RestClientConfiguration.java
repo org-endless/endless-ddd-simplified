@@ -1,8 +1,8 @@
 package org.endless.ddd.simplified.starter.common.config.rest.client;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.endless.ddd.simplified.starter.common.config.endless.EndlessAutoConfiguration;
 import org.endless.ddd.simplified.starter.common.config.rest.converter.FastJson2HttpMessageConverter;
+import org.endless.ddd.simplified.starter.common.config.rest.converter.FormHttpMessageConverter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -24,14 +24,8 @@ public class RestClientConfiguration {
 
     private final EndlessAutoConfiguration configuration;
 
-    private final HttpServletRequest httpRequest;
-
-    private final MappingJackson2HttpMessageConverter jacksonConverter;
-
-    public RestClientConfiguration(EndlessAutoConfiguration configuration, HttpServletRequest httpRequest, MappingJackson2HttpMessageConverter jacksonConverter) {
+    public RestClientConfiguration(EndlessAutoConfiguration configuration) {
         this.configuration = configuration;
-        this.httpRequest = httpRequest;
-        this.jacksonConverter = jacksonConverter;
     }
 
     @ConditionalOnMissingBean
@@ -42,6 +36,7 @@ public class RestClientConfiguration {
                 converter instanceof MappingJackson2HttpMessageConverter);
         // 添加 Fastjson2 转换器
         restTemplate.getMessageConverters().add(new FastJson2HttpMessageConverter<>(configuration));
+        restTemplate.getMessageConverters().add(new FormHttpMessageConverter<>(configuration));
         return RestClient.create(restTemplate);
     }
 }

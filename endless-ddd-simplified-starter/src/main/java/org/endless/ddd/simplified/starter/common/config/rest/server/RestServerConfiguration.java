@@ -2,6 +2,7 @@ package org.endless.ddd.simplified.starter.common.config.rest.server;
 
 import org.endless.ddd.simplified.starter.common.config.endless.EndlessAutoConfiguration;
 import org.endless.ddd.simplified.starter.common.config.rest.converter.FastJson2HttpMessageConverter;
+import org.endless.ddd.simplified.starter.common.config.rest.converter.FormHttpMessageConverter;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
@@ -22,7 +23,7 @@ import java.util.List;
  * @see WebMvcConfigurer
  * @since 1.0.0
  */
-@Import({FastJson2HttpMessageConverter.class})
+@Import({FastJson2HttpMessageConverter.class, FormHttpMessageConverter.class})
 public class RestServerConfiguration implements WebMvcConfigurer {
 
     private final EndlessAutoConfiguration configuration;

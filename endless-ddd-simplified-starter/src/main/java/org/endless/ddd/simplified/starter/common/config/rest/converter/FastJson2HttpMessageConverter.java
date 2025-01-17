@@ -14,7 +14,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.AbstractHttpMessageConverter;
 import org.springframework.lang.NonNull;
 
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 
@@ -50,15 +49,8 @@ public class FastJson2HttpMessageConverter<T> extends AbstractHttpMessageConvert
     @Override
     protected @NonNull T readInternal(@NonNull Class<? extends T> clazz, @NonNull HttpInputMessage inputMessage) {
         try (InputStream inputStream = inputMessage.getBody()) {
-            // 使用缓冲区读取 InputStream 内容
-            byte[] bytes = new byte[1024];
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            int length;
-            while ((length = inputStream.read(bytes)) != -1) {
-                byteArrayOutputStream.write(bytes, 0, length);
-            }
-            // 转换为字符串
-            String string = byteArrayOutputStream.toString(charset);
+            byte[] buffer = inputStream.readAllBytes();
+            String string = new String(buffer, charset);
             log.trace("[Rest反序列化对象]: {}", JsonTools.maskSensitive(string.replaceAll("[\\r\\n\\s]", "")));
             return JSON.parseObject(string, clazz, filter());
         } catch (Exception e) {
@@ -80,6 +72,4 @@ public class FastJson2HttpMessageConverter<T> extends AbstractHttpMessageConvert
     private Filter filter() {
         return JSONReader.autoTypeFilter(configuration.jsonAllowedTypes());
     }
-
-
 }

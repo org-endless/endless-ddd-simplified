@@ -54,7 +54,7 @@ public class RepositoryGenerator {
         } else {
             className = exchangeSuffix(generics, "QueryRepository", 1);
             domainPackage = domainPackage(aggregate);
-            subPackage = "application.query.repository";
+            subPackage = "application.query.anticorruption";
             packageName = domainPackage + "." + subPackage;
             String superClassNameQueryRepository = superClassName(aggregate.getServiceName(), className, 2);
             String superClassNameRepository = exchangeSuffix(className, "QueryRepository", "Repository");

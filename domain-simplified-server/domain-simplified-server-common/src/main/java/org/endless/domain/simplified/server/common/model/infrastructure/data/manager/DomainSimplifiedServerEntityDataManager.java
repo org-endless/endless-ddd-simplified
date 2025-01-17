@@ -1,7 +1,7 @@
 package org.endless.domain.simplified.server.common.model.infrastructure.data.manager;
 
 import org.endless.ddd.simplified.starter.common.model.infrastructure.data.manager.EntityDataManager;
-import org.endless.domain.simplified.server.common.model.application.query.repository.DomainSimplifiedServerQueryRepository;
+import org.endless.domain.simplified.server.common.model.application.query.anticorruption.DomainSimplifiedServerQueryRepository;
 import org.endless.domain.simplified.server.common.model.domain.entity.DomainSimplifiedServerEntity;
 import org.endless.domain.simplified.server.common.model.infrastructure.data.record.DomainSimplifiedServerRecord;
 

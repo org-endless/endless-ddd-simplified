@@ -147,7 +147,7 @@ public class HeaderTemplate {
         String superSubPackage = removeSuffix(subPackage, ".impl");
         stringBuilder
                 .append("import ").append(domainPackage).append(".").append(superSubPackage).append(".*;\n")
-                .append("import ").append(domainPackage).append(".application.query.repository.*;\n")
+                .append("import ").append(domainPackage).append(".application.query.anticorruption.*;\n")
                 .append("import ").append(domainPackage).append(".domain.anticorruption.*;\n")
                 .append("import ").append(groupId).append(".ddd.simplified.starter.common.exception.model.").append(superSubPackage).append(".*;\n\n");
     }
@@ -174,7 +174,7 @@ public class HeaderTemplate {
     public static void importHeaderDataManager(StringBuilder stringBuilder, String groupId, String servicePackage, String domainPackage, String subPackage) {
         stringBuilder
                 .append("import ").append(servicePackage).append(".common.model.").append(subPackage).append(".*;\n")
-                .append("import ").append(domainPackage).append(".application.query.repository.*;\n")
+                .append("import ").append(domainPackage).append(".application.query.anticorruption.*;\n")
                 .append("import ").append(domainPackage).append(".domain.anticorruption.*;\n")
                 .append("import ").append(domainPackage).append(".domain.entity.*;\n")
                 .append("import ").append(domainPackage).append(".infrastructure.data.persistence.mapper.*;\n")
@@ -215,7 +215,7 @@ public class HeaderTemplate {
                 .append("import ").append(domainPackage).append(".application.command.handler.impl.*;\n")
                 .append("import ").append(domainPackage).append(".application.query.handler.*;\n")
                 .append("import ").append(domainPackage).append(".application.query.handler.impl.*;\n")
-                .append("import ").append(domainPackage).append(".application.query.repository.*;\n")
+                .append("import ").append(domainPackage).append(".application.query.anticorruption.*;\n")
                 .append("import ").append(domainPackage).append(".domain.anticorruption.*;\n")
                 .append("import ").append(domainPackage).append(".facade.adapter.*;\n")
                 .append("import ").append(domainPackage).append(".facade.adapter.spring.*;\n")

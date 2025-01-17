@@ -1,6 +1,6 @@
 package org.endless.ddd.simplified.starter.common.model.infrastructure.data.manager;
 
-import org.endless.ddd.simplified.starter.common.model.application.query.repository.QueryRepository;
+import org.endless.ddd.simplified.starter.common.model.application.query.anticorruption.QueryRepository;
 import org.endless.ddd.simplified.starter.common.model.domain.anticorruption.Repository;
 import org.endless.ddd.simplified.starter.common.model.domain.entity.Aggregate;
 import org.endless.ddd.simplified.starter.common.model.infrastructure.data.record.DataRecord;
