@@ -1,7 +1,5 @@
 package org.endless.ddd.simplified.starter.common.model.application.query.transfer;
 
-import org.endless.ddd.simplified.starter.common.model.common.Transfer;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -18,7 +16,7 @@ import java.util.List;
  */
 public interface PageRespQTransfer extends QueryTransfer {
 
-    List<? extends Transfer> getRows();
+    List<Object> getRows();
 
     Long getTotal();
 

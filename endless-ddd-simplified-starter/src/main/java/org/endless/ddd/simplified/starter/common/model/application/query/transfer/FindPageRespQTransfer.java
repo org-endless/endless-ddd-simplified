@@ -29,7 +29,7 @@ public class FindPageRespQTransfer implements PageRespQTransfer {
     /**
      * 查询结果
      */
-    private final List<? extends Transfer> rows;
+    private final List<Object> rows;
 
     /**
      * 查询总条数

@@ -65,6 +65,7 @@
         <dependency>
             <groupId>com.yomahub</groupId>
             <artifactId>tlog-all-spring-boot-starter</artifactId>
+            <optional>true</optional>
         </dependency>
         <!-- Springdoc OpenAPI 依赖 -->
         <!-- Infrastructure -->
