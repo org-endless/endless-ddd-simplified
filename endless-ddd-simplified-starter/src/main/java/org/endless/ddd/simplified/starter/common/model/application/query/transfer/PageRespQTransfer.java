@@ -16,7 +16,7 @@ import java.util.List;
  */
 public interface PageRespQTransfer extends QueryTransfer {
 
-    List<Object> getRows();
+    List<?> getRows();
 
     Long getTotal();
 
