@@ -112,6 +112,8 @@ public class DataRecordGenerator {
             if (className.endsWith("AssociationRecord")) {
                 if (fieldName.equals("associationId")) {
                     primaryKey = " PRIMARY KEY";
+                } else if (fieldName.equals("removeAt")) {
+                    primaryKey = " DEFAULT 0";
                 }
             } else if (fieldName.equals(id(className, 1))) {
                 primaryKey = " PRIMARY KEY";

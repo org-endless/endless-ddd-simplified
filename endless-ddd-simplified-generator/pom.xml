@@ -8,7 +8,6 @@
         <artifactId>endless-ddd-simplified</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
-
     <artifactId>endless-ddd-simplified-generator</artifactId>
     <packaging>jar</packaging>
     <name>endless-ddd-simplified-generator</name>
