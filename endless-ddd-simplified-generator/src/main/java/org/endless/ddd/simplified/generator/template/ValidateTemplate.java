@@ -140,6 +140,8 @@ public class ValidateTemplate {
             stringBuilder.append("            throw new CommandTransferValidateException(\"").append(fieldDescription).append(message).append(");\n");
         } else if (className.endsWith("QTransfer")) {
             stringBuilder.append("            throw new QueryTransferValidateException(\"").append(fieldDescription).append(message).append(");\n");
+        } else if (className.endsWith("DTransfer")) {
+            stringBuilder.append("            throw new DrivenTransferValidateException(\"").append(fieldDescription).append(message).append(");\n");
         } else if (className.endsWith("Record")) {
             stringBuilder.append("            throw new DataRecordValidateException(\"").append(fieldDescription).append(message).append(");\n");
         }

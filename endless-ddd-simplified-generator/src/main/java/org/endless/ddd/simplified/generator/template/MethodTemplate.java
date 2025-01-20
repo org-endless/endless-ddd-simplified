@@ -305,7 +305,7 @@ public class MethodTemplate {
                         .append("    }\n\n");
             } else if ("List<String>".equals(fieldType) || "List<Long>".equals(fieldType)) {
                 stringBuilder
-                        .append("    ").append(access(className, false, true)).append(" ").append(className).append(" ").append(singularMethod).append("(").append(generics).append(" ").append(singularField).append(") {\n")
+                        .append("    ").append(access(className, false, true)).append(" ").append(className).append(" ").append(singularMethod).append("(").append(generics).append(" ").append(singularField).append(", String modifyUserId) {\n")
                         .append("        if (").append(singularField).append(" == null) {\n")
                         .append("            throw new AggregateRemoveItemException(\"聚合根要删除的子实体 ").append(generics).append(" 不能为 null\");\n")
                         .append("        }\n")
@@ -316,7 +316,7 @@ public class MethodTemplate {
                 // 列表删除子实体列表方法
                 String method = "remove" + StringUtils.capitalize(fieldName);
                 stringBuilder
-                        .append("    ").append(access(className, false, true)).append(" ").append(className).append(" ").append(method).append("(").append(fieldType).append(" ").append(fieldName).append(") {\n")
+                        .append("    ").append(access(className, false, true)).append(" ").append(className).append(" ").append(method).append("(").append(fieldType).append(" ").append(fieldName).append(", String modifyUserId) {\n")
                         .append("        if (CollectionUtils.isEmpty(").append(fieldName).append(")) {\n")
                         .append("            throw new AggregateRemoveItemException(\"聚合根要删除的子实体列表 ").append(fieldType).append(" 不能为空\");\n")
                         .append("        }\n")
