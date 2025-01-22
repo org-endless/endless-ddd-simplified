@@ -31,7 +31,7 @@ import java.util.Map;
  *
  * @author Deng Haozhi
  * @see AbstractHttpMessageConverter
- * @since 2.0.0
+ * @since 1.0.0
  */
 @Slf4j
 public class FormHttpMessageConverter<T> extends AbstractHttpMessageConverter<T> {

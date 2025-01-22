@@ -1,4 +1,4 @@
-package org.endless.ddd.simplified.starter.common.exception.security;
+package org.endless.ddd.simplified.starter.common.exception.security.password;
 
 import lombok.Getter;
 import org.endless.ddd.simplified.starter.common.exception.security.common.SecurityFailedException;
@@ -17,25 +17,27 @@ import org.endless.ddd.simplified.starter.common.handler.result.type.ErrorCode;
 @Getter
 public class InitialPasswordException extends SecurityFailedException {
 
+    private static final ErrorCode ERROR_CODE = ErrorCode.SEC0000;
+
     private final String userId;
 
     public InitialPasswordException(String userId) {
-        super(ErrorCode.SEC0000);
+        super(ERROR_CODE);
         this.userId = userId;
     }
 
     public InitialPasswordException(String message, String userId) {
-        super(ErrorCode.SEC0000, message);
+        super(ERROR_CODE, message);
         this.userId = userId;
     }
 
     public InitialPasswordException(Throwable throwable, String userId) {
-        super(ErrorCode.SEC0000, throwable);
+        super(ERROR_CODE, throwable);
         this.userId = userId;
     }
 
     public InitialPasswordException(String message, Throwable throwable, String userId) {
-        super(ErrorCode.SEC0000, message, throwable);
+        super(ERROR_CODE, message, throwable);
         this.userId = userId;
     }
 }

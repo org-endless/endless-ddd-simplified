@@ -16,19 +16,21 @@ import org.endless.ddd.simplified.starter.common.handler.result.type.ErrorCode;
  */
 public class LogoutUnknownException extends SecurityUnknownException {
 
+    private static final ErrorCode ERROR_CODE = ErrorCode.SEC9020;
+
     public LogoutUnknownException() {
-        super(ErrorCode.SEC9020);
+        super(ERROR_CODE);
     }
 
     public LogoutUnknownException(String message) {
-        super(ErrorCode.SEC9020, message);
+        super(ERROR_CODE, message);
     }
 
     public LogoutUnknownException(Throwable throwable) {
-        super(ErrorCode.SEC9020, throwable);
+        super(ERROR_CODE, throwable);
     }
 
     public LogoutUnknownException(String message, Throwable throwable) {
-        super(ErrorCode.SEC9020, message, throwable);
+        super(ERROR_CODE, message, throwable);
     }
 }
