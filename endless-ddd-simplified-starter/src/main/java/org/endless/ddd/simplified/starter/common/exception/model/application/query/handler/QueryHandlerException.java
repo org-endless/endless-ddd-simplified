@@ -1,6 +1,7 @@
 package org.endless.ddd.simplified.starter.common.exception.model.application.query.handler;
 
-import org.endless.ddd.simplified.starter.common.utils.model.string.StringTools;
+import org.endless.ddd.simplified.starter.common.exception.common.FailedException;
+import org.endless.ddd.simplified.starter.common.handler.result.type.ErrorCode;
 
 /**
  * QueryHandlerException
@@ -13,19 +14,23 @@ import org.endless.ddd.simplified.starter.common.utils.model.string.StringTools;
  * @see RuntimeException
  * @since 1.0.0
  */
-public class QueryHandlerException extends RuntimeException {
+public class QueryHandlerException extends FailedException {
 
-    private static final String DEFAULT_MESSAGE = "查询处理器异常";
+    private static final ErrorCode ERROR_CODE = ErrorCode.DQR0000;
 
-    public QueryHandlerException(String message) {
-        super("[" + DEFAULT_MESSAGE + "]" + StringTools.addBrackets(message));
+    public QueryHandlerException() {
+        super(ERROR_CODE);
     }
 
-    public QueryHandlerException(String message, Throwable throwable) {
-        super("[" + DEFAULT_MESSAGE + "]" + StringTools.addBrackets(message), throwable);
+    public QueryHandlerException(String message) {
+        super(ERROR_CODE, message);
     }
 
     public QueryHandlerException(Throwable throwable) {
-        super("[" + DEFAULT_MESSAGE + "]" + StringTools.addBrackets(throwable.getMessage()), throwable);
+        super(ERROR_CODE, throwable);
+    }
+
+    public QueryHandlerException(String message, Throwable throwable) {
+        super(ERROR_CODE, message, throwable);
     }
 }

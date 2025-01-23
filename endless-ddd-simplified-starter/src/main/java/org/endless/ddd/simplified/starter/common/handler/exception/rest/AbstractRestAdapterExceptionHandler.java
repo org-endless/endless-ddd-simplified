@@ -56,15 +56,16 @@ public abstract class AbstractRestAdapterExceptionHandler implements RestAdapter
     public ResponseEntity<RestResponse> handleNoHandlerFoundException(NoHandlerFoundException e) {
         String message = addBrackets(e.getMessage());
         log.error("[{}][{}]{}", ErrorCode.NOT_FND.getCode(), ErrorCode.NOT_FND.getDescription(), message, e);
-        return response().badRequest(ErrorCode.NOT_FND, message);
+        return response().notFound(ErrorCode.NOT_FND, message);
     }
 
     @ExceptionHandler(QueryHandlerNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<RestResponse> handleQueryHandlerNotFoundException(QueryHandlerNotFoundException e) {
         String message = addBrackets(e.getMessage());
-        log.error("[{}][{}]{}", ErrorCode.NOT_FND.getCode(), ErrorCode.NOT_FND.getDescription(), message, e);
-        return response().badRequest(ErrorCode.NOT_FND, message);
+        ErrorCode errorCode = e.getErrorCode();
+        log.error("[{}][{}]{}", errorCode.getCode(), errorCode.getDescription(), message, e);
+        return response().notFound(errorCode, message);
     }
 
     @ExceptionHandler(RestNotFoundException.class)
@@ -72,7 +73,7 @@ public abstract class AbstractRestAdapterExceptionHandler implements RestAdapter
     public ResponseEntity<RestResponse> handleRestNotFoundException(RestNotFoundException e) {
         String message = addBrackets(e.getMessage());
         log.error("[{}][{}]{}", ErrorCode.NOT_FND.getCode(), ErrorCode.NOT_FND.getDescription(), message, e);
-        return response().badRequest(ErrorCode.NOT_FND, message);
+        return response().notFound(ErrorCode.NOT_FND, message);
     }
 
     @ExceptionHandler(MapperException.class)
@@ -96,7 +97,7 @@ public abstract class AbstractRestAdapterExceptionHandler implements RestAdapter
     public ResponseEntity<RestResponse> handleUnknownException(UnknownException e) {
         String message = addBrackets(e.getMessage());
         ErrorCode errorCode = e.getErrorCode();
-        log.error("[{}][{}]{}", errorCode.getCode(), ErrorCode.UNKNOWN.getDescription(), message, e);
+        log.error("[{}][{}]{}", errorCode.getCode(), errorCode.getDescription(), message, e);
         return response().unavailable(errorCode, message);
     }
 
@@ -105,7 +106,7 @@ public abstract class AbstractRestAdapterExceptionHandler implements RestAdapter
     public ResponseEntity<RestResponse> handleSecurityUnknownException(SecurityUnknownException e) {
         String message = addBrackets(e.getMessage());
         ErrorCode errorCode = e.getErrorCode();
-        log.error("[{}][{}]{}", errorCode.getCode(), ErrorCode.UNKNOWN.getDescription(), message, e);
+        log.error("[{}][{}]{}", errorCode.getCode(), errorCode.getDescription(), message, e);
         return response().unavailable(errorCode, message);
     }
 
@@ -114,7 +115,7 @@ public abstract class AbstractRestAdapterExceptionHandler implements RestAdapter
     public ResponseEntity<RestResponse> handleFailedException(FailedException e) {
         String message = addBrackets(e.getMessage());
         ErrorCode errorCode = e.getErrorCode();
-        log.error("[{}][{}]{}", errorCode.getCode(), ErrorCode.FAILURE.getDescription(), message, e);
+        log.error("[{}][{}]{}", errorCode.getCode(), errorCode.getDescription(), message, e);
         return response().error(errorCode, message);
     }
 
@@ -123,7 +124,7 @@ public abstract class AbstractRestAdapterExceptionHandler implements RestAdapter
     public ResponseEntity<RestResponse> handleSecurityFailedException(SecurityFailedException e) {
         String message = addBrackets(e.getMessage());
         ErrorCode errorCode = e.getErrorCode();
-        log.error("[{}][{}]{}", errorCode.getCode(), ErrorCode.FAILURE.getDescription(), message, e);
+        log.error("[{}][{}]{}", errorCode.getCode(), errorCode.getDescription(), message, e);
         return response().error(errorCode, message);
     }
 

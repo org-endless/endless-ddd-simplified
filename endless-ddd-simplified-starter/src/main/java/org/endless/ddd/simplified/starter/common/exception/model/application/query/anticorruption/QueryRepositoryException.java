@@ -1,4 +1,4 @@
-package org.endless.ddd.simplified.starter.common.exception.model.application.query.repository;
+package org.endless.ddd.simplified.starter.common.exception.model.application.query.anticorruption;
 
 import org.endless.ddd.simplified.starter.common.utils.model.string.StringTools;
 

@@ -1,6 +1,7 @@
 package org.endless.ddd.simplified.starter.common.exception.model.application.query.handler;
 
-import org.endless.ddd.simplified.starter.common.utils.model.string.StringTools;
+import org.endless.ddd.simplified.starter.common.exception.common.FailedException;
+import org.endless.ddd.simplified.starter.common.handler.result.type.ErrorCode;
 
 /**
  * QueryHandlerNotFoundException
@@ -13,19 +14,23 @@ import org.endless.ddd.simplified.starter.common.utils.model.string.StringTools;
  * @see QueryHandlerException
  * @since 1.0.0
  */
-public class QueryHandlerNotFoundException extends QueryHandlerException {
+public class QueryHandlerNotFoundException extends FailedException {
 
-    private static final String DEFAULT_MESSAGE = "未找到相关数据";
+    private static final ErrorCode ERROR_CODE = ErrorCode.DQR0001;
 
-    public QueryHandlerNotFoundException(String message) {
-        super("[" + DEFAULT_MESSAGE + "]" + StringTools.addBrackets(message));
+    public QueryHandlerNotFoundException() {
+        super(ERROR_CODE);
     }
 
-    public QueryHandlerNotFoundException(String message, Throwable throwable) {
-        super("[" + DEFAULT_MESSAGE + "]" + StringTools.addBrackets(message), throwable);
+    public QueryHandlerNotFoundException(String message) {
+        super(ERROR_CODE, message);
     }
 
     public QueryHandlerNotFoundException(Throwable throwable) {
-        super("[" + DEFAULT_MESSAGE + "]" + StringTools.addBrackets(throwable.getMessage()), throwable);
+        super(ERROR_CODE, throwable);
+    }
+
+    public QueryHandlerNotFoundException(String message, Throwable throwable) {
+        super(ERROR_CODE, message, throwable);
     }
 }
