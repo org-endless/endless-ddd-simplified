@@ -401,7 +401,7 @@ public class MethodTemplate {
                 }
                 expandedTypes.add(fieldType);
             } else if (entityNames.contains(fieldGenerics)) {
-                stringBuilder.append("                .").append(fieldName).append("(").append(filedGenericsRecord).append(".from(").append(objectParam).append(".").append(getField).append("(), ").append(objectParam).append(".get").append(StringUtils.capitalize(aggregateId)).append("()))\n");
+                stringBuilder.append("                .").append(fieldName).append("(").append(objectParam).append(".").append(getField).append("() == null ? null : ").append(filedGenericsRecord).append(".from(").append(objectParam).append(".").append(getField).append("(), ").append(objectParam).append(".get").append(StringUtils.capitalize(aggregateId)).append("()))\n");
             } else {
                 stringBuilder.append("                .").append(fieldName).append("(").append(objectParam).append(".get").append(StringUtils.capitalize(fieldName)).append("())\n");
             }
