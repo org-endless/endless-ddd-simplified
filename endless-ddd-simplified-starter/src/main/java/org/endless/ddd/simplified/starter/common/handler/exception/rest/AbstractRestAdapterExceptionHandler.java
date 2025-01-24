@@ -15,6 +15,7 @@ import org.endless.ddd.simplified.starter.common.model.sidecar.rest.RestResponse
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.NoHandlerFoundException;
@@ -75,6 +76,15 @@ public abstract class AbstractRestAdapterExceptionHandler implements RestAdapter
         log.error("[{}][{}]{}", ErrorCode.NOT_FND.getCode(), ErrorCode.NOT_FND.getDescription(), message, e);
         return response().notFound(ErrorCode.NOT_FND, message);
     }
+
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<RestResponse> handleAuthorizationDeniedException(AuthorizationDeniedException e) {
+        String message = addBrackets("没有访问权限");
+        log.error("[{}][{}]{}", ErrorCode.FORBIDN.getCode(), ErrorCode.FORBIDN.getDescription(), message, e);
+        return response().forbidden(ErrorCode.FORBIDN, message);
+    }
+
 
     @ExceptionHandler(MapperException.class)
     @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)

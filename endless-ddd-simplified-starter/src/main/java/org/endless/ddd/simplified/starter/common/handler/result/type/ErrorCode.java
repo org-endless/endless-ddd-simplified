@@ -29,7 +29,7 @@ public enum ErrorCode implements BaseEnum {
     UN_AUTH("UN_AUTH", "身份认证失败"),
     BAD_REQ("BAD_REQ", "请求参数错误"),
     NOT_FND("NOT_FND", "未找到相关资源"),
-    FORBIDN("FORBIDN", "没有访问权限"),
+    FORBIDN("FORBIDN", "服务访问被拒绝"),
 
     // DDD通用错误码
     // 聚合行为
