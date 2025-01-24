@@ -99,6 +99,8 @@ public enum ErrorCode implements BaseEnum {
     SEC0000("SEC0000", "初始化密码不能用于登录"),
     SEC0001("SEC0001", "用户名为空"),
     SEC0002("SEC0002", "密码为空"),
+    SEC0003("SEC0003", "密码错误"),
+    SEC0004("SEC0004", "密码格式错误"),
     SEC0010("SEC0010", "令牌请求无效"),
     SEC0011("SEC0011", "令牌生成失败"),
     SEC0012("SEC0012", "令牌刷新失败"),
