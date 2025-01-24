@@ -191,4 +191,30 @@ public interface RestResponse extends Response {
         message = "[" + errorCode.getDescription() + "]" + addBrackets(message);
         return response(String.valueOf(HttpStatus.NOT_FOUND.value()), errorCode.getCode(), message, data);
     }
+
+    default ResponseEntity<RestResponse> forbidden(ErrorCode errorCode) {
+        String message = "[" + ErrorCode.FORBIDN.getDescription() + "]";
+        if (errorCode != ErrorCode.FORBIDN) {
+            message = message + addBrackets(errorCode.getDescription());
+        }
+        return response(String.valueOf(HttpStatus.FORBIDDEN.value()), errorCode.getCode(), message, null);
+    }
+
+    default ResponseEntity<RestResponse> forbidden(ErrorCode errorCode, String message) {
+        message = "[" + errorCode.getDescription() + "]" + addBrackets(message);
+        return response(String.valueOf(HttpStatus.FORBIDDEN.value()), errorCode.getCode(), message, null);
+    }
+
+    default ResponseEntity<RestResponse> forbidden(ErrorCode errorCode, Object data) {
+        String message = "[" + ErrorCode.FORBIDN.getDescription() + "]";
+        if (errorCode != ErrorCode.FORBIDN) {
+            message = message + addBrackets(errorCode.getDescription());
+        }
+        return response(String.valueOf(HttpStatus.FORBIDDEN.value()), errorCode.getCode(), message, data);
+    }
+
+    default ResponseEntity<RestResponse> forbidden(ErrorCode errorCode, String message, Object data) {
+        message = "[" + errorCode.getDescription() + "]" + addBrackets(message);
+        return response(String.valueOf(HttpStatus.FORBIDDEN.value()), errorCode.getCode(), message, data);
+    }
 }
