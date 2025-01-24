@@ -1,6 +1,7 @@
 package org.endless.ddd.simplified.starter.common.exception.model.domain.type;
 
-import org.endless.ddd.simplified.starter.common.utils.model.string.StringTools;
+import org.endless.ddd.simplified.starter.common.exception.common.FailedException;
+import org.endless.ddd.simplified.starter.common.handler.result.type.ErrorCode;
 
 /**
  * EnumException
@@ -13,19 +14,23 @@ import org.endless.ddd.simplified.starter.common.utils.model.string.StringTools;
  * @see RuntimeException
  * @since 1.0.0
  */
-public class EnumException extends RuntimeException {
+public class EnumException extends FailedException {
 
-    private static final String DEFAULT_MESSAGE = "枚举异常";
+    private static final ErrorCode ERROR_CODE = ErrorCode.DEM0000;
 
-    public EnumException(String message) {
-        super("[" + DEFAULT_MESSAGE + "]" + StringTools.addBrackets(message));
+    public EnumException() {
+        super(ERROR_CODE);
     }
 
-    public EnumException(String message, Throwable throwable) {
-        super("[" + DEFAULT_MESSAGE + "]" + StringTools.addBrackets(message), throwable);
+    public EnumException(String message) {
+        super(ERROR_CODE, message);
     }
 
     public EnumException(Throwable throwable) {
-        super("[" + DEFAULT_MESSAGE + "]" + StringTools.addBrackets(throwable.getMessage()), throwable);
+        super(ERROR_CODE, throwable);
+    }
+
+    public EnumException(String message, Throwable throwable) {
+        super(ERROR_CODE, message, throwable);
     }
 }
