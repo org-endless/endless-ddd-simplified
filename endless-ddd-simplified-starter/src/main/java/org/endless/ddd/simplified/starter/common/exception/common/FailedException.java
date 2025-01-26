@@ -7,7 +7,7 @@ import org.endless.ddd.simplified.starter.common.handler.result.type.ErrorCode;
  * <p>
  * create 2024/12/05 02:08
  * <p>
- * update 2024/12/05 02:08
+ * update 2025/01/27 03:57
  *
  * @author Deng Haozhi
  * @see AbstractException

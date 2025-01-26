@@ -34,7 +34,9 @@ public enum ErrorCode implements BaseEnum {
     // DDD通用错误码
     // 聚合行为
     DAG0000("DAG0000", "聚合行为处理失败"),
-    DAG9000("DAG9000", "聚合行为处理异常"),
+    DAG9000("DAG9000", "聚合行为状态未知"),
+    // 领域服务
+    DSV0000("DSV0000", "领域服务处理失败"),
     // 枚举
     DEM0000("DEM0000", "枚举处理失败"),
 
