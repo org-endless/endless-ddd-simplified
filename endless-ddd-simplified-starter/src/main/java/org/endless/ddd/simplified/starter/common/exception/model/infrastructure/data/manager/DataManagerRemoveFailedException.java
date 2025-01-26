@@ -4,7 +4,7 @@ import org.endless.ddd.simplified.starter.common.exception.common.FailedExceptio
 import org.endless.ddd.simplified.starter.common.handler.result.type.ErrorCode;
 
 /**
- * DataManagerFindFailedException
+ * DataManagerRemoveFailedException
  * <p>
  * create 2024/09/29 10:55
  * <p>
@@ -14,23 +14,23 @@ import org.endless.ddd.simplified.starter.common.handler.result.type.ErrorCode;
  * @see DataManagerFailedException
  * @since 1.0.0
  */
-public class DataManagerNotFoundException extends FailedException {
+public class DataManagerRemoveFailedException extends FailedException {
 
-    private static final ErrorCode ERROR_CODE = ErrorCode.DDM0011;
+    private static final ErrorCode ERROR_CODE = ErrorCode.DDM0002;
 
-    public DataManagerNotFoundException() {
+    public DataManagerRemoveFailedException() {
         super(ERROR_CODE);
     }
 
-    public DataManagerNotFoundException(String message) {
+    public DataManagerRemoveFailedException(String message) {
         super(ERROR_CODE, message);
     }
 
-    public DataManagerNotFoundException(Throwable throwable) {
+    public DataManagerRemoveFailedException(Throwable throwable) {
         super(ERROR_CODE, throwable);
     }
 
-    public DataManagerNotFoundException(String message, Throwable throwable) {
+    public DataManagerRemoveFailedException(String message, Throwable throwable) {
         super(ERROR_CODE, message, throwable);
     }
 }

@@ -14,23 +14,23 @@ import org.endless.ddd.simplified.starter.common.handler.result.type.ErrorCode;
  * @see DataManagerFailedException
  * @since 1.0.0
  */
-public class DataManagerNotFoundException extends FailedException {
+public class DataManagerFindFailedException extends FailedException {
 
-    private static final ErrorCode ERROR_CODE = ErrorCode.DDM0011;
+    private static final ErrorCode ERROR_CODE = ErrorCode.DDM0010;
 
-    public DataManagerNotFoundException() {
+    public DataManagerFindFailedException() {
         super(ERROR_CODE);
     }
 
-    public DataManagerNotFoundException(String message) {
+    public DataManagerFindFailedException(String message) {
         super(ERROR_CODE, message);
     }
 
-    public DataManagerNotFoundException(Throwable throwable) {
+    public DataManagerFindFailedException(Throwable throwable) {
         super(ERROR_CODE, throwable);
     }
 
-    public DataManagerNotFoundException(String message, Throwable throwable) {
+    public DataManagerFindFailedException(String message, Throwable throwable) {
         super(ERROR_CODE, message, throwable);
     }
 }
