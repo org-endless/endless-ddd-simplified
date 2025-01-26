@@ -3,8 +3,10 @@ package org.endless.ddd.simplified.starter.common.handler.exception.rest;
 import lombok.extern.slf4j.Slf4j;
 import org.endless.ddd.simplified.starter.common.exception.common.FailedException;
 import org.endless.ddd.simplified.starter.common.exception.common.UnknownException;
+import org.endless.ddd.simplified.starter.common.exception.model.application.command.handler.CommandHandlerNotFoundException;
 import org.endless.ddd.simplified.starter.common.exception.model.application.query.handler.QueryHandlerNotFoundException;
 import org.endless.ddd.simplified.starter.common.exception.model.infrastructure.adapter.filesystem.FileSystemException;
+import org.endless.ddd.simplified.starter.common.exception.model.infrastructure.data.manager.DataManagerNotFoundException;
 import org.endless.ddd.simplified.starter.common.exception.model.infrastructure.data.persistence.mapper.MapperException;
 import org.endless.ddd.simplified.starter.common.exception.model.sidecar.rest.RestBadRequestException;
 import org.endless.ddd.simplified.starter.common.exception.model.sidecar.rest.RestNotFoundException;
@@ -58,6 +60,24 @@ public abstract class AbstractRestAdapterExceptionHandler implements RestAdapter
         String message = addBrackets(e.getMessage());
         log.error("[{}][{}]{}", ErrorCode.NOT_FND.getCode(), ErrorCode.NOT_FND.getDescription(), message, e);
         return response().notFound(ErrorCode.NOT_FND, message);
+    }
+
+    @ExceptionHandler(DataManagerNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<RestResponse> handleDataManagerNotFoundException(DataManagerNotFoundException e) {
+        String message = addBrackets(e.getMessage());
+        ErrorCode errorCode = e.getErrorCode();
+        log.error("[{}][{}]{}", errorCode.getCode(), errorCode.getDescription(), message, e);
+        return response().notFound(errorCode, message);
+    }
+
+    @ExceptionHandler(CommandHandlerNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<RestResponse> handleCommandHandlerNotFoundException(CommandHandlerNotFoundException e) {
+        String message = addBrackets(e.getMessage());
+        ErrorCode errorCode = e.getErrorCode();
+        log.error("[{}][{}]{}", errorCode.getCode(), errorCode.getDescription(), message, e);
+        return response().notFound(errorCode, message);
     }
 
     @ExceptionHandler(QueryHandlerNotFoundException.class)
