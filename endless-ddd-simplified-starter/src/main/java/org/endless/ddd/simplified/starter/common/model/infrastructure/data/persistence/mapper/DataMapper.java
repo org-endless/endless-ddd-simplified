@@ -111,6 +111,7 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
         Optional.ofNullable(queryWrapper)
                 .orElseThrow(() -> new MapperFindException("查询条件不能为空"));
         try {
+            queryWrapper.select("is_removed");
             return Optional.of(this.selectOne(queryWrapper, false))
                     .filter(record -> Boolean.FALSE.equals(record.getIsRemoved()));
         } catch (Exception e) {
@@ -135,6 +136,7 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
         Optional.ofNullable(queryWrapper)
                 .orElseThrow(() -> new MapperFindException("查询条件不能为空"));
         try {
+            queryWrapper.select("is_removed");
             return this.selectList(queryWrapper).stream()
                     .filter(record -> Boolean.FALSE.equals(record.getIsRemoved()))
                     .toList();
@@ -238,7 +240,6 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
         Optional.ofNullable(queryWrapper)
                 .orElseThrow(() -> new MapperFindException("查询条件不能为空"));
         try {
-            queryWrapper.eq("is_removed", false);
             return countByWrapper(queryWrapper) > 0;
         } catch (Exception e) {
             String errorMessage = e.getMessage();
