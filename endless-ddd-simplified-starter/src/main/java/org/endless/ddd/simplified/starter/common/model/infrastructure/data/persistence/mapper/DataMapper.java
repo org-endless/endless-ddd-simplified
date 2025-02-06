@@ -483,8 +483,9 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
                         String fieldName = field.getName();
                         Class<?> fieldType = field.getType();
                         if (!Objects.equals(newValue, existingValue)
-                                && (MAPPER_MODIFY_SUPPORTED_TYPES.contains(fieldType) || fieldType.isEnum())
+                                && MAPPER_MODIFY_SUPPORTED_TYPES.contains(fieldType)
                                 && !MAPPER_MODIFY_EXCLUDED_FIELDS.contains(fieldName)
+                                && fieldType.isEnum()
                                 && !fieldName.equals(idName)) {
                             log.trace("字段 {} 值变更: {} -> {}", fieldName, existingValue, newValue);
                             wrapper.set(StringTools.toSnake(fieldName), newValue);
