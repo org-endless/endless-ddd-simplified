@@ -111,9 +111,8 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
         Optional.ofNullable(queryWrapper)
                 .orElseThrow(() -> new MapperFindException("查询条件不能为空"));
         try {
-            queryWrapper.select("is_removed");
-            return Optional.of(this.selectOne(queryWrapper, false))
-                    .filter(record -> Boolean.FALSE.equals(record.getIsRemoved()));
+            queryWrapper.eq("is_removed", Boolean.FALSE);
+            return Optional.of(this.selectOne(queryWrapper, false));
         } catch (Exception e) {
             String errorMessage = e.getMessage();
             if (errorMessage.contains("Table") && errorMessage.contains("doesn't exist")) {
@@ -136,10 +135,8 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
         Optional.ofNullable(queryWrapper)
                 .orElseThrow(() -> new MapperFindException("查询条件不能为空"));
         try {
-            queryWrapper.select("is_removed");
-            return this.selectList(queryWrapper).stream()
-                    .filter(record -> Boolean.FALSE.equals(record.getIsRemoved()))
-                    .toList();
+            queryWrapper.eq("is_removed", Boolean.FALSE);
+            return this.selectList(queryWrapper).stream().toList();
         } catch (Exception e) {
             String errorMessage = e.getMessage();
             if (errorMessage.contains("Table") && errorMessage.contains("doesn't exist")) {
