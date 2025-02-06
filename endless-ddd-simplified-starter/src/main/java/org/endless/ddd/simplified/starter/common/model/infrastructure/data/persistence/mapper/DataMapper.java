@@ -20,7 +20,6 @@ import org.springframework.util.StringUtils;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * DataMapper
@@ -62,7 +61,7 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
                 .filter(StringUtils::hasText)
                 .orElseThrow(() -> new MapperFindException("ID不能为空"));
         try {
-            return Optional.ofNullable(this.selectById(id))
+            return Optional.of(this.selectById(id))
                     .filter(record -> Boolean.FALSE.equals(record.getIsRemoved()));
         } catch (Exception e) {
             String errorMessage = e.getMessage();
@@ -87,9 +86,9 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
                 .filter(l -> !CollectionUtils.isEmpty(l))
                 .orElseThrow(() -> new MapperFindException("ID列表不能为空"));
         try {
-            return this.selectBatchIds(ids).stream()
+            return this.selectByIds(ids).stream()
                     .filter(record -> Boolean.FALSE.equals(record.getIsRemoved()))
-                    .collect(Collectors.toList());
+                    .toList();
         } catch (Exception e) {
             String errorMessage = e.getMessage();
             if (errorMessage.contains("Table") && errorMessage.contains("doesn't exist")) {
@@ -112,8 +111,8 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
         Optional.ofNullable(queryWrapper)
                 .orElseThrow(() -> new MapperFindException("查询条件不能为空"));
         try {
-            queryWrapper.eq("is_removed", false);
-            return Optional.ofNullable(this.selectOne(queryWrapper, false));
+            return Optional.of(this.selectOne(queryWrapper, false))
+                    .filter(record -> Boolean.FALSE.equals(record.getIsRemoved()));
         } catch (Exception e) {
             String errorMessage = e.getMessage();
             if (errorMessage.contains("Table") && errorMessage.contains("doesn't exist")) {
@@ -136,8 +135,9 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
         Optional.ofNullable(queryWrapper)
                 .orElseThrow(() -> new MapperFindException("查询条件不能为空"));
         try {
-            queryWrapper.eq("is_removed", false);
-            return selectList(queryWrapper);
+            return this.selectList(queryWrapper).stream()
+                    .filter(record -> Boolean.FALSE.equals(record.getIsRemoved()))
+                    .toList();
         } catch (Exception e) {
             String errorMessage = e.getMessage();
             if (errorMessage.contains("Table") && errorMessage.contains("doesn't exist")) {
@@ -157,7 +157,9 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
      */
     default List<R> findAll() {
         try {
-            return selectList(new QueryWrapper<R>().eq("is_removed", false));
+            return this.selectList(new QueryWrapper<>()).stream()
+                    .filter(record -> Boolean.FALSE.equals(record.getIsRemoved()))
+                    .toList();
         } catch (Exception e) {
             String errorMessage = e.getMessage();
             if (errorMessage.contains("Table") && errorMessage.contains("doesn't exist")) {
@@ -207,7 +209,7 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
                 .filter(l -> !CollectionUtils.isEmpty(l))
                 .orElseThrow(() -> new MapperFindException("ID列表不能为空"));
         try {
-            List<R> records = this.selectBatchIds(ids).stream()
+            List<R> records = this.selectByIds(ids).stream()
                     .filter(record -> Boolean.FALSE.equals(record.getIsRemoved()))
                     .toList();
             if (records.size() > ids.size()) {
