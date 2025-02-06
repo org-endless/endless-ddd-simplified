@@ -61,7 +61,7 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
                 .filter(StringUtils::hasText)
                 .orElseThrow(() -> new MapperFindException("ID不能为空"));
         try {
-            return Optional.of(this.selectById(id))
+            return Optional.ofNullable(this.selectById(id))
                     .filter(record -> Boolean.FALSE.equals(record.getIsRemoved()));
         } catch (Exception e) {
             String errorMessage = e.getMessage();
@@ -111,8 +111,8 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
         Optional.ofNullable(queryWrapper)
                 .orElseThrow(() -> new MapperFindException("查询条件不能为空"));
         try {
-            queryWrapper.eq("is_removed", Boolean.FALSE);
-            return Optional.of(this.selectOne(queryWrapper, false));
+            queryWrapper.eq("is_removed", false);
+            return Optional.ofNullable(this.selectOne(queryWrapper, false));
         } catch (Exception e) {
             String errorMessage = e.getMessage();
             if (errorMessage.contains("Table") && errorMessage.contains("doesn't exist")) {
@@ -135,8 +135,8 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
         Optional.ofNullable(queryWrapper)
                 .orElseThrow(() -> new MapperFindException("查询条件不能为空"));
         try {
-            queryWrapper.eq("is_removed", Boolean.FALSE);
-            return this.selectList(queryWrapper).stream().toList();
+            queryWrapper.eq("is_removed", false);
+            return selectList(queryWrapper);
         } catch (Exception e) {
             String errorMessage = e.getMessage();
             if (errorMessage.contains("Table") && errorMessage.contains("doesn't exist")) {
@@ -156,9 +156,7 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
      */
     default List<R> findAll() {
         try {
-            return this.selectList(new QueryWrapper<>()).stream()
-                    .filter(record -> Boolean.FALSE.equals(record.getIsRemoved()))
-                    .toList();
+            return selectList(new QueryWrapper<R>().eq("is_removed", false));
         } catch (Exception e) {
             String errorMessage = e.getMessage();
             if (errorMessage.contains("Table") && errorMessage.contains("doesn't exist")) {
@@ -237,6 +235,7 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
         Optional.ofNullable(queryWrapper)
                 .orElseThrow(() -> new MapperFindException("查询条件不能为空"));
         try {
+            queryWrapper.eq("is_removed", false);
             return countByWrapper(queryWrapper) > 0;
         } catch (Exception e) {
             String errorMessage = e.getMessage();
@@ -483,9 +482,8 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
                         String fieldName = field.getName();
                         Class<?> fieldType = field.getType();
                         if (!Objects.equals(newValue, existingValue)
-                                && MAPPER_MODIFY_SUPPORTED_TYPES.contains(fieldType)
+                                && (MAPPER_MODIFY_SUPPORTED_TYPES.contains(fieldType) || fieldType.isEnum())
                                 && !MAPPER_MODIFY_EXCLUDED_FIELDS.contains(fieldName)
-                                && fieldType.isEnum()
                                 && !fieldName.equals(idName)) {
                             log.trace("字段 {} 值变更: {} -> {}", fieldName, existingValue, newValue);
                             wrapper.set(StringTools.toSnake(fieldName), newValue);
