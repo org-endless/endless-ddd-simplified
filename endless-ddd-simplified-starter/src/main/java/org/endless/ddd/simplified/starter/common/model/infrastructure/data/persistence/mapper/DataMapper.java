@@ -453,6 +453,7 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
         int retryCount = 0;
         final int MAX_RETRY_COUNT = 3;
         while (retryCount < MAX_RETRY_COUNT) {
+            Long now = TimeStamp.now();
             try {
                 String idName = record.idName();
                 // 检查更新时间（乐观锁）字段
@@ -470,7 +471,7 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
                     Optional.ofNullable(existingRecord.getRemoveAt())
                             .filter(removeAt -> removeAt == 0L)
                             .orElseThrow(() -> new MapperModifyFailedException("数据库记录已删除，无法再次删除，ID: " + id));
-                    wrapper.set("remove_at", TimeStamp.now());
+                    wrapper.set("remove_at", now);
                 }
                 boolean hasUpdates = false;
                 // 遍历所有字段，设置非空且不同的字段
@@ -495,7 +496,7 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
                         throw new MapperModifyFailedException("数据库修改字段时获取 getter 方法出错", e);
                     }
                 }
-                wrapper.set("modify_at", TimeStamp.now());
+                wrapper.set("modify_at", now);
                 // 执行更新操作
                 if (hasUpdates && this.update(wrapper) == 0) {
                     retryCount++;
