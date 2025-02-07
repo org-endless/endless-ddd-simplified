@@ -68,7 +68,7 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
             if (errorMessage.contains("Table") && errorMessage.contains("doesn't exist")) {
                 throw new MapperFindException(StringTools.tableMessage(errorMessage), e);
             } else if (errorMessage.contains("Unknown column")) {
-                throw new MapperModifyFailedException(StringTools.unknownColumn(errorMessage), e);
+                throw new MapperFindException(StringTools.unknownColumn(errorMessage), e);
             } else {
                 throw new MapperFindException("根据ID查询记录失败，ID: " + id + " : " + errorMessage, e);
             }
@@ -94,7 +94,7 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
             if (errorMessage.contains("Table") && errorMessage.contains("doesn't exist")) {
                 throw new MapperFindException(StringTools.tableMessage(errorMessage), e);
             } else if (errorMessage.contains("Unknown column")) {
-                throw new MapperModifyFailedException(StringTools.unknownColumn(errorMessage), e);
+                throw new MapperFindException(StringTools.unknownColumn(errorMessage), e);
             } else {
                 throw new MapperFindException("根据ID列表查询记录失败: " + errorMessage, e);
             }
@@ -118,7 +118,7 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
             if (errorMessage.contains("Table") && errorMessage.contains("doesn't exist")) {
                 throw new MapperFindException(StringTools.tableMessage(errorMessage), e);
             } else if (errorMessage.contains("Unknown column")) {
-                throw new MapperModifyFailedException(StringTools.unknownColumn(errorMessage), e);
+                throw new MapperFindException(StringTools.unknownColumn(errorMessage), e);
             } else {
                 throw new MapperFindException("根据条件查询第一条记录失败: " + errorMessage, e);
             }
@@ -142,7 +142,7 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
             if (errorMessage.contains("Table") && errorMessage.contains("doesn't exist")) {
                 throw new MapperFindException(StringTools.tableMessage(errorMessage), e);
             } else if (errorMessage.contains("Unknown column")) {
-                throw new MapperModifyFailedException(StringTools.unknownColumn(errorMessage), e);
+                throw new MapperFindException(StringTools.unknownColumn(errorMessage), e);
             } else {
                 throw new MapperFindException("根据条件查询记录失败: " + errorMessage, e);
             }
@@ -162,7 +162,7 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
             if (errorMessage.contains("Table") && errorMessage.contains("doesn't exist")) {
                 throw new MapperFindException(StringTools.tableMessage(errorMessage), e);
             } else if (errorMessage.contains("Unknown column")) {
-                throw new MapperModifyFailedException(StringTools.unknownColumn(errorMessage), e);
+                throw new MapperFindException(StringTools.unknownColumn(errorMessage), e);
             } else {
                 throw new MapperFindException("数据库查询所有记录失败: " + errorMessage, e);
             }
@@ -188,7 +188,7 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
             if (errorMessage.contains("Table") && errorMessage.contains("doesn't exist")) {
                 throw new MapperFindException(StringTools.tableMessage(errorMessage), e);
             } else if (errorMessage.contains("Unknown column")) {
-                throw new MapperModifyFailedException(StringTools.unknownColumn(errorMessage), e);
+                throw new MapperFindException(StringTools.unknownColumn(errorMessage), e);
             } else {
                 throw new MapperFindException("根据ID查询记录是否存在失败，ID: " + id + " : " + errorMessage, e);
             }
@@ -218,7 +218,7 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
             if (errorMessage.contains("Table") && errorMessage.contains("doesn't exist")) {
                 throw new MapperFindException(StringTools.tableMessage(errorMessage), e);
             } else if (errorMessage.contains("Unknown column")) {
-                throw new MapperModifyFailedException(StringTools.unknownColumn(errorMessage), e);
+                throw new MapperFindException(StringTools.unknownColumn(errorMessage), e);
             } else {
                 throw new MapperFindException("根据ID列表查询记录是否存在失败: " + errorMessage, e);
             }
@@ -242,7 +242,7 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
             if (errorMessage.contains("Table") && errorMessage.contains("doesn't exist")) {
                 throw new MapperFindException(StringTools.tableMessage(errorMessage), e);
             } else if (errorMessage.contains("Unknown column")) {
-                throw new MapperModifyFailedException(StringTools.unknownColumn(errorMessage), e);
+                throw new MapperFindException(StringTools.unknownColumn(errorMessage), e);
             } else {
                 throw new MapperFindException("根据条件查询记录是否存在失败: " + errorMessage, e);
             }
@@ -273,7 +273,7 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
             if (errorMessage.contains("Table") && errorMessage.contains("doesn't exist")) {
                 throw new PageFindException(StringTools.tableMessage(errorMessage), e);
             } else if (errorMessage.contains("Unknown column")) {
-                throw new MapperModifyFailedException(StringTools.unknownColumn(errorMessage), e);
+                throw new MapperFindException(StringTools.unknownColumn(errorMessage), e);
             } else {
                 throw new PageFindException("分页查询失败: " + errorMessage, e);
             }
@@ -305,7 +305,7 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
             if (errorMessage.contains("Table") && errorMessage.contains("doesn't exist")) {
                 throw new PageFindException(StringTools.tableMessage(errorMessage), e);
             } else if (errorMessage.contains("Unknown column")) {
-                throw new MapperModifyFailedException(StringTools.unknownColumn(errorMessage), e);
+                throw new MapperFindException(StringTools.unknownColumn(errorMessage), e);
             } else {
                 throw new PageFindException("根据查询条件分页查询失败: " + errorMessage, e);
             }
@@ -329,7 +329,7 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
             if (errorMessage.contains("Table") && errorMessage.contains("doesn't exist")) {
                 throw new MapperFindException(StringTools.tableMessage(errorMessage), e);
             } else if (errorMessage.contains("Unknown column")) {
-                throw new MapperModifyFailedException(StringTools.unknownColumn(errorMessage), e);
+                throw new MapperFindException(StringTools.unknownColumn(errorMessage), e);
             } else {
                 throw new MapperFindException("根据条件查询记录数失败: " + errorMessage, e);
             }
@@ -444,7 +444,7 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
     default void remove(List<R> records) {
         Optional.ofNullable(records)
                 .filter(l -> !CollectionUtils.isEmpty(l))
-                .orElseThrow(() -> new MapperSaveFailedException("要删除的数据库记录列表不能为空"));
+                .orElseThrow(() -> new MapperRemoveFailedException("要删除的数据库记录列表不能为空"));
         records.forEach(this::remove);
     }
 
@@ -550,7 +550,7 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
     default void modify(List<R> records) {
         Optional.ofNullable(records)
                 .filter(l -> !CollectionUtils.isEmpty(l))
-                .orElseThrow(() -> new MapperSaveFailedException("要修改的数据库列表不能为空"));
+                .orElseThrow(() -> new MapperModifyFailedException("要修改的数据库列表不能为空"));
         records.forEach(this::modify);
     }
 }
