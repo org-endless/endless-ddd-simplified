@@ -3,6 +3,8 @@ package org.endless.ddd.simplified.starter.common.config.data.persistence.mybati
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;
 import org.endless.ddd.simplified.starter.common.utils.model.time.TimeStamp;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * MybatisPlusMetaObjectHandler
@@ -18,14 +20,18 @@ import org.endless.ddd.simplified.starter.common.utils.model.time.TimeStamp;
  */
 public class MybatisPlusMetaObjectHandler implements MetaObjectHandler {
 
+    private static final Logger log = LoggerFactory.getLogger(MybatisPlusMetaObjectHandler.class);
+
     @Override
     public void insertFill(MetaObject metaObject) {
-        this.strictInsertFill(metaObject, "createAt", Long.class, TimeStamp.now());
-        this.strictInsertFill(metaObject, "modifyAt", Long.class, TimeStamp.now());
+        Long now = TimeStamp.now();
+        this.strictInsertFill(metaObject, "createAt", Long.class, now);
+        this.strictInsertFill(metaObject, "modifyAt", Long.class, now);
     }
 
     @Override
     public void updateFill(MetaObject metaObject) {
-        this.strictUpdateFill(metaObject, "modifyAt", Long.class, TimeStamp.now());
+        Long now = TimeStamp.now();
+        this.strictUpdateFill(metaObject, "modifyAt", Long.class, now);
     }
 }

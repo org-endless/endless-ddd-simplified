@@ -495,6 +495,7 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
                         throw new MapperModifyFailedException("数据库修改字段时获取 getter 方法出错", e);
                     }
                 }
+                wrapper.set("modify_at", TimeStamp.now());
                 // 执行更新操作
                 if (hasUpdates && this.update(wrapper) == 0) {
                     retryCount++;
