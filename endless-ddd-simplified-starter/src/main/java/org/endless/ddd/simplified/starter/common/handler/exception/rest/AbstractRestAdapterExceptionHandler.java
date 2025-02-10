@@ -68,7 +68,7 @@ public abstract class AbstractRestAdapterExceptionHandler implements RestAdapter
         String message = addBrackets(e.getMessage());
         ErrorCode errorCode = e.getErrorCode();
         log.error("[{}][{}]{}", errorCode.getCode(), errorCode.getDescription(), message, e);
-        return response().success(message);
+        return response().notFound(errorCode, message);
     }
 
     @ExceptionHandler(CommandHandlerNotFoundException.class)
@@ -77,7 +77,7 @@ public abstract class AbstractRestAdapterExceptionHandler implements RestAdapter
         String message = addBrackets(e.getMessage());
         ErrorCode errorCode = e.getErrorCode();
         log.error("[{}][{}]{}", errorCode.getCode(), errorCode.getDescription(), message, e);
-        return response().success(message);
+        return response().notFound(errorCode, message);
     }
 
     @ExceptionHandler(QueryHandlerNotFoundException.class)
@@ -86,7 +86,7 @@ public abstract class AbstractRestAdapterExceptionHandler implements RestAdapter
         String message = addBrackets(e.getMessage());
         ErrorCode errorCode = e.getErrorCode();
         log.error("[{}][{}]{}", errorCode.getCode(), errorCode.getDescription(), message, e);
-        return response().success(message);
+        return response().notFound(errorCode, message);
     }
 
     @ExceptionHandler(RestNotFoundException.class)
