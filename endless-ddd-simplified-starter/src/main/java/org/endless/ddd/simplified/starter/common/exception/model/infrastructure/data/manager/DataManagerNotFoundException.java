@@ -1,6 +1,6 @@
 package org.endless.ddd.simplified.starter.common.exception.model.infrastructure.data.manager;
 
-import org.endless.ddd.simplified.starter.common.exception.common.FailedException;
+import org.endless.ddd.simplified.starter.common.exception.common.NotFoundException;
 import org.endless.ddd.simplified.starter.common.handler.result.type.ErrorCode;
 
 /**
@@ -14,7 +14,7 @@ import org.endless.ddd.simplified.starter.common.handler.result.type.ErrorCode;
  * @see DataManagerFailedException
  * @since 1.0.0
  */
-public class DataManagerNotFoundException extends FailedException {
+public class DataManagerNotFoundException extends NotFoundException {
 
     private static final ErrorCode ERROR_CODE = ErrorCode.DDM0011;
 

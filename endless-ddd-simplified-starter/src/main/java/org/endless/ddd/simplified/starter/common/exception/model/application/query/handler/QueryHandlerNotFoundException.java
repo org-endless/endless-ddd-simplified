@@ -1,6 +1,6 @@
 package org.endless.ddd.simplified.starter.common.exception.model.application.query.handler;
 
-import org.endless.ddd.simplified.starter.common.exception.common.FailedException;
+import org.endless.ddd.simplified.starter.common.exception.common.NotFoundException;
 import org.endless.ddd.simplified.starter.common.handler.result.type.ErrorCode;
 
 /**
@@ -14,7 +14,7 @@ import org.endless.ddd.simplified.starter.common.handler.result.type.ErrorCode;
  * @see QueryHandlerException
  * @since 1.0.0
  */
-public class QueryHandlerNotFoundException extends FailedException {
+public class QueryHandlerNotFoundException extends NotFoundException {
 
     private static final ErrorCode ERROR_CODE = ErrorCode.DQR0001;
 
