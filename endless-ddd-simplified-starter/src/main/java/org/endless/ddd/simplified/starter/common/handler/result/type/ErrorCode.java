@@ -31,6 +31,10 @@ public enum ErrorCode implements BaseEnum {
     NOT_FND("NOT_FND", "未找到相关资源"),
     FORBIDN("FORBIDN", "服务访问被拒绝"),
 
+    // REST
+    RES0200("RES0200", "REST未找到相关资源"),
+
+
     // DDD通用错误码
     // 聚合行为
     DAG0000("DAG0000", "聚合行为处理失败"),

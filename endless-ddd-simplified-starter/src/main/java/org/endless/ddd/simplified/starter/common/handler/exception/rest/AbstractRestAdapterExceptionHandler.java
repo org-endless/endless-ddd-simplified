@@ -93,8 +93,9 @@ public abstract class AbstractRestAdapterExceptionHandler implements RestAdapter
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<RestResponse> handleRestNotFoundException(RestNotFoundException e) {
         String message = addBrackets(e.getMessage());
-        log.error("[{}][{}]{}", ErrorCode.NOT_FND.getCode(), ErrorCode.NOT_FND.getDescription(), message, e);
-        return response().notFound(ErrorCode.NOT_FND, message);
+        ErrorCode errorCode = e.getErrorCode();
+        log.error("[{}][{}]{}", errorCode.getCode(), errorCode.getDescription(), message, e);
+        return response().notFound(errorCode, message);
     }
 
     @ExceptionHandler(AuthorizationDeniedException.class)
