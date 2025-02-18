@@ -22,4 +22,5 @@ public class IdGeneratorParameters {
 
     @Value("${server.worker-id:1}")
     private Long workerId;
+
 }

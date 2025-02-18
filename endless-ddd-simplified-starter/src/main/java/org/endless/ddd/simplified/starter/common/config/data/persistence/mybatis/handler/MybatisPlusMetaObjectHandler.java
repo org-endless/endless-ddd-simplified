@@ -20,7 +20,6 @@ import org.slf4j.LoggerFactory;
  */
 public class MybatisPlusMetaObjectHandler implements MetaObjectHandler {
 
-    private static final Logger log = LoggerFactory.getLogger(MybatisPlusMetaObjectHandler.class);
 
     @Override
     public void insertFill(MetaObject metaObject) {
