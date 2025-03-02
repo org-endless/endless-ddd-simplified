@@ -115,6 +115,7 @@ public enum ErrorCode implements BaseEnum {
     UTL0141("UTL0141", "AES加密失败"),
     UTL0142("UTL0142", "AES解密失败"),
     UTL7000("UTL7000", "PEM证书处理失败"),
+    UTL7010("UTL7010", "PFX证书处理失败"),
     UTL8000("UTL8000", "PKCS1补位失败"),
     UTL8001("UTL8000", "PKCS1去除补位失败"),
     UTL8002("UTL8002", "PKCS7补位失败"),

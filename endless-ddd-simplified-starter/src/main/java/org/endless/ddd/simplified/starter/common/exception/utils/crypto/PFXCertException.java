@@ -14,23 +14,23 @@ import org.endless.ddd.simplified.starter.common.handler.result.type.ErrorCode;
  * @see FailedException
  * @since 1.0.0
  */
-public class PemCertException extends FailedException {
+public class PFXCertException extends FailedException {
 
-    private static final ErrorCode ERROR_CODE = ErrorCode.UTL7000;
+    private static final ErrorCode ERROR_CODE = ErrorCode.UTL7010;
 
-    public PemCertException() {
+    public PFXCertException() {
         super(ERROR_CODE);
     }
 
-    public PemCertException(String message) {
+    public PFXCertException(String message) {
         super(ERROR_CODE, message);
     }
 
-    public PemCertException(Throwable throwable) {
+    public PFXCertException(Throwable throwable) {
         super(ERROR_CODE, throwable);
     }
 
-    public PemCertException(String message, Throwable throwable) {
+    public PFXCertException(String message, Throwable throwable) {
         super(ERROR_CODE, message, throwable);
     }
 }
