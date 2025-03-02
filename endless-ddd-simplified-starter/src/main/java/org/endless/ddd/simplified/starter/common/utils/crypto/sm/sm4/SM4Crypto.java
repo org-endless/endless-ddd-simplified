@@ -47,8 +47,7 @@ public class SM4Crypto {
     public static SM4Crypto key() {
         try {
             byte[] keyBytes = new byte[SM4_KEY_SIZE];
-            SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG");
-            secureRandom.setSeed(System.nanoTime());
+            SecureRandom secureRandom = SecureRandom.getInstanceStrong();
             secureRandom.nextBytes(keyBytes);
             return SM4Crypto.builder()
                     .key(Base64.getEncoder().encodeToString(keyBytes))

@@ -6,6 +6,7 @@ import org.bouncycastle.crypto.*;
 import org.bouncycastle.crypto.engines.AESEngine;
 import org.bouncycastle.crypto.modes.CBCBlockCipher;
 import org.bouncycastle.crypto.paddings.PaddedBufferedBlockCipher;
+import org.bouncycastle.crypto.paddings.ZeroBytePadding;
 import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.crypto.params.ParametersWithIV;
 import org.endless.ddd.simplified.starter.common.exception.utils.crypto.AESDecryptException;
@@ -30,6 +31,11 @@ import java.util.Base64;
 public class AESCrypto {
 
     /**
+     * 秘钥字符集
+     */
+    private static final String CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*()-_=+[]{}|;:'\",.<>?/";
+
+    /**
      * AES 密钥长度为 16 字节
      */
     private static final Integer AES_KEY_SIZE = 16;
@@ -52,11 +58,27 @@ public class AESCrypto {
     public static AESCrypto key() {
         try {
             byte[] keyBytes = new byte[AES_KEY_SIZE];
-            SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG");
-            secureRandom.setSeed(System.nanoTime());
+            SecureRandom secureRandom = SecureRandom.getInstanceStrong();
             secureRandom.nextBytes(keyBytes);
             return AESCrypto.builder()
                     .key(Base64.getEncoder().encodeToString(keyBytes))
+                    .build();
+        } catch (Exception e) {
+            throw new AESKeyPairException(e.getMessage(), e);
+        }
+    }
+
+    public static AESCrypto stringKey() {
+        try {
+            SecureRandom secureRandom = SecureRandom.getInstanceStrong();
+            StringBuilder keyBuilder = new StringBuilder(AES_KEY_SIZE);
+
+            for (int i = 0; i < AES_KEY_SIZE; i++) {
+                int index = secureRandom.nextInt(CHARSET.length());
+                keyBuilder.append(CHARSET.charAt(index));
+            }
+            return AESCrypto.builder()
+                    .key(Base64.getEncoder().encodeToString(keyBuilder.toString().getBytes()))
                     .build();
         } catch (Exception e) {
             throw new AESKeyPairException(e.getMessage(), e);
@@ -125,13 +147,6 @@ public class AESCrypto {
                 throw new AESDecryptException("解密的秘钥长度必须为 " + AES_KEY_SIZE + " 字节");
             }
         }
-        if (!isPadding && data.length % AES_BLOCK_SIZE != 0) {
-            if (isEncrypt) {
-                throw new AESEncryptException("加密的数据长度必须为 " + AES_KEY_SIZE + " 字节的倍数");
-            } else {
-                throw new AESDecryptException("解密的数据长度必须为 " + AES_KEY_SIZE + " 字节的倍数");
-            }
-        }
         // 处理CBC
         BlockCipher blockCipher;
         CipherParameters parameters;
@@ -146,9 +161,12 @@ public class AESCrypto {
         BufferedBlockCipher cipher;
         if (isPadding) {
             cipher = new PaddedBufferedBlockCipher(blockCipher);
+        } else if (data.length % AES_BLOCK_SIZE != 0) {
+            cipher = new PaddedBufferedBlockCipher(blockCipher, new ZeroBytePadding());
         } else {
             cipher = new DefaultBufferedBlockCipher(blockCipher);
         }
+
         cipher.init(isEncrypt, parameters);
         byte[] result = new byte[cipher.getOutputSize(data.length)];
         int len = cipher.processBytes(data, 0, data.length, result, 0);

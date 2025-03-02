@@ -72,8 +72,7 @@ public class SM2Crypto {
      */
     public static SM2Crypto keyPair() {
         try {
-            SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG");
-            secureRandom.setSeed(System.nanoTime()); // 确保种子每次不同
+            SecureRandom secureRandom = SecureRandom.getInstanceStrong();
             // 生成BouncyCastle格式EC密钥对
             AsymmetricCipherKeyPair bouncyCastleKeyPair = asymmetricCipherKeyPair(secureRandom);
             ECPrivateKeyParameters privateKeyParameters = (ECPrivateKeyParameters) bouncyCastleKeyPair.getPrivate();

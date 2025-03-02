@@ -2,10 +2,12 @@ package org.endless.ddd.simplified.starter.common.utils.crypto.rsa;
 
 import lombok.Builder;
 import lombok.Getter;
+import org.bouncycastle.crypto.AsymmetricBlockCipher;
 import org.bouncycastle.crypto.Digest;
 import org.bouncycastle.crypto.digests.SHA1Digest;
 import org.bouncycastle.crypto.digests.SHA256Digest;
 import org.bouncycastle.crypto.digests.SHA512Digest;
+import org.bouncycastle.crypto.encodings.PKCS1Encoding;
 import org.bouncycastle.crypto.engines.RSAEngine;
 import org.bouncycastle.crypto.params.RSAKeyParameters;
 import org.bouncycastle.crypto.signers.RSADigestSigner;
@@ -62,8 +64,7 @@ public class RSACrypto {
                 throw new RSAEncryptException("秘钥长度必须为256的倍数");
             }
             // 生成密钥对
-            SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG");
-            secureRandom.setSeed(System.nanoTime());
+            SecureRandom secureRandom = SecureRandom.getInstanceStrong();
             KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(RSA_ALGORITHM);
             keyPairGenerator.initialize(keySize, secureRandom);
             KeyPair keyPair = keyPairGenerator.generateKeyPair();
@@ -93,16 +94,16 @@ public class RSACrypto {
             RSAPublicKey rsaPublicKey = (RSAPublicKey) keyFactory.generatePublic(new X509EncodedKeySpec(publicKeyBytes));
             RSAKeyParameters publicKeyParameters = new RSAKeyParameters(false, rsaPublicKey.getModulus(), rsaPublicKey.getPublicExponent());
             // 初始化 RSA 加解密引擎
-            RSAEngine engine = new RSAEngine();
-            engine.init(true, publicKeyParameters);
+            AsymmetricBlockCipher cipher = new PKCS1Encoding(new RSAEngine());
+            cipher.init(true, publicKeyParameters);
             // 加密
             byte[] plaintextBytes = Base64.getDecoder().decode(plaintext);
-            int inputBlockSize = engine.getOutputBlockSize() - 11;
+            int inputBlockSize = cipher.getOutputBlockSize() - 11;
             try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
                 for (int i = 0; i < plaintextBytes.length; i += inputBlockSize) {
                     int chunkSize = Math.min(inputBlockSize, plaintextBytes.length - i);
                     byte[] chunk = Arrays.copyOfRange(plaintextBytes, i, i + chunkSize);
-                    byte[] encryptedBlock = engine.processBlock(chunk, 0, chunk.length);
+                    byte[] encryptedBlock = cipher.processBlock(chunk, 0, chunk.length);
                     outputStream.write(encryptedBlock);
                 }
                 return Base64.getEncoder().encodeToString(outputStream.toByteArray());
@@ -127,15 +128,15 @@ public class RSACrypto {
             RSAPrivateKey rsaPrivateKey = (RSAPrivateKey) keyFactory.generatePrivate(new PKCS8EncodedKeySpec(privateKeyBytes));
             RSAKeyParameters privateKeyParameters = new RSAKeyParameters(true, rsaPrivateKey.getModulus(), rsaPrivateKey.getPrivateExponent());
             // 初始化 RSA 加解密引擎
-            RSAEngine engine = new RSAEngine();
-            engine.init(false, privateKeyParameters);
+            AsymmetricBlockCipher cipher = new PKCS1Encoding(new RSAEngine());
+            cipher.init(false, privateKeyParameters);
             // 解密
             byte[] ciphertextBytes = Base64.getDecoder().decode(ciphertext);
-            int inputBlockSize = engine.getInputBlockSize();
+            int inputBlockSize = cipher.getInputBlockSize();
             try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
                 for (int i = 0; i < ciphertextBytes.length; i += inputBlockSize) {
                     byte[] chunk = Arrays.copyOfRange(ciphertextBytes, i, i + inputBlockSize);
-                    byte[] decryptedBlock = engine.processBlock(chunk, 0, chunk.length);
+                    byte[] decryptedBlock = cipher.processBlock(chunk, 0, chunk.length);
                     outputStream.write(decryptedBlock);
                 }
                 return Base64.getEncoder().encodeToString(outputStream.toByteArray());

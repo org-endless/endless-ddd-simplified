@@ -40,8 +40,8 @@ public class SM3Crypto {
     public static SM3Crypto salt() {
         try {
             byte[] saltBytes = new byte[SALT_LENGTH];
-            SecureRandom random = new SecureRandom();
-            random.nextBytes(saltBytes);
+            SecureRandom secureRandom = SecureRandom.getInstanceStrong();
+            secureRandom.nextBytes(saltBytes);
             return SM3Crypto.builder()
                     .salt(Base64.getEncoder().encodeToString(saltBytes))
                     .build();
