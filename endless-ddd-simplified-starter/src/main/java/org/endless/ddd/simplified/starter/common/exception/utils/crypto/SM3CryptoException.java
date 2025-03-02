@@ -3,29 +3,29 @@ package org.endless.ddd.simplified.starter.common.exception.utils.crypto;
 import org.endless.ddd.simplified.starter.common.utils.model.string.StringTools;
 
 /**
- * Sm2KeyPairException
+ * SM3CryptoException
  * <p>
- * create 2024/11/16 04:04
+ * create 2024/11/18 21:23
  * <p>
- * update 2024/11/16 23:54
+ * update 2025/03/01 23:28
  *
  * @author Deng Haozhi
  * @see CryptoException
  * @since 1.0.0
  */
-public class Sm2KeyPairException extends CryptoException {
+public class SM3CryptoException extends CryptoException {
 
-    private static final String DEFAULT_MESSAGE = "生成SM2密钥对异常";
+    private static final String DEFAULT_MESSAGE = "SM3哈希处理异常";
 
-    public Sm2KeyPairException(String message) {
+    public SM3CryptoException(String message) {
         super("[" + DEFAULT_MESSAGE + "]" + StringTools.addBrackets(message));
     }
 
-    public Sm2KeyPairException(String message, Throwable throwable) {
+    public SM3CryptoException(String message, Throwable throwable) {
         super("[" + DEFAULT_MESSAGE + "]" + StringTools.addBrackets(message), throwable);
     }
 
-    public Sm2KeyPairException(Throwable throwable) {
+    public SM3CryptoException(Throwable throwable) {
         super("[" + DEFAULT_MESSAGE + "]" + StringTools.addBrackets(throwable.getMessage()), throwable);
     }
 }

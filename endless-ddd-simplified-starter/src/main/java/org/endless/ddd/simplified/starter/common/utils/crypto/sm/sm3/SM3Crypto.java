@@ -3,7 +3,7 @@ package org.endless.ddd.simplified.starter.common.utils.crypto.sm.sm3;
 import lombok.Builder;
 import lombok.Getter;
 import org.bouncycastle.crypto.digests.SM3Digest;
-import org.endless.ddd.simplified.starter.common.exception.utils.crypto.Sm3CryptoException;
+import org.endless.ddd.simplified.starter.common.exception.utils.crypto.SM3CryptoException;
 
 import java.security.SecureRandom;
 import java.util.Base64;
@@ -46,7 +46,7 @@ public class SM3Crypto {
                     .salt(Base64.getEncoder().encodeToString(saltBytes))
                     .build();
         } catch (Exception e) {
-            throw new Sm3CryptoException("盐值生成异常", e);
+            throw new SM3CryptoException("盐值生成异常", e);
         }
     }
 
@@ -69,7 +69,7 @@ public class SM3Crypto {
             digest.doFinal(resultBytes, 0);
             return Base64.getEncoder().encodeToString(resultBytes) + ":" + Base64.getEncoder().encodeToString(saltBytes);
         } catch (Exception e) {
-            throw new Sm3CryptoException("哈希生成异常", e);
+            throw new SM3CryptoException("哈希生成异常", e);
         }
     }
 
@@ -84,13 +84,13 @@ public class SM3Crypto {
         try {
             String[] hashedParts = hashedText.split(":");
             if (hashedParts.length != 2) {
-                throw new Sm3CryptoException("无效的哈希值格式");
+                throw new SM3CryptoException("无效的哈希值格式");
             }
             return hash(plaintext, hashedParts[1]).equals(hashedText);
-        } catch (Sm3CryptoException e) {
+        } catch (SM3CryptoException e) {
             throw e;
         } catch (Exception e) {
-            throw new Sm3CryptoException("哈希验证异常", e);
+            throw new SM3CryptoException("哈希验证异常", e);
         }
     }
 }

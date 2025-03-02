@@ -3,29 +3,29 @@ package org.endless.ddd.simplified.starter.common.exception.utils.crypto;
 import org.endless.ddd.simplified.starter.common.utils.model.string.StringTools;
 
 /**
- * Sm2EncryptException
+ * SM4CryptoException
  * <p>
- * create 2024/11/16 04:04
+ * create 2024/11/18 19:43
  * <p>
- * update 2024/11/16 23:54
+ * update 2024/11/18 21:24
  *
  * @author Deng Haozhi
  * @see CryptoException
  * @since 1.0.0
  */
-public class Sm2EncryptException extends CryptoException {
+public class SM4CryptoException extends CryptoException {
 
-    private static final String DEFAULT_MESSAGE = "使用SM2加密异常";
+    private static final String DEFAULT_MESSAGE = "SM4加解密处理异常";
 
-    public Sm2EncryptException(String message) {
+    public SM4CryptoException(String message) {
         super("[" + DEFAULT_MESSAGE + "]" + StringTools.addBrackets(message));
     }
 
-    public Sm2EncryptException(String message, Throwable throwable) {
+    public SM4CryptoException(String message, Throwable throwable) {
         super("[" + DEFAULT_MESSAGE + "]" + StringTools.addBrackets(message), throwable);
     }
 
-    public Sm2EncryptException(Throwable throwable) {
+    public SM4CryptoException(Throwable throwable) {
         super("[" + DEFAULT_MESSAGE + "]" + StringTools.addBrackets(throwable.getMessage()), throwable);
     }
 }

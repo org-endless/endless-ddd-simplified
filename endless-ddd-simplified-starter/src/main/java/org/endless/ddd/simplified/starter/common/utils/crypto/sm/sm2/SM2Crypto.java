@@ -18,7 +18,6 @@ import org.bouncycastle.math.ec.ECPoint;
 import org.endless.ddd.simplified.starter.common.exception.utils.crypto.*;
 
 import java.math.BigInteger;
-import java.security.KeyPair;
 import java.security.SecureRandom;
 import java.security.Security;
 import java.util.Base64;
@@ -69,7 +68,7 @@ public class SM2Crypto {
     /**
      * 生成密钥对
      *
-     * @return {@link KeyPair }
+     * @return {@link SM2Crypto }
      */
     public static SM2Crypto keyPair() {
         try {
@@ -89,7 +88,7 @@ public class SM2Crypto {
                     .publicKey(Base64.getEncoder().encodeToString(compressedPublicKeyBytes))
                     .build();
         } catch (Exception e) {
-            throw new Sm2KeyPairException(e.getMessage(), e);
+            throw new SM2KeyPairException(e.getMessage(), e);
         }
     }
 
@@ -124,7 +123,7 @@ public class SM2Crypto {
             byte[] encryptedBytes = engine.processBlock(plaintextBytes, 0, plaintextBytes.length);
             return Base64.getEncoder().encodeToString(encryptedBytes);
         } catch (Exception e) {
-            throw new Sm2EncryptException(e.getMessage(), e);
+            throw new SM2EncryptException(e.getMessage(), e);
         }
     }
 
@@ -159,9 +158,9 @@ public class SM2Crypto {
             byte[] decryptedBytes = engine.processBlock(ciphertextBytes, 0, ciphertextBytes.length);
             return Base64.getEncoder().encodeToString(decryptedBytes);
         } catch (IllegalArgumentException | InvalidCipherTextException e) {
-            throw new Sm2DecryptException("密文格式有误" + e.getMessage(), e);
+            throw new SM2DecryptException("密文格式有误" + e.getMessage(), e);
         } catch (Exception e) {
-            throw new Sm2DecryptException(e.getMessage(), e);
+            throw new SM2DecryptException(e.getMessage(), e);
         }
     }
 
@@ -184,7 +183,7 @@ public class SM2Crypto {
             signer.update(messageBytes, 0, messageBytes.length);
             return Base64.getEncoder().encodeToString(signer.generateSignature());
         } catch (Exception e) {
-            throw new Sm2SignException(e.getMessage(), e);
+            throw new SM2SignException(e.getMessage(), e);
         }
     }
 
@@ -210,9 +209,9 @@ public class SM2Crypto {
             signer.update(messageBytes, 0, messageBytes.length);
             return signer.verifySignature(signatureBytes);
         } catch (IllegalArgumentException e) {
-            throw new Sm2VerifyException("签名的长度或格式有误" + e.getMessage(), e);
+            throw new SM2VerifyException("签名的长度或格式有误" + e.getMessage(), e);
         } catch (Exception e) {
-            throw new Sm2VerifyException(e.getMessage(), e);
+            throw new SM2VerifyException(e.getMessage(), e);
         }
     }
 
@@ -229,4 +228,6 @@ public class SM2Crypto {
         keyPairGenerator.init(keyGenParams);
         return keyPairGenerator.generateKeyPair();
     }
+
+
 }

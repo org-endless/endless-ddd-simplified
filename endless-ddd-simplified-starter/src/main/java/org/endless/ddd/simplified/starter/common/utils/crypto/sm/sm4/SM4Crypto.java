@@ -4,8 +4,8 @@ import lombok.Builder;
 import lombok.Getter;
 import org.bouncycastle.crypto.engines.SM4Engine;
 import org.bouncycastle.crypto.params.KeyParameter;
-import org.endless.ddd.simplified.starter.common.exception.utils.crypto.Sm4CryptoException;
-import org.endless.ddd.simplified.starter.common.utils.crypto.pkcs7.Pkcs7;
+import org.endless.ddd.simplified.starter.common.exception.utils.crypto.SM4CryptoException;
+import org.endless.ddd.simplified.starter.common.utils.crypto.pkcs.pkcs7.PKCS7Padding;
 
 import java.security.SecureRandom;
 import java.util.Base64;
@@ -47,13 +47,14 @@ public class SM4Crypto {
     public static SM4Crypto key() {
         try {
             byte[] keyBytes = new byte[SM4_KEY_SIZE];
-            SecureRandom random = new SecureRandom();
-            random.nextBytes(keyBytes);
+            SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG");
+            secureRandom.setSeed(System.nanoTime());
+            secureRandom.nextBytes(keyBytes);
             return SM4Crypto.builder()
                     .key(Base64.getEncoder().encodeToString(keyBytes))
                     .build();
         } catch (Exception e) {
-            throw new Sm4CryptoException("密钥生成异常" + e.getMessage(), e);
+            throw new SM4CryptoException("密钥生成异常" + e.getMessage(), e);
         }
     }
 
@@ -67,11 +68,11 @@ public class SM4Crypto {
     public static String encrypt(String plaintext, String key) {
         try {
             byte[] keyBytes = Base64.getDecoder().decode(key);
-            byte[] plaintextBytes = Pkcs7.padding(Base64.getDecoder().decode(plaintext), SM4_BLOCK_SIZE);
+            byte[] plaintextBytes = PKCS7Padding.padding(Base64.getDecoder().decode(plaintext), SM4_BLOCK_SIZE);
             byte[] encryptedBytes = crypto(true, plaintextBytes, keyBytes);
             return Base64.getEncoder().encodeToString(encryptedBytes);
         } catch (Exception e) {
-            throw new Sm4CryptoException("加密异常" + e.getMessage(), e);
+            throw new SM4CryptoException("加密异常" + e.getMessage(), e);
         }
     }
 
@@ -87,11 +88,11 @@ public class SM4Crypto {
             byte[] keyBytes = Base64.getDecoder().decode(key);
             byte[] ciphertextBytes = Base64.getDecoder().decode(ciphertext);
             byte[] decryptedBytes = crypto(false, ciphertextBytes, keyBytes);
-            return Base64.getEncoder().encodeToString(Pkcs7.remove(decryptedBytes));
-        } catch (Sm4CryptoException e) {
+            return Base64.getEncoder().encodeToString(PKCS7Padding.remove(decryptedBytes));
+        } catch (SM4CryptoException e) {
             throw e;
         } catch (Exception e) {
-            throw new Sm4CryptoException("解密异常" + e.getMessage(), e);
+            throw new SM4CryptoException("解密异常" + e.getMessage(), e);
         }
     }
 
@@ -109,16 +110,16 @@ public class SM4Crypto {
             engine.init(isEncrypt, new KeyParameter(key));
             if (key.length != SM4_KEY_SIZE) {
                 if (isEncrypt) {
-                    throw new Sm4CryptoException("加密的秘钥长度必须为 16 字节");
+                    throw new SM4CryptoException("加密的秘钥长度必须为 16 字节");
                 } else {
-                    throw new Sm4CryptoException("解密的秘钥长度必须为 16 字节");
+                    throw new SM4CryptoException("解密的秘钥长度必须为 16 字节");
                 }
             }
             if (data.length % SM4_BLOCK_SIZE != 0) {
                 if (isEncrypt) {
-                    throw new Sm4CryptoException("加密的数据长度必须为 16 的倍数");
+                    throw new SM4CryptoException("加密的数据长度必须为 16 的倍数");
                 } else {
-                    throw new Sm4CryptoException("解密的数据长度必须为 16 的倍数");
+                    throw new SM4CryptoException("解密的数据长度必须为 16 的倍数");
                 }
             }
             byte[] result = new byte[data.length];
@@ -127,17 +128,15 @@ public class SM4Crypto {
             }
             return result;
         } catch (IllegalArgumentException | IllegalStateException e) {
-            throw new Sm4CryptoException("秘钥或数据格式有误" + e.getMessage(), e);
-        } catch (Sm4CryptoException e) {
+            throw new SM4CryptoException("秘钥或数据格式有误" + e.getMessage(), e);
+        } catch (SM4CryptoException e) {
             throw e;
         } catch (Exception e) {
             if (isEncrypt) {
-                throw new Sm4CryptoException("加密异常" + e.getMessage(), e);
+                throw new SM4CryptoException("加密异常" + e.getMessage(), e);
             } else {
-                throw new Sm4CryptoException("解密异常" + e.getMessage(), e);
+                throw new SM4CryptoException("解密异常" + e.getMessage(), e);
             }
         }
     }
-
-
 }

@@ -1,9 +1,9 @@
-package org.endless.ddd.simplified.starter.common.utils.crypto.pkcs7;
+package org.endless.ddd.simplified.starter.common.utils.crypto.pkcs.pkcs7;
 
 import java.util.Arrays;
 
 /**
- * Pkcs7
+ * PKCS7Padding
  * <p>
  * create 2024/11/18 20:22
  * <p>
@@ -12,10 +12,10 @@ import java.util.Arrays;
  * @author Deng Haozhi
  * @since 1.0.0
  */
-public class Pkcs7 {
+public class PKCS7Padding {
 
     /**
-     * Pkcs7 填充
+     * PKCS7Padding 填充
      *
      * @param data      原始数据
      * @param blockSize 分组大小 (通常为 16 字节)
@@ -32,7 +32,7 @@ public class Pkcs7 {
     }
 
     /**
-     * 去除 Pkcs7 填充
+     * 去除 PKCS7Padding 填充
      *
      * @param data 含填充的数据
      * @return 去除填充后的数据
