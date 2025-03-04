@@ -33,7 +33,7 @@ public class AESCrypto {
     /**
      * 秘钥字符集
      */
-    private static final String CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*()-_=+[]{}|;:'\",.<>?/";
+    private static final String CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@$&*()_=+[]{};:'\",.<>?/";
 
     /**
      * AES 密钥长度为 16 字节
