@@ -512,8 +512,8 @@ public class MethodTemplate {
 
                 .append("    @Lazy\n")
                 .append("    @ConditionalOnMissingBean\n")
-                .append("    protected @Bean ").append(commandHandler).append(" ").append(StringUtils.uncapitalize(commandHandler)).append("(").append(repository).append(" anticorruption) {\n")
-                .append("        return new ").append(commandHandler).append("Impl(anticorruption);\n")
+                .append("    protected @Bean ").append(commandHandler).append(" ").append(StringUtils.uncapitalize(commandHandler)).append("(").append(repository).append(" repository) {\n")
+                .append("        return new ").append(commandHandler).append("Impl(repository);\n")
                 .append("    }\n\n");
 
 

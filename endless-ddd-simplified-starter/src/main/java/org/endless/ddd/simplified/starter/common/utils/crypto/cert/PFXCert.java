@@ -3,7 +3,7 @@ package org.endless.ddd.simplified.starter.common.utils.crypto.cert;
 import lombok.Builder;
 import lombok.Getter;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.endless.ddd.simplified.starter.common.exception.utils.crypto.PEMCertException;
+import org.endless.ddd.simplified.starter.common.exception.utils.crypto.PFXCertException;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -62,7 +62,7 @@ public class PFXCert {
                     .publicKey(Base64.getEncoder().encodeToString(publicKey.getEncoded()))
                     .build();
         } catch (Exception e) {
-            throw new PEMCertException(e.getMessage(), e);
+            throw new PFXCertException(e.getMessage(), e);
         }
     }
 }
