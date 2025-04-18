@@ -147,6 +147,73 @@ public class RSACrypto {
     }
 
     /**
+     * 使用私钥加密
+     *
+     * @param plaintext  明文 (Base64编码)
+     * @param privateKey 公钥 (Base64编码)
+     * @return {@link String } 加密后的密文 (Base64编码)
+     */
+    public static String encryptByPrivateKey(String plaintext, String privateKey) {
+        try {
+            // 生成 RSA 私钥参数
+            byte[] privateKeyBytes = Base64.getDecoder().decode(privateKey);
+            KeyFactory keyFactory = KeyFactory.getInstance(RSA_ALGORITHM);
+            RSAPrivateKey rsaPrivateKey = (RSAPrivateKey) keyFactory.generatePrivate(new PKCS8EncodedKeySpec(privateKeyBytes));
+            RSAKeyParameters privateKeyParameters = new RSAKeyParameters(true, rsaPrivateKey.getModulus(), rsaPrivateKey.getPrivateExponent());
+            // 初始化 RSA 加解密引擎
+            AsymmetricBlockCipher cipher = new PKCS1Encoding(new RSAEngine());
+            cipher.init(true, privateKeyParameters);
+            // 加密
+            byte[] plaintextBytes = Base64.getDecoder().decode(plaintext);
+            int inputBlockSize = cipher.getOutputBlockSize() - 11;
+            try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+                for (int i = 0; i < plaintextBytes.length; i += inputBlockSize) {
+                    int chunkSize = Math.min(inputBlockSize, plaintextBytes.length - i);
+                    byte[] chunk = Arrays.copyOfRange(plaintextBytes, i, i + chunkSize);
+                    byte[] encryptedBlock = cipher.processBlock(chunk, 0, chunk.length);
+                    outputStream.write(encryptedBlock);
+                }
+                return Base64.getEncoder().encodeToString(outputStream.toByteArray());
+            }
+        } catch (Exception e) {
+            throw new RSAEncryptException(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * 使用公钥解密
+     *
+     * @param ciphertext 密文 (Base64编码)
+     * @param publicKey  私钥 (Base64编码)
+     * @return {@link String } 解密后的明文 (Base64编码)
+     */
+    public static String decryptByPublicKey(String ciphertext, String publicKey) {
+        try {
+            // 生成 RSA 公钥参数
+            byte[] publicKeyBytes = Base64.getDecoder().decode(publicKey);
+            KeyFactory keyFactory = KeyFactory.getInstance(RSA_ALGORITHM);
+            RSAPublicKey rsaPublicKey = (RSAPublicKey) keyFactory.generatePublic(new X509EncodedKeySpec(publicKeyBytes));
+            RSAKeyParameters publicKeyParameters = new RSAKeyParameters(false, rsaPublicKey.getModulus(), rsaPublicKey.getPublicExponent());
+            // 初始化 RSA 加解密引擎
+            AsymmetricBlockCipher cipher = new PKCS1Encoding(new RSAEngine());
+            cipher.init(false, publicKeyParameters);
+            // 解密
+            byte[] ciphertextBytes = Base64.getDecoder().decode(ciphertext);
+            int inputBlockSize = cipher.getInputBlockSize();
+            try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+                for (int i = 0; i < ciphertextBytes.length; i += inputBlockSize) {
+                    byte[] chunk = Arrays.copyOfRange(ciphertextBytes, i, i + inputBlockSize);
+                    byte[] decryptedBlock = cipher.processBlock(chunk, 0, chunk.length);
+                    outputStream.write(decryptedBlock);
+                }
+                return Base64.getEncoder().encodeToString(outputStream.toByteArray());
+            }
+        } catch (Exception e) {
+            throw new RSADecryptException(e.getMessage(), e);
+        }
+    }
+
+    /**
      * 签名，默认使用 SHA-1 摘要算法
      *
      * @param message    待签名消息 (Base64编码)
