@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 import org.endless.ddd.simplified.generator.object.type.EnumValue;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
@@ -63,7 +64,7 @@ public class Enum {
     }
 
     private void validateFields() {
-        if (fields != null && !fields.isEmpty()) {
+        if (!CollectionUtils.isEmpty(fields)) {
             fields.forEach(Field::validate);
         } else {
             throw new IllegalArgumentException("实体字段不能为空");
@@ -71,7 +72,7 @@ public class Enum {
     }
 
     private void validateEnumValues() {
-        if (enumValues != null && !enumValues.isEmpty()) {
+        if (!CollectionUtils.isEmpty(enumValues)) {
             enumValues.forEach(EnumValue::validate);
         } else {
             throw new IllegalArgumentException("枚举值不能为空");

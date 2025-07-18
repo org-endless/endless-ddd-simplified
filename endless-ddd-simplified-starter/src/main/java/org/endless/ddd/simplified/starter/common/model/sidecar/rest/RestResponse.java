@@ -1,8 +1,11 @@
 package org.endless.ddd.simplified.starter.common.model.sidecar.rest;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.endless.ddd.simplified.starter.common.exception.model.sidecar.rest.RestResponseException;
 import org.endless.ddd.simplified.starter.common.handler.result.type.ErrorCode;
 import org.endless.ddd.simplified.starter.common.model.common.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -25,6 +28,8 @@ import static org.endless.ddd.simplified.starter.common.utils.model.string.Strin
 @Schema(description = "通用的响应格式", name = "Response", implementation = AbstractRestResponse.class)
 public interface RestResponse extends Response {
 
+    Logger log = LoggerFactory.getLogger(RestResponse.class);
+
     RestResponse createInstance(String status, String errorCode, String message, Object data);
 
     String getStatus();
@@ -36,6 +41,15 @@ public interface RestResponse extends Response {
     Object getData();
 
     String getServiceDescription();
+
+    default Object validate() {
+        if (getErrorCode() != null && getErrorCode().equals(ErrorCode.SUCCESS.getCode())) {
+            log.info("[REST响应成功]: {}", this);
+            return getData();
+        } else {
+            throw new RestResponseException("[REST响应失败]: " + this);
+        }
+    }
 
     default ResponseEntity<RestResponse> response(String status, String errorCode, String message, Object data) {
         message = addBrackets(message);

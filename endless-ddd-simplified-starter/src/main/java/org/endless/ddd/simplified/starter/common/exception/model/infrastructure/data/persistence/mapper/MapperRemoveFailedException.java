@@ -1,31 +1,36 @@
 package org.endless.ddd.simplified.starter.common.exception.model.infrastructure.data.persistence.mapper;
 
-import org.endless.ddd.simplified.starter.common.utils.model.string.StringTools;
+import org.endless.ddd.simplified.starter.common.exception.common.FailedException;
+import org.endless.ddd.simplified.starter.common.handler.result.type.ErrorCode;
 
 /**
  * MapperRemoveFieldException
  * <p>
  * create 2024/11/06 09:37
  * <p>
- * update 2024/11/17 16:23
+ * update 2025/07/19 02:57
  *
  * @author Deng Haozhi
- * @see MapperFailedException
- * @since 1.0.0
+ * @see FailedException
+ * @since 2.0.0
  */
-public class MapperRemoveFailedException extends MapperFailedException {
+public class MapperRemoveFailedException extends FailedException {
 
-    private static final String DEFAULT_MESSAGE = "删除失败";
+    private static final ErrorCode ERROR_CODE = ErrorCode.DDP0120;
 
-    public MapperRemoveFailedException(String message) {
-        super("[" + DEFAULT_MESSAGE + "]" + StringTools.addBrackets(message));
+    public MapperRemoveFailedException() {
+        super(ERROR_CODE);
     }
 
-    public MapperRemoveFailedException(String message, Throwable throwable) {
-        super("[" + DEFAULT_MESSAGE + "]" + StringTools.addBrackets(message), throwable);
+    public MapperRemoveFailedException(String message) {
+        super(ERROR_CODE, message);
     }
 
     public MapperRemoveFailedException(Throwable throwable) {
-        super("[" + DEFAULT_MESSAGE + "]" + StringTools.addBrackets(throwable.getMessage()), throwable);
+        super(ERROR_CODE, throwable);
+    }
+
+    public MapperRemoveFailedException(String message, Throwable throwable) {
+        super(ERROR_CODE, message, throwable);
     }
 }

@@ -1,31 +1,36 @@
 package org.endless.ddd.simplified.starter.common.exception.utils.crypto;
 
-import org.endless.ddd.simplified.starter.common.utils.model.string.StringTools;
+import org.endless.ddd.simplified.starter.common.exception.common.FailedException;
+import org.endless.ddd.simplified.starter.common.handler.result.type.ErrorCode;
 
 /**
  * SM3CryptoException
  * <p>
  * create 2024/11/18 21:23
  * <p>
- * update 2025/03/01 23:28
+ * update 2025/07/19 03:48
  *
  * @author Deng Haozhi
- * @see CryptoException
+ * @see FailedException
  * @since 1.0.0
  */
-public class SM3CryptoException extends CryptoException {
+public class SM3CryptoException extends FailedException {
 
-    private static final String DEFAULT_MESSAGE = "SM3哈希处理异常";
+    private static final ErrorCode ERROR_CODE = ErrorCode.UTL0110;
 
-    public SM3CryptoException(String message) {
-        super("[" + DEFAULT_MESSAGE + "]" + StringTools.addBrackets(message));
+    public SM3CryptoException() {
+        super(ERROR_CODE);
     }
 
-    public SM3CryptoException(String message, Throwable throwable) {
-        super("[" + DEFAULT_MESSAGE + "]" + StringTools.addBrackets(message), throwable);
+    public SM3CryptoException(String message) {
+        super(ERROR_CODE, message);
     }
 
     public SM3CryptoException(Throwable throwable) {
-        super("[" + DEFAULT_MESSAGE + "]" + StringTools.addBrackets(throwable.getMessage()), throwable);
+        super(ERROR_CODE, throwable);
+    }
+
+    public SM3CryptoException(String message, Throwable throwable) {
+        super(ERROR_CODE, message, throwable);
     }
 }

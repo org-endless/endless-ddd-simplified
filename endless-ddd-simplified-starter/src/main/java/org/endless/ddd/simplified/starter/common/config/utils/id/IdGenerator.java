@@ -1,8 +1,8 @@
 package org.endless.ddd.simplified.starter.common.config.utils.id;
 
+import org.endless.ddd.simplified.starter.common.config.endless.EndlessAutoConfiguration;
 import org.endless.ddd.simplified.starter.common.exception.utils.id.IdException;
 import org.endless.ddd.simplified.starter.common.utils.id.snowflake.SnowflakeIdGenerator;
-import org.springframework.context.annotation.Import;
 import org.springframework.util.StringUtils;
 
 /**
@@ -15,23 +15,22 @@ import org.springframework.util.StringUtils;
  * @author Deng Haozhi
  * @since 1.0.0
  */
-@Import(IdGeneratorParameters.class)
 public class IdGenerator {
 
     private static SnowflakeIdGenerator idGenerator;
 
-    private static IdGeneratorParameters parameters;
+    private static Long dataCenterId;
 
-    public IdGenerator(IdGeneratorParameters parameters) {
-        IdGenerator.parameters = parameters;
+    private static Long workerId;
+
+    public IdGenerator(EndlessAutoConfiguration configuration) {
+        IdGenerator.dataCenterId = configuration.dataCenterId();
+        IdGenerator.workerId = configuration.workerId();
     }
 
     private static synchronized void init() {
         if (idGenerator == null) {
-            idGenerator = new SnowflakeIdGenerator(
-                    parameters.getDataCenterId(),
-                    parameters.getWorkerId()
-            );
+            idGenerator = new SnowflakeIdGenerator(dataCenterId, workerId);
         }
     }
 

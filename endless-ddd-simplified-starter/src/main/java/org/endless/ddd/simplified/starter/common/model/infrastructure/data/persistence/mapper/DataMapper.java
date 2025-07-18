@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.endless.ddd.simplified.starter.common.config.data.persistence.mybatis.bulk.MapperBulkOperations;
 import org.endless.ddd.simplified.starter.common.exception.model.infrastructure.data.persistence.mapper.*;
 import org.endless.ddd.simplified.starter.common.exception.model.infrastructure.data.persistence.page.PageFindException;
 import org.endless.ddd.simplified.starter.common.model.domain.entity.Entity;
@@ -236,7 +237,7 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
                 .orElseThrow(() -> new MapperFindException("查询条件不能为空"));
         try {
             queryWrapper.eq("is_removed", false);
-            return countByWrapper(queryWrapper) > 0;
+            return countByWrapper(queryWrapper).orElse(0L) > 0;
         } catch (Exception e) {
             String errorMessage = e.getMessage();
             if (errorMessage.contains("Table") && errorMessage.contains("doesn't exist")) {
@@ -266,7 +267,7 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
             PageHelper.startPage(pageNum, pageSize);
             List<R> result = callback.execute();
             return PageInfo.of(result);
-        } catch (MapperException e) {
+        } catch (MapperUnknownException e) {
             throw e;
         } catch (Exception e) {
             String errorMessage = e.getMessage();
@@ -282,6 +283,7 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
 
     /**
      * 数据库记录分页查询，使用查询条件
+     * 记录总数
      *
      * @param pageNum      页码
      * @param pageSize     每页记录数
@@ -289,6 +291,19 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
      * @return {@link PageInfo }<{@link R }>
      */
     default PageInfo<R> findPageByWrapper(QueryWrapper<R> queryWrapper, Integer pageNum, Integer pageSize) {
+        return findPageByWrapper(queryWrapper, pageNum, pageSize, true);
+    }
+
+    /**
+     * 数据库记录分页查询，使用查询条件
+     *
+     * @param queryWrapper 查询条件
+     * @param pageNum      页码
+     * @param pageSize     每页记录数
+     * @param count        是否统计总记录数
+     * @return {@link PageInfo }<{@link R }>
+     */
+    default PageInfo<R> findPageByWrapper(QueryWrapper<R> queryWrapper, Integer pageNum, Integer pageSize, Boolean count) {
         Optional.of(pageNum).filter(f -> f >= 0)
                 .orElseThrow(() -> new MapperFindException("开始页码不能小于0"));
         Optional.of(pageSize).filter(f -> f > 0)
@@ -296,7 +311,7 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
         Optional.ofNullable(queryWrapper)
                 .orElseThrow(() -> new MapperFindException("查询条件不能为空"));
         try {
-            PageHelper.startPage(pageNum, pageSize);
+            PageHelper.startPage(pageNum, pageSize, count);
             queryWrapper.eq("is_removed", false);
             List<R> results = this.selectList(queryWrapper);
             return PageInfo.of(results);
@@ -318,12 +333,12 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
      * @param queryWrapper 查询条件
      * @return {@link Long }
      */
-    default Long countByWrapper(QueryWrapper<R> queryWrapper) {
+    default Optional<Long> countByWrapper(QueryWrapper<R> queryWrapper) {
         Optional.ofNullable(queryWrapper)
                 .orElseThrow(() -> new MapperFindException("查询条件不能为空"));
         try {
             queryWrapper.eq("is_removed", false);
-            return selectCount(queryWrapper);
+            return Optional.of(selectCount(queryWrapper));
         } catch (Exception e) {
             String errorMessage = e.getMessage();
             if (errorMessage.contains("Table") && errorMessage.contains("doesn't exist")) {
@@ -337,17 +352,17 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
     }
 
     /**
-     * 数据库写入记录
+     * 保存数据库记录
      *
      * @param record 数据库实体
      */
     default void save(R record) {
         Optional.ofNullable(record)
-                .orElseThrow(() -> new MapperModifyException("要写入的数据库记录不能为空"));
+                .orElseThrow(() -> new MapperModifyUnknownException("要保存的数据库记录不能为空"));
         String id = record.idValue();
         try {
             if (this.insert(record) == 0) {
-                throw new MapperSaveFailedException("数据库写入记录失败，ID: " + id);
+                throw new MapperSaveFailedException("数据库保存记录失败，ID: " + id);
             }
         } catch (Exception e) {
             String errorMessage = e.getMessage();
@@ -362,22 +377,35 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
             } else if (errorMessage.contains("Field") && errorMessage.contains("doesn't have a default value")) {
                 throw new MapperSaveFailedException(StringTools.nullColumn(errorMessage), e);
             } else {
-                throw new MapperSaveException("数据库写入记录异常，ID: " + id + " : " + errorMessage, e);
+                throw new MapperSaveUnknownException("数据库保存记录异常，ID: " + id + " : " + errorMessage, e);
             }
         }
     }
 
     /**
-     * 批量写入实体记录
-     * TODO
+     * 批量保存数据库记录
      *
      * @param records 数据库实体列表
      */
     default void save(List<R> records) {
         Optional.ofNullable(records)
                 .filter(l -> !CollectionUtils.isEmpty(l))
-                .orElseThrow(() -> new MapperSaveFailedException("要写入的数据库记录列表不能为空"));
+                .orElseThrow(() -> new MapperSaveFailedException("要保存的数据库记录列表不能为空"));
         records.forEach(this::save);
+    }
+
+    /**
+     * 批量保存数据库记录，单次提交
+     *
+     * @param records     数据库记录列表
+     * @param mapperClass 数据库记录映射器类
+     * @param operations  批量操作接口
+     */
+    default void save(List<R> records, Class<? extends DataMapper<R>> mapperClass, MapperBulkOperations<R> operations) {
+        Optional.ofNullable(records)
+                .filter(l -> !CollectionUtils.isEmpty(l))
+                .orElseThrow(() -> new MapperSaveFailedException("要保存的数据库记录列表不能为空"));
+        operations.execute(records, mapperClass, DataMapper::save);
     }
 
     /**
@@ -396,15 +424,15 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
             } else {
                 save(record);
             }
-        } catch (MapperFailedException e) {
+        } catch (MapperFailedException | MapperSaveFailedException | MapperModifyFailedException e) {
             throw new MapperUpsertFailedException(e.getMessage(), e);
         } catch (Exception e) {
-            throw new MapperUpsertException(e.getMessage(), e);
+            throw new MapperUpsertUnknownException(e.getMessage(), e);
         }
     }
 
     /**
-     * 新增或修改数据库记录
+     * 批量新增或修改数据库记录
      *
      * @param records 数据库实体列表
      */
@@ -413,6 +441,20 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
                 .filter(l -> !CollectionUtils.isEmpty(l))
                 .orElseThrow(() -> new MapperUpsertFailedException("要新增或修改的数据库记录列表不能为空"));
         records.forEach(this::upsert);
+    }
+
+    /**
+     * 批量新增或修改数据库记录，单次提交
+     *
+     * @param records     数据库记录列表
+     * @param mapperClass 数据库记录映射器类
+     * @param operations  批量操作接口
+     */
+    default void upsert(List<R> records, Class<? extends DataMapper<R>> mapperClass, MapperBulkOperations<R> operations) {
+        Optional.ofNullable(records)
+                .filter(l -> !CollectionUtils.isEmpty(l))
+                .orElseThrow(() -> new MapperUpsertFailedException("要新增或修改的数据库记录列表不能为空"));
+        operations.execute(records, mapperClass, DataMapper::upsert);
     }
 
     /**
@@ -429,10 +471,10 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
                 .orElseThrow(() -> new MapperRemoveFailedException("要删除的数据库记录未被标记为删除，ID: " + id));
         try {
             modify(record);
-        } catch (MapperFailedException e) {
+        } catch (MapperFailedException | MapperModifyFailedException e) {
             throw new MapperRemoveFailedException(e.getMessage(), e);
         } catch (Exception e) {
-            throw new MapperRemoveException(e.getMessage(), e);
+            throw new MapperRemoveUnknownException(e.getMessage(), e);
         }
     }
 
@@ -446,6 +488,60 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
                 .filter(l -> !CollectionUtils.isEmpty(l))
                 .orElseThrow(() -> new MapperRemoveFailedException("要删除的数据库记录列表不能为空"));
         records.forEach(this::remove);
+    }
+
+    /**
+     * 批量删除修改数据库记录，单次提交
+     *
+     * @param records     数据库记录列表
+     * @param mapperClass 数据库记录映射器类
+     * @param operations  批量操作接口
+     */
+    default void remove(List<R> records, Class<? extends DataMapper<R>> mapperClass, MapperBulkOperations<R> operations) {
+        Optional.ofNullable(records)
+                .filter(l -> !CollectionUtils.isEmpty(l))
+                .orElseThrow(() -> new MapperRemoveFailedException("要删除的数据库记录列表不能为空"));
+        operations.execute(records, mapperClass, DataMapper::remove);
+    }
+
+    /**
+     * 修改数据库记录
+     *
+     * @param record 要更新的数据库记录
+     */
+    default void modify(R record) {
+        Optional.ofNullable(record)
+                .orElseThrow(() -> new MapperModifyFailedException("要修改的数据库记录不能为空"));
+        String id = record.idValue();
+        R existingRecord = findById(id)
+                .orElseThrow(() -> new MapperModifyFailedException("要修改的数据库记录不存在，ID: " + id));
+        modify(record, existingRecord);
+    }
+
+    /**
+     * 批量修改数据库记录
+     *
+     * @param records 数据库记录列表
+     */
+    default void modify(List<R> records) {
+        Optional.ofNullable(records)
+                .filter(l -> !CollectionUtils.isEmpty(l))
+                .orElseThrow(() -> new MapperModifyFailedException("要修改的数据库列表不能为空"));
+        records.forEach(this::modify);
+    }
+
+    /**
+     * 批量修改数据库记录，单次提交
+     *
+     * @param records     数据库记录列表
+     * @param mapperClass 数据库记录映射器类
+     * @param operations  批量操作接口
+     */
+    default void modify(List<R> records, Class<? extends DataMapper<R>> mapperClass, MapperBulkOperations<R> operations) {
+        Optional.ofNullable(records)
+                .filter(l -> !CollectionUtils.isEmpty(l))
+                .orElseThrow(() -> new MapperModifyFailedException("要修改的数据库列表不能为空"));
+        operations.execute(records, mapperClass, DataMapper::modify);
     }
 
     default void modify(R record, R existingRecord) {
@@ -507,12 +603,13 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
                 } else {
                     break;
                 }
-            } catch (MapperFailedException | MapperException e) {
+            } catch (MapperFailedException | MapperUnknownException | MapperModifyFailedException |
+                     MapperModifyUnknownException e) {
                 throw e;
             } catch (Exception e) {
                 String errorMessage = e.getMessage();
                 if (errorMessage.contains("Duplicate entry")) {
-                    throw new MapperModifyFailedException(StringTools.duplicateMessage(errorMessage) + " ID: " + id, e);
+                    throw new MapperModifyFailedException(StringTools.duplicateMessage(errorMessage), e);
                 } else if (errorMessage.contains("Table") && errorMessage.contains("doesn't exist")) {
                     throw new MapperModifyFailedException(StringTools.tableMessage(errorMessage), e);
                 } else if (errorMessage.contains("Data too long for column")) {
@@ -522,35 +619,9 @@ public interface DataMapper<R extends DataRecord<? extends Entity>> extends Base
                 } else if (errorMessage.contains("Field") && errorMessage.contains("doesn't have a default value")) {
                     throw new MapperModifyFailedException(StringTools.nullColumn(errorMessage), e);
                 } else {
-                    throw new MapperModifyException(errorMessage + " ID: " + id, e);
+                    throw new MapperModifyUnknownException(errorMessage, e);
                 }
             }
         }
-    }
-
-    /**
-     * 修改数据库记录
-     *
-     * @param record 要更新的数据库记录
-     */
-    default void modify(R record) {
-        Optional.ofNullable(record)
-                .orElseThrow(() -> new MapperModifyFailedException("要修改的数据库记录不能为空"));
-        String id = record.idValue();
-        R existingRecord = findById(id)
-                .orElseThrow(() -> new MapperModifyFailedException("要修改的数据库记录不存在，ID: " + id));
-        modify(record, existingRecord);
-    }
-
-    /**
-     * 批量修改数据库记录
-     *
-     * @param records 数据库记录列表
-     */
-    default void modify(List<R> records) {
-        Optional.ofNullable(records)
-                .filter(l -> !CollectionUtils.isEmpty(l))
-                .orElseThrow(() -> new MapperModifyFailedException("要修改的数据库列表不能为空"));
-        records.forEach(this::modify);
     }
 }

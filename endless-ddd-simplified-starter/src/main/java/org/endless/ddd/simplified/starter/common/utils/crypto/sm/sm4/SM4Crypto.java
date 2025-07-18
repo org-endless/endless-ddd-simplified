@@ -5,7 +5,7 @@ import lombok.Getter;
 import org.bouncycastle.crypto.engines.SM4Engine;
 import org.bouncycastle.crypto.params.KeyParameter;
 import org.endless.ddd.simplified.starter.common.exception.utils.crypto.SM4CryptoException;
-import org.endless.ddd.simplified.starter.common.utils.crypto.pkcs.pkcs7.PKCS7Padding;
+import org.endless.ddd.simplified.starter.common.utils.crypto.pkcs.pkcs7.PKCS7;
 
 import java.security.SecureRandom;
 import java.util.Base64;
@@ -67,7 +67,7 @@ public class SM4Crypto {
     public static String encrypt(String plaintext, String key) {
         try {
             byte[] keyBytes = Base64.getDecoder().decode(key);
-            byte[] plaintextBytes = PKCS7Padding.padding(Base64.getDecoder().decode(plaintext), SM4_BLOCK_SIZE);
+            byte[] plaintextBytes = PKCS7.padding(Base64.getDecoder().decode(plaintext), SM4_BLOCK_SIZE);
             byte[] encryptedBytes = crypto(true, plaintextBytes, keyBytes);
             return Base64.getEncoder().encodeToString(encryptedBytes);
         } catch (Exception e) {
@@ -87,7 +87,7 @@ public class SM4Crypto {
             byte[] keyBytes = Base64.getDecoder().decode(key);
             byte[] ciphertextBytes = Base64.getDecoder().decode(ciphertext);
             byte[] decryptedBytes = crypto(false, ciphertextBytes, keyBytes);
-            return Base64.getEncoder().encodeToString(PKCS7Padding.remove(decryptedBytes));
+            return Base64.getEncoder().encodeToString(PKCS7.remove(decryptedBytes));
         } catch (SM4CryptoException e) {
             throw e;
         } catch (Exception e) {

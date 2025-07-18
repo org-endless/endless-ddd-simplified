@@ -1,31 +1,36 @@
 package org.endless.ddd.simplified.starter.common.exception.model.infrastructure.data.persistence.mapper;
 
-import org.endless.ddd.simplified.starter.common.utils.model.string.StringTools;
+import org.endless.ddd.simplified.starter.common.exception.common.UnknownException;
+import org.endless.ddd.simplified.starter.common.handler.result.type.ErrorCode;
 
 /**
- * MapperUpsertException
+ * MapperUpsertUnknownException
  * <p>
  * create 2024/09/29 16:01
  * <p>
- * update 2024/11/17 16:22
+ * update 2025/07/19 02:58
  *
  * @author Deng Haozhi
- * @see MapperFailedException
- * @since 1.0.0
+ * @see UnknownException
+ * @since 2.0.0
  */
-public class MapperUpsertFailedException extends MapperFailedException {
+public class MapperUpsertFailedException extends UnknownException {
 
-    private static final String DEFAULT_MESSAGE = "新增或更新失败";
+    private static final ErrorCode ERROR_CODE = ErrorCode.DDP0140;
 
-    public MapperUpsertFailedException(String message) {
-        super("[" + DEFAULT_MESSAGE + "]" + StringTools.addBrackets(message));
+    public MapperUpsertFailedException() {
+        super(ERROR_CODE);
     }
 
-    public MapperUpsertFailedException(String message, Throwable throwable) {
-        super("[" + DEFAULT_MESSAGE + "]" + StringTools.addBrackets(message), throwable);
+    public MapperUpsertFailedException(String message) {
+        super(ERROR_CODE, message);
     }
 
     public MapperUpsertFailedException(Throwable throwable) {
-        super("[" + DEFAULT_MESSAGE + "]" + StringTools.addBrackets(throwable.getMessage()), throwable);
+        super(ERROR_CODE, throwable);
+    }
+
+    public MapperUpsertFailedException(String message, Throwable throwable) {
+        super(ERROR_CODE, message, throwable);
     }
 }

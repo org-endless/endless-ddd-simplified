@@ -1,31 +1,36 @@
 package org.endless.ddd.simplified.starter.common.exception.utils.crypto;
 
-import org.endless.ddd.simplified.starter.common.utils.model.string.StringTools;
+import org.endless.ddd.simplified.starter.common.exception.common.FailedException;
+import org.endless.ddd.simplified.starter.common.handler.result.type.ErrorCode;
 
 /**
  * SM4CryptoException
  * <p>
  * create 2024/11/18 19:43
  * <p>
- * update 2024/11/18 21:24
+ * update 2025/07/19 03:46
  *
  * @author Deng Haozhi
- * @see CryptoException
+ * @see FailedException
  * @since 1.0.0
  */
-public class SM4CryptoException extends CryptoException {
+public class SM4CryptoException extends FailedException {
 
-    private static final String DEFAULT_MESSAGE = "SM4加解密处理异常";
+    private static final ErrorCode ERROR_CODE = ErrorCode.UTL0120;
 
-    public SM4CryptoException(String message) {
-        super("[" + DEFAULT_MESSAGE + "]" + StringTools.addBrackets(message));
+    public SM4CryptoException() {
+        super(ERROR_CODE);
     }
 
-    public SM4CryptoException(String message, Throwable throwable) {
-        super("[" + DEFAULT_MESSAGE + "]" + StringTools.addBrackets(message), throwable);
+    public SM4CryptoException(String message) {
+        super(ERROR_CODE, message);
     }
 
     public SM4CryptoException(Throwable throwable) {
-        super("[" + DEFAULT_MESSAGE + "]" + StringTools.addBrackets(throwable.getMessage()), throwable);
+        super(ERROR_CODE, throwable);
+    }
+
+    public SM4CryptoException(String message, Throwable throwable) {
+        super(ERROR_CODE, message, throwable);
     }
 }

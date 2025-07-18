@@ -1,5 +1,6 @@
 package org.endless.ddd.simplified.starter.common.utils.model.object;
 
+import com.alibaba.fastjson2.util.TypeUtils;
 import org.endless.ddd.simplified.starter.common.exception.utils.model.ObjectToolsException;
 import org.endless.ddd.simplified.starter.common.utils.model.string.StringTools;
 
@@ -21,6 +22,18 @@ import static org.endless.ddd.simplified.starter.common.config.endless.constant.
  * @since 1.0.0
  */
 public class ObjectTools {
+
+    /**
+     * 将对象转换为指定类型
+     *
+     * @param object 要转换的对象
+     * @param clazz  要转换的类型
+     * @return {@link T }
+     */
+    public static <T> T of(Object object, Class<T> clazz) {
+        if (object == null) return null;
+        return TypeUtils.cast(object, clazz);
+    }
 
     /**
      * 对象脱敏

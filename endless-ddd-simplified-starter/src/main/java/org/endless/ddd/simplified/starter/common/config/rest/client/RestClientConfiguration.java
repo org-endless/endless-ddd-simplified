@@ -37,6 +37,7 @@ public class RestClientConfiguration {
         // 添加 Fastjson2 转换器
         restTemplate.getMessageConverters().add(new FastJson2HttpMessageConverter<>(configuration));
         restTemplate.getMessageConverters().add(new FormHttpMessageConverter<>(configuration));
+        restTemplate.setErrorHandler(new RestClientResponseErrorHandler());
         return RestClient.create(restTemplate);
     }
 }

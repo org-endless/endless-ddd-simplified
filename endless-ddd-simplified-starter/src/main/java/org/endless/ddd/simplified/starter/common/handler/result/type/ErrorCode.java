@@ -31,7 +31,13 @@ public enum ErrorCode implements BaseEnum {
     NOT_FND("NOT_FND", "未找到相关资源"),
     FORBIDN("FORBIDN", "服务访问被拒绝"),
 
-    // REST
+    CFG0000("CFG0000", "配置处理失败"),
+    CFG0100("CFG0100", "执行机配置处理失败"),
+    CFG0400("CFG0400", "REDIS配置加载失败"),
+    CFG0401("CFG0401", "REDIS配置加载状态未知"),
+    CFG0410("CFG0410", "REDIS序列化器处理失败"),
+    CFG0420("CFG0420", "REDIS STREAM 初始化失败"),
+    CFG0421("CFG0421", "REDIS STREAM ADD 处理失败"),
     RES0200("RES0200", "REST未找到相关资源"),
 
 
@@ -75,6 +81,8 @@ public enum ErrorCode implements BaseEnum {
     DDM9002("DDM9002", "数据管理器删除数据状态未知"),
     DDM9003("DDM9003", "数据管理器修改数据状态未知"),
 
+    DRT0000("DRT0000", "REST请求处理失败"),
+    DRT0100("DRT0100", "REST响应处理失败"),
     // 传输对象
     DTO0000("DTO0000", "传输对象为空"),
     DTO0001("DTO0001", "传输对象校验失败"),
@@ -91,6 +99,18 @@ public enum ErrorCode implements BaseEnum {
     DTR0100("DTR0100", "命令响应传输对象为空"),
     DTR0200("DTR0200", "查询响应传输对象为空"),
     DTR0300("DTR0300", "被动响应传输对象为空"),
+    DDP0100("DDP0100", "[MyBatis-Plus]数据库操作失败"),
+    DDP0101("DDP0101", "[MyBatis-Plus]数据库操作状态未知"),
+    DDP0110("DDP0110", "[MyBatis-Plus]数据库新增操作失败"),
+    DDP0111("DDP0111", "[MyBatis-Plus]数据库新增操作状态未知"),
+    DDP0120("DDP0120", "[MyBatis-Plus]数据库删除操作失败"),
+    DDP0121("DDP0121", "[MyBatis-Plus]数据库删除操作状态未知"),
+    DDP0130("DDP0130", "[MyBatis-Plus]数据库修改操作失败"),
+    DDP0131("DDP0131", "[MyBatis-Plus]数据库修改操作状态未知"),
+    DDP0140("DDP0140", "[MyBatis-Plus]数据库新增或修改操作失败"),
+    DDP0141("DDP0141", "[MyBatis-Plus]数据库新增或修改操作状态未知"),
+    DDP0150("DDP0150", "[MyBatis-Plus]数据库查询失败"),
+    DDP0160("DDP0160", "[MyBatis-Plus]数据库批量操作失败"),
 
     // 工具类错误码
     UTL0000("UTL0000", "ID生成失败"),
@@ -106,6 +126,8 @@ public enum ErrorCode implements BaseEnum {
     UTL0102("UTL0102", "SM2解密失败"),
     UTL0103("UTL0103", "SM2签名失败"),
     UTL0104("UTL0104", "SM2验签失败"),
+    UTL0110("UTL0110", "SM3加解密失败"),
+    UTL0120("UTL0120", "SM4加解密失败"),
     UTL0130("UTL0130", "RSA生成密钥对失败"),
     UTL0131("UTL0131", "RSA加密失败"),
     UTL0132("UTL0132", "RSA解密失败"),

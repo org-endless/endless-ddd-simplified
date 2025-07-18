@@ -10,6 +10,7 @@ import org.endless.ddd.simplified.starter.common.config.log.type.LogLevel;
 import org.endless.ddd.simplified.starter.common.exception.config.LogException;
 import org.endless.ddd.simplified.starter.common.utils.model.object.ObjectTools;
 import org.endless.ddd.simplified.starter.common.utils.model.time.TimeStamp;
+import org.springframework.core.annotation.Order;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Aspect
+@Order
 public class LogAspect {
 
     @Around("execution(* *.*(..)) && @annotation(annotation)")
@@ -47,9 +49,9 @@ public class LogAspect {
             message = methodName;
         }
         if (!StringUtils.hasText(value)) {
-            value = Arrays.stream(args)
+            value = "(" + Arrays.stream(args)
                     .map(ObjectTools::maskSensitive)  // 处理敏感信息
-                    .collect(Collectors.joining(", "));
+                    .collect(Collectors.joining(", ")) + ")";
         } else {
             String result;
             try {
@@ -84,18 +86,24 @@ public class LogAspect {
     }
 
     private void logExecutionStart(String className, String message, LogLevel level) {
-        if (level == LogLevel.TRACE && log.isTraceEnabled()) {
-            log.trace("[{}][开始执行][{}]", className, message);
-        } else if (level == LogLevel.DEBUG && log.isDebugEnabled()) {
-            log.debug("[{}][开始执行][{}]", className, message);
+        if (level == LogLevel.TRACE) {
+            if (log.isTraceEnabled()) {
+                log.trace("[{}][开始执行][{}]", className, message);
+            }
+        } else if (level == LogLevel.DEBUG) {
+            if (log.isDebugEnabled()) {
+                log.debug("[{}][开始执行][{}]", className, message);
+            }
         } else if (log.isInfoEnabled()) {
             log.info("[{}][开始执行][{}]", className, message);
         }
     }
 
     private void logExecutionRequestInfo(String className, String message, String value, LogLevel level) {
-        if (level == LogLevel.TRACE && log.isTraceEnabled()) {
-            log.trace("[{}][{}]<请求信息> {}", className, message, value);
+        if (level == LogLevel.TRACE) {
+            if (log.isTraceEnabled()) {
+                log.trace("[{}][{}]<请求信息> {}", className, message, value);
+            }
         } else if (log.isDebugEnabled()) {
             log.debug("[{}][{}]<请求信息> {}", className, message, value);
         }
@@ -103,18 +111,27 @@ public class LogAspect {
 
     private void logExecutionEnd(Boolean isSuccess, String className, String message, String result, long duration, LogLevel level) {
         String resultMessage = isSuccess ? "成功" : "失败";
-        if (level == LogLevel.TRACE && log.isTraceEnabled()) {
-            log.trace("[{}][{}][执行{}，耗时: {} 毫秒]", className, message, resultMessage, duration);
-            log.trace("[{}][{}]<响应信息> {}", className, message, result);
+        if (isSuccess) {
+            if (level == LogLevel.TRACE) {
+                if (log.isTraceEnabled()) {
+                    log.trace("[{}][{}][执行{}，耗时: {} 毫秒]", className, message, resultMessage, duration);
+                    log.trace("[{}][{}]<响应信息> {}", className, message, result);
+                }
+            } else {
+                if (level == LogLevel.DEBUG) {
+                    if (log.isDebugEnabled()) {
+                        log.debug("[{}][{}][执行{}，耗时: {} 毫秒]", className, message, resultMessage, duration);
+                    }
+                } else if (log.isInfoEnabled()) {
+                    log.info("[{}][{}][执行{}，耗时: {} 毫秒]", className, message, resultMessage, duration);
+                }
+                if (log.isDebugEnabled()) {
+                    log.debug("[{}][{}]<响应信息> {}", className, message, result);
+                }
+            }
         } else {
-            if (level == LogLevel.DEBUG) {
-                log.debug("[{}][{}][执行{}，耗时: {} 毫秒]", className, message, resultMessage, duration);
-            } else if (log.isInfoEnabled()) {
-                log.info("[{}][{}][执行{}，耗时: {} 毫秒]", className, message, resultMessage, duration);
-            }
-            if (log.isDebugEnabled()) {
-                log.debug("[{}][{}]<响应信息> {}", className, message, result);
-            }
+            log.error("[{}][{}][执行失败，耗时: {} 毫秒]", className, message, duration);
+            log.error("[{}][{}]<响应信息> {}", className, message, result);
         }
     }
 

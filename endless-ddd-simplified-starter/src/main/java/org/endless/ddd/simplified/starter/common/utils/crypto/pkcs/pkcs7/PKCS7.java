@@ -12,7 +12,7 @@ import java.util.Arrays;
  * @author Deng Haozhi
  * @since 1.0.0
  */
-public class PKCS7Padding {
+public class PKCS7 {
 
     /**
      * PKCS7Padding 填充

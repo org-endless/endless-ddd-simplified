@@ -1,13 +1,18 @@
-package org.endless.ddd.simplified.starter.common.model.application.query.transfer;
+package org.endless.ddd.simplified.starter.common.model.common.transfer;
 
 import com.alibaba.fastjson2.annotation.JSONType;
+import com.alibaba.fastjson2.util.TypeUtils;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 import org.endless.ddd.simplified.starter.common.exception.model.common.TransferValidateException;
 import org.endless.ddd.simplified.starter.common.model.common.Transfer;
+import org.springframework.util.CollectionUtils;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * FindPageRespTransfer
@@ -24,7 +29,7 @@ import java.util.List;
 @ToString
 @Builder
 @JSONType(orders = {"rows", "total", "pageSize", "pageNum"})
-public class FindPageRespQTransfer implements PageRespQTransfer {
+public class FindPageRespTransfer implements PageRespTransfer {
 
     /**
      * 查询结果
@@ -48,11 +53,20 @@ public class FindPageRespQTransfer implements PageRespQTransfer {
 
 
     @Override
-    public FindPageRespQTransfer validate() {
+    public FindPageRespTransfer validate() {
         validateTotal();
         validatePageSize();
         validatePageNum();
         return this;
+    }
+
+    public <T extends Transfer> List<T> getRows(Class<T> clazz) {
+        return Optional.ofNullable(rows)
+                .filter(l -> !CollectionUtils.isEmpty(l))
+                .orElse(Collections.emptyList())
+                .stream()
+                .map(t -> TypeUtils.cast(t, clazz))
+                .collect(Collectors.toList());
     }
 
     private void validateTotal() {

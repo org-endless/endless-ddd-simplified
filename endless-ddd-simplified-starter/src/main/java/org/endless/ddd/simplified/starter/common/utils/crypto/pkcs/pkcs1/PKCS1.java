@@ -6,7 +6,7 @@ import java.security.SecureRandom;
 import java.util.Arrays;
 
 /**
- * PKCS1Padding
+ * PKCS1
  * <p>
  * create 2024/11/18 20:22
  * <p>
@@ -15,7 +15,7 @@ import java.util.Arrays;
  * @author Deng Haozhi
  * @since 1.0.0
  */
-public class PKCS1Padding {
+public class PKCS1 {
 
     private static final SecureRandom random = new SecureRandom();
 

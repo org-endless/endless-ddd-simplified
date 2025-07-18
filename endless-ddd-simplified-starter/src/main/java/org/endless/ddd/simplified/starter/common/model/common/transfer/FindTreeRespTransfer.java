@@ -1,15 +1,16 @@
-package org.endless.ddd.simplified.starter.common.model.application.query.transfer;
+package org.endless.ddd.simplified.starter.common.model.common.transfer;
 
 import com.alibaba.fastjson2.annotation.JSONType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+import org.endless.ddd.simplified.starter.common.model.application.query.transfer.QueryTransfer;
 import org.endless.ddd.simplified.starter.common.utils.model.tree.TreeNode;
 
 import java.util.List;
 
 /**
- * FindTreeRespQTransfer
+ * FindTreeRespTransfer
  * <p>
  * create 2024/12/27 15:50
  * <p>
@@ -23,7 +24,7 @@ import java.util.List;
 @ToString
 @Builder
 @JSONType(orders = {"treeNodes"})
-public class FindTreeRespQTransfer implements TreeRespQTransfer {
+public class FindTreeRespTransfer implements TreeRespTransfer {
 
     /**
      * 树节点列表
@@ -31,7 +32,7 @@ public class FindTreeRespQTransfer implements TreeRespQTransfer {
     private final List<TreeNode> treeNodes;
 
     @Override
-    public FindTreeRespQTransfer validate() {
+    public FindTreeRespTransfer validate() {
         return this;
     }
 }

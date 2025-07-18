@@ -274,9 +274,8 @@ public class StringTools {
                 result.put("precision", M);
                 result.put("scale", D);
                 return result;
-            }
             // 如果匹配到了不带空格的情况
-            else if (matcher.group(3) != null && matcher.group(4) != null) {
+            } else if (matcher.group(3) != null && matcher.group(4) != null) {
                 Integer M = Integer.parseInt(matcher.group(3));
                 Integer D = Integer.parseInt(matcher.group(4));
                 Map<String, Integer> result = new HashMap<>();

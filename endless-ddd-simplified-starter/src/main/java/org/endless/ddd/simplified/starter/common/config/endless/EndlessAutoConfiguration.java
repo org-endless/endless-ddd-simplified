@@ -43,4 +43,12 @@ public class EndlessAutoConfiguration {
     public String springdoc() {
         return properties.getSpringdocPath();
     }
+
+    public Long dataCenterId() {
+        return properties.getDataCenterId();
+    }
+
+    public Long workerId() {
+        return properties.getWorkerId();
+    }
 }
