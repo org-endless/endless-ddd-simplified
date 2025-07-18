@@ -5,7 +5,7 @@ import org.endless.domain.simplified.server.common.model.domain.entity.DomainSim
 import org.endless.domain.simplified.server.common.model.infrastructure.data.record.DomainSimplifiedServerRecord;
 
 /**
- * DomainSimplifiedServerDataMapper
+ * DomainSimplifiedServerMapper
  * <p>
  * create 2024/09/03 09:35
  * <p>
@@ -14,7 +14,7 @@ import org.endless.domain.simplified.server.common.model.infrastructure.data.rec
  * @see DataMapper
  * @since 1.0.0
  */
-public interface DomainSimplifiedServerDataMapper<R extends DomainSimplifiedServerRecord<? extends DomainSimplifiedServerEntity>>
+public interface DomainSimplifiedServerMapper<R extends DomainSimplifiedServerRecord<? extends DomainSimplifiedServerEntity>>
         extends DataMapper<R> {
 
 }
