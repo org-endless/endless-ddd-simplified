@@ -12,7 +12,7 @@ import org.springframework.scheduling.annotation.Async;
  * update 2025/07/10 05:37
  *
  * @author Deng Haozhi
- * @since 2.0.0
+ * @since 1.0.0
  */
 public interface RedisStreamListenerTask {
 

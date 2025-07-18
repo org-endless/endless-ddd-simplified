@@ -20,7 +20,7 @@ import org.springframework.data.redis.core.RedisTemplate;
  * update 2025/07/09 17:13
  *
  * @author Deng Haozhi
- * @since 2.0.0
+ * @since 1.0.0
  */
 @ConditionalOnProperty(name = "spring.redis.stream.enabled", havingValue = "true")
 @EnableConfigurationProperties(RedisStreamProperties.class)

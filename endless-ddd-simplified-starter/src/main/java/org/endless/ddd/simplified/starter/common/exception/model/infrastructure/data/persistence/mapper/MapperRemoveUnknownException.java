@@ -12,7 +12,7 @@ import org.endless.ddd.simplified.starter.common.handler.result.type.ErrorCode;
  *
  * @author Deng Haozhi
  * @see UnknownException
- * @since 2.0.0
+ * @since 1.0.0
  */
 public class MapperRemoveUnknownException extends UnknownException {
 

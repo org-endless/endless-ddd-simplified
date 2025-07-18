@@ -28,7 +28,7 @@ import java.util.List;
  * update 2025/07/09 18:04
  *
  * @author Deng Haozhi
- * @since 2.0.0
+ * @since 1.0.0
  */
 @Slf4j
 public class RedisStreamListenerRegistrar {

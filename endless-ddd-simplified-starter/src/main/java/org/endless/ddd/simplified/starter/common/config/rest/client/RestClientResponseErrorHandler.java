@@ -12,7 +12,7 @@ import org.springframework.web.client.ResponseErrorHandler;
  * update 2025/03/19 18:31
  *
  * @author Deng Haozhi
- * @since 2.0.0
+ * @since 1.0.0
  */
 public class RestClientResponseErrorHandler implements ResponseErrorHandler {
 

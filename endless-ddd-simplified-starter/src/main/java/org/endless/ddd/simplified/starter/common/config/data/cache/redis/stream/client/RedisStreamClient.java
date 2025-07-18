@@ -14,7 +14,7 @@ import org.springframework.data.redis.core.RedisTemplate;
  * update 2025/07/09 19:19
  *
  * @author Deng Haozhi
- * @since 2.0.0
+ * @since 1.0.0
  */
 public class RedisStreamClient<T> {
 

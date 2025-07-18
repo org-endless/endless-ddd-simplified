@@ -12,7 +12,7 @@ import java.util.Base64;
  * update 2025/03/03 00:41
  *
  * @author Deng Haozhi
- * @since 2.0.0
+ * @since 1.0.0
  */
 public class SHA1Digest {
 

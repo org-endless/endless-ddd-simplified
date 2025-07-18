@@ -16,7 +16,7 @@ import java.util.function.BiConsumer;
  * update 2025/07/15 14:01
  *
  * @author Deng Haozhi
- * @since 2.0.0
+ * @since 1.0.0
  */
 public interface MapperBulkOperations<R extends DataRecord<? extends Entity>> {
 

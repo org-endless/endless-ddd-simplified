@@ -15,7 +15,7 @@ import java.util.concurrent.Executors;
  * update 2025/07/19 03:28
  *
  * @author Deng Haozhi
- * @since 2.0.0
+ * @since 1.0.0
  */
 @EnableAsync
 @AutoConfiguration

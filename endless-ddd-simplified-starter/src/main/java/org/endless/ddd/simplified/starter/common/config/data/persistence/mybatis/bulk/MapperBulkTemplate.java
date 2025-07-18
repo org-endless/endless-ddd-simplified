@@ -22,7 +22,7 @@ import java.util.function.BiConsumer;
  *
  * @author Deng Haozhi
  * @see MapperBulkOperations
- * @since 2.0.0
+ * @since 1.0.0
  */
 public class MapperBulkTemplate<R extends DataRecord<? extends Entity>> implements MapperBulkOperations<R> {
 
