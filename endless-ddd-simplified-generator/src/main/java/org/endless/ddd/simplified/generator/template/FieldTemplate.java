@@ -56,7 +56,6 @@ public class FieldTemplate {
                 .stream()
                 .collect(Collectors.toMap(Value::getName, value -> value));
         List<Field> fields = new ArrayList<>();
-        Set<String> expandedTypes = new HashSet<>(); // 用于记录已展开的类型
 
         for (Field field : oldFields) {
             String fieldName = field.name();
@@ -67,7 +66,7 @@ public class FieldTemplate {
                 continue;
             }
             // 如果 valueNames 包含 fieldType，且 valueMap 中存在对应的 value，并且该类型尚未展开
-            if (valueMap.containsKey(fieldType) && !expandedTypes.contains(fieldType)) {
+            if (valueMap.containsKey(fieldType)) {
                 Value value = valueMap.get(fieldType);
 
                 // 展开 value 中的字段并添加到 fields 列表
@@ -79,8 +78,6 @@ public class FieldTemplate {
                             .nullable(valueField.nullable())
                             .build());
                 }
-                // 将已经展开的类型记录下来，避免后续重复展开
-                expandedTypes.add(fieldType);
                 continue;
             }
             fields.add(field);

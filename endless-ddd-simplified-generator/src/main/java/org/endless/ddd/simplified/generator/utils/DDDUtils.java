@@ -51,16 +51,16 @@ public class DDDUtils {
         String contextName = aggregate.getContextName().toLowerCase();
         String domainPackage = aggregate.getDomainName().toLowerCase();
         if (domainPackage.contains(contextName)) {
-            domainPackage = convertToDot(aggregate.getDomainName()).replace("." + contextName, "").replace(contextName + ".", "");
+            domainPackage = camelCaseToDot(aggregate.getDomainName()).replace(contextName + ".", "").replace(contextName + ".", "");
         }
         if (!contextName.equals(domainPackage)) {
-            domainPackage = convertToDot(aggregate.getDomainName()).replace("." + contextName, "").replace(contextName + ".", "");
+            domainPackage = camelCaseToDot(aggregate.getDomainName()).replace("." + contextName, "").replace(contextName + ".", "");
         }
         return servicePackage(aggregate) + "." + aggregate.getServiceSubPackage() + "." + contextName + "." + domainPackage;
     }
 
     public static String servicePackage(Aggregate aggregate) {
-        return aggregate.getGroupId() + "." + convertToDot(aggregate.getServiceName());
+        return aggregate.getGroupId() + "." + camelCaseToDot(aggregate.getServiceName());
     }
 
     public static String packageName(Aggregate aggregate, String subPackage) {

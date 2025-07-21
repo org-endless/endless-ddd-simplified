@@ -115,6 +115,7 @@ public enum ErrorCode implements BaseEnum {
     // 工具类错误码
     UTL0000("UTL0000", "ID生成失败"),
     UTL0001("UTL0001", "雪花ID生成失败"),
+    UTL0002("UTL0002", "加解密失败"),
     UTL0010("UTL0010", "精度数值计算错误"),
     UTL0011("UTL0011", "精度计算除数不能为0"),
     UTL0012("UTL0012", "精度数值为空"),

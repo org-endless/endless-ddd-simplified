@@ -40,7 +40,7 @@ public class AssociationGenerator {
                 String associationIdName = removeSuffix(fieldName, "s");
                 String associationClassName = StringUtils.capitalize(removeSuffix(fieldName, "Ids"));
                 String className = removeSuffix(aggregateName, 1) + associationClassName + "AssociationRecord";
-                String tableName = snakeCase(aggregate.getContextName()) + "_" + snakeCase(removeSuffix(className, "Record")).replace("_" + aggregate.getContextName(), "").replace(aggregate.getContextName() + "_", "");
+                String tableName = camelCaseToSnakeCase(aggregate.getContextName()) + "_" + camelCaseToSnakeCase(removeSuffix(className, "Record")).replace("_" + aggregate.getContextName(), "").replace(aggregate.getContextName() + "_", "");
                 List<Field> associationFields = new ArrayList<>();
                 associationFields.add(Field.builder().name("associationId").type("String").description(removeSuffix(classDescription, "关系数据库记录实体") + "ID").nullable(false).build());
                 associationFields.add(Field.builder().name(associationIdName).type("String").description(associationDescription + "ID").nullable(false).build());

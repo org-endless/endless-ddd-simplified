@@ -243,7 +243,6 @@ public class DDDGeneratorService {
 
             // 将 JSON 字符串解析为有序的 LinkedHashMap
             LinkedHashMap<?, ?> jsonMap = JSON.parseObject(JSON.toJSONString(aggregate), LinkedHashMap.class);
-
             // 配置输出选项，设置为块样式（标准 YAML 格式），并设置缩进
             DumperOptions options = new DumperOptions();
             options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);  // 使用块样式
@@ -273,7 +272,7 @@ public class DDDGeneratorService {
             }
             log.debug("更新聚合信息成功: {}", fileName);
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.error("更新聚合信息失败", e);
             throw new RuntimeException("更新聚合信息失败, 文件IO异常: " + e.getMessage(), e);
         }

@@ -66,10 +66,10 @@
                     选择要生成的组件
                 </h4>
                 <div class="form-check col-auto me-3">
-                    <input class="form-check-input" type="checkbox" id="all-checked-1" onclick="handlerAllChecked()">
+                    <input class="form-check-input" id="all-checked-1" onclick="handlerAllChecked()" type="checkbox">
                     <label class="form-check-label" for="all-checked-1">全选</label>
                 </div>
-                <div onchange="handlerAllCheckedChange()" id="all-1">
+                <div id="all-1" onchange="handlerAllCheckedChange()">
                     <div class="mb-4">
                         <div class="group"
                              style="border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 10px; width: 100%; display: block;">
@@ -216,7 +216,7 @@
                     </li>
                 </ul>
 
-                <form id="yamlForm" autocomplete="off" method="post">
+                <form autocomplete="off" id="yamlForm" method="post">
                     <div class="tab-content bg-body-tertiary">
                         <div class="tab-pane fade show active" id="aggregate" role="tabpanel">
                             <h2>聚合信息</h2>

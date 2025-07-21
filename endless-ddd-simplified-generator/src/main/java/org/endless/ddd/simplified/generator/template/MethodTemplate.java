@@ -333,7 +333,6 @@ public class MethodTemplate {
                 .orElseGet(Collections::emptyList)
                 .stream()
                 .collect(Collectors.toMap(Value::getName, value -> value));
-        Set<String> expandedTypes = new HashSet<>(); // 用于记录已展开的类型
         String param, objectParam, associationParam = "";
         String aggregateId = id(aggregateName, 1);
         if (className.endsWith("AssociationRecord")) {
@@ -386,7 +385,7 @@ public class MethodTemplate {
                     stringBuilder
                             .append("                .").append(fieldName).append("(").append(objectParam).append(".").append(getField).append("() == null ? new ArrayList<>() : new ArrayList<>(").append(objectParam).append(".").append(getField).append("()))\n");
                 }
-            } else if (valueMap.containsKey(fieldType) && !expandedTypes.contains(fieldType)) {
+            } else if (valueMap.containsKey(fieldType)) {
                 Value value = valueMap.get(fieldType);
 
                 for (Field valueField : value.getFields()) {
@@ -399,7 +398,6 @@ public class MethodTemplate {
                     }
 
                 }
-                expandedTypes.add(fieldType);
             } else if (entityNames.contains(fieldGenerics)) {
                 stringBuilder.append("                .").append(fieldName).append("(").append(objectParam).append(".").append(getField).append("() == null ? null : ").append(filedGenericsRecord).append(".from(").append(objectParam).append(".").append(getField).append("(), ").append(objectParam).append(".get").append(StringUtils.capitalize(aggregateId)).append("()))\n");
             } else {
@@ -418,7 +416,6 @@ public class MethodTemplate {
                 .orElseGet(Collections::emptyList)
                 .stream()
                 .collect(Collectors.toMap(Value::getName, value -> value));
-        Set<String> expandedTypes = new HashSet<>(); // 用于记录已展开的类型
 
         if (className.endsWith("AssociationRecord")) {
             String associationParam = StringUtils.uncapitalize(removeSuffix(removePrefix(className, removeSuffix(generics, "Aggregate")), "AssociationRecord")) + "Id";
@@ -451,7 +448,7 @@ public class MethodTemplate {
                     stringBuilder.append("                .").append(fieldName).append("(").append(fieldName).append("== null? new ArrayList<>() : new ArrayList<>(").append(fieldName).append("))\n");
                 }
 
-            } else if (valueMap.containsKey(fieldType) && !expandedTypes.contains(fieldType)) {
+            } else if (valueMap.containsKey(fieldType)) {
                 Value value = valueMap.get(fieldType);
                 String valueName = value.getName();
                 stringBuilder.append("                .").append(fieldName).append("(").append(valueName).append(".builder()\n");
@@ -460,7 +457,6 @@ public class MethodTemplate {
                     stringBuilder.append("                        .").append(valueFiledName).append("(").append(fieldName).append(StringUtils.capitalize(valueFiledName)).append(")\n");
                 }
                 stringBuilder.append("                        .innerBuild())\n");
-                expandedTypes.add(fieldType);
             } else if (entityNames.contains(fieldType)) {
                 stringBuilder.append("                .").append(fieldName).append("(").append(fieldName).append(".to())\n");
             } else {

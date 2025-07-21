@@ -194,8 +194,8 @@ public class StringTools {
      * @param camelCase 驼峰字符串
      * @return {@link String }
      */
-    public static String snakeCase(String camelCase) {
-        return convertToSeparator(camelCase, "_");
+    public static String camelCaseToSnakeCase(String camelCase) {
+        return camelCaseToSeparator(camelCase, "_");
     }
 
     /**
@@ -204,15 +204,15 @@ public class StringTools {
      * @param camelCase 驼峰形式
      * @return {@link String }
      */
-    public static String convertToDot(String camelCase) {
-        return convertToSeparator(camelCase, ".");
+    public static String camelCaseToDot(String camelCase) {
+        return camelCaseToSeparator(camelCase, ".");
     }
 
-    public static String convertToSlash(String camelCase) {
-        return convertToSeparator(camelCase, "/");
+    public static String camelCaseToSlash(String camelCase) {
+        return camelCaseToSeparator(camelCase, "/");
     }
 
-    public static String convertToSeparator(String camelCase, String separator) {
+    public static String camelCaseToSeparator(String camelCase, String separator) {
         StringBuilder result = new StringBuilder();
 
         // 将第一个字母转换为小写并添加到结果中
@@ -274,7 +274,7 @@ public class StringTools {
                 result.put("precision", M);
                 result.put("scale", D);
                 return result;
-            // 如果匹配到了不带空格的情况
+                // 如果匹配到了不带空格的情况
             } else if (matcher.group(3) != null && matcher.group(4) != null) {
                 Integer M = Integer.parseInt(matcher.group(3));
                 Integer D = Integer.parseInt(matcher.group(4));

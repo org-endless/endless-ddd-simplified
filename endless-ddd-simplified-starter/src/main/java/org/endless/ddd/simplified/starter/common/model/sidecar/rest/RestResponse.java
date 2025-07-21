@@ -44,7 +44,7 @@ public interface RestResponse extends Response {
 
     default Object validate() {
         if (getErrorCode() != null && getErrorCode().equals(ErrorCode.SUCCESS.getCode())) {
-            log.info("[REST响应成功]: {}", this);
+            log.trace("[REST响应成功]: {}", this);
             return getData();
         } else {
             throw new RestResponseException("[REST响应失败]: " + this);

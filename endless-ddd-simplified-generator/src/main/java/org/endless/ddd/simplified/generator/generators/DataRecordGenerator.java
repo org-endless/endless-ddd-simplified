@@ -36,18 +36,16 @@ public class DataRecordGenerator {
 
     public void generateAggregate(Aggregate aggregate) throws Exception {
         String className = exchangeSuffix(aggregate.getAggregateName(), "Record", 1);
-        String contextTableName = aggregate.getContextName();
-        String tableName = aggregate.getContextName() + "_" + snakeCase(removeSuffix(className, "Record")).replace(contextTableName + "_", "").replace("_" + contextTableName, "");
+        String tableName = tableName(aggregate.getContextName(), className);
         String classDescription = aggregate.getDescription() + "数据库记录实体";
-
         generate(aggregate, aggregate.getFields(), className, tableName, aggregate.getAggregateName(), aggregate.getDescription(), classDescription);
     }
 
     public void generateEntity(Aggregate aggregate, Entity entity) throws Exception {
         String className = exchangeSuffix(entity.getName(), "Record", 1);
         String contextTableName = aggregate.getContextName();
-        String domainTableName = snakeCase(aggregate.getDomainName());
-        String entityTableName = snakeCase(removeSuffix(className, "Record"));
+        String domainTableName = camelCaseToSnakeCase(aggregate.getDomainName());
+        String entityTableName = camelCaseToSnakeCase(removeSuffix(className, "Record"));
         String tableName = contextTableName + "_"
                 + domainTableName.replace("_" + aggregate.getContextName(), "").replace(contextTableName + "_", "") + "_"
                 + entityTableName.replace("_" + domainTableName, "").replace(domainTableName + "_", "");
@@ -121,7 +119,7 @@ public class DataRecordGenerator {
                 primaryKey = " DEFAULT 0";
             }
             if (StringUtils.hasText(fieldSqlType)) {
-                stringBuilder.append("    ").append(snakeCase(fieldName)).append(" ").append(fieldSqlType).append(" ").append(nullAble).append(primaryKey).append(" COMMENT '").append(field.description()).append("'").append(",\n");
+                stringBuilder.append("    ").append(camelCaseToSnakeCase(fieldName)).append(" ").append(fieldSqlType).append(" ").append(nullAble).append(primaryKey).append(" COMMENT '").append(field.description()).append("'").append(",\n");
             }
         }
         classDescription = classDescription.replace("数据库记录实体", "表");
@@ -146,5 +144,19 @@ public class DataRecordGenerator {
             fieldSqlType = "VARCHAR(255)";
         }
         return fieldSqlType;
+    }
+
+    private String tableName(String contextName, String className) {
+        String contextTableName = contextName.replace(".", "_");
+        String classTableName = camelCaseToSnakeCase(removeSuffix(className, "Record"));
+        if (classTableName.contains(contextTableName)) {
+            if (classTableName.equals(contextTableName)) {
+                return contextTableName;
+            } else {
+                return contextTableName + "_" + classTableName.replace("_" + contextTableName, "").replace(contextTableName + "_", "");
+            }
+        } else {
+            return contextTableName + "_" + classTableName;
+        }
     }
 }

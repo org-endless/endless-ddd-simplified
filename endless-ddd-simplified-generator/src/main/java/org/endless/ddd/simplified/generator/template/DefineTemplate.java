@@ -5,8 +5,6 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 
-import static org.endless.ddd.simplified.generator.utils.StringTools.convertToSlash;
-
 /**
  * DefineTemplate
  * <p>
@@ -62,16 +60,12 @@ public class DefineTemplate {
         classDefineEnd(stringBuilder, className, superClassName);
     }
 
-    public static void controllerDefine(StringBuilder stringBuilder, String className, String superClassName, String domainName, String contextName) {
+    public static void controllerDefine(StringBuilder stringBuilder, String uri, String className, String superClassName) {
         if (className.endsWith("Controller")) {
-            String url = convertToSlash(contextName) + "/" + convertToSlash(domainName);
-            if (domainName.toLowerCase().contains(contextName)) {
-                url = convertToSlash(contextName) + "/" + convertToSlash(domainName).replace("/" + contextName, "").replace(contextName + "/", "");
-            }
             stringBuilder
                     .append("@Lazy\n")
                     .append("@RestController\n")
-                    .append("@RequestMapping(\"/").append(url).append("\")\n");
+                    .append("@RequestMapping(\"/").append(uri).append("\")\n");
         }
         classDefineEnd(stringBuilder, className, superClassName);
     }

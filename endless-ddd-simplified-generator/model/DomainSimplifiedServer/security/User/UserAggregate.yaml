@@ -25,6 +25,10 @@ fields:
     type: PasswordValue
     description: 密码
     nullable: false
+  - name: password1
+    type: PasswordValue
+    description: 密码
+    nullable: false
   - name: roleIds
     type: List<String>
     description: 用户角色ID列表
@@ -56,25 +60,4 @@ values:
       - name: lockedUntil
         type: Long
         description: 锁定到期时间
-        nullable: false
-transfers:
-  - name: UserFindByIdReqQTransfer
-    adapterType: DRIVING
-    cqrsType: QUERY
-    messageType: REQUEST
-    description: 根据ID查询用户请求传输对象
-    fields:
-      - name: userId
-        type: String
-        description: 用户ID
-        nullable: false
-  - name: UserFindByIdRespQTransfer
-    adapterType: DRIVING
-    cqrsType: QUERY
-    messageType: RESPONSE
-    description: 根据ID查询用户响应传输对象
-    fields:
-      - name: userId
-        type: String
-        description: 用户ID
         nullable: false

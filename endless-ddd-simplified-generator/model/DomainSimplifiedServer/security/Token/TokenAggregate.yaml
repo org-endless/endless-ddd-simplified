@@ -63,8 +63,7 @@ enums:
         description: 枚举描述
         nullable: false
     enumValues:
-      - code: AUTHENTICATION
-        description: 身份认证令牌
+      - null
       - code: REFRESH
         description: 刷新令牌
 methods:

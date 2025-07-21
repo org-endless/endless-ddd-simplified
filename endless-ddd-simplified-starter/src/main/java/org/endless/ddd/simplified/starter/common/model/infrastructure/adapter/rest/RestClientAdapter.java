@@ -19,6 +19,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * RestClientAdapter
@@ -28,19 +29,20 @@ import java.util.Optional;
  * update 2025/01/08 12:44
  *
  * @author Deng Haozhi
- * @see RestClient
  * @since 1.0.0
  */
-public interface RestClientAdapter extends RestClient {
+public interface RestClientAdapter {
 
-    default <S extends Transfer, R extends Transfer> Optional<R> post(RestTemplate restTemplate, String url, S request, Class<R> responseClass, HttpHeaders headers) {
+    default <S extends Transfer, R extends Transfer> Optional<R> post(RestClient restClient, String uri, S request, Class<R> responseClass, Consumer<HttpHeaders> headers) {
         Optional.ofNullable(request)
                 .map(Transfer::validate)
                 .orElseThrow(() -> new DrivenAdapterManagerException("被动适配器请求参数不能为空"));
-        return Optional.ofNullable(TypeUtils.cast(Optional.ofNullable(restTemplate.postForEntity(
-                        url,
-                        new HttpEntity<>(request, headers),
-                        RestResponse.class).getBody())
+        return Optional.ofNullable(TypeUtils.cast(Optional.ofNullable(restClient.post()
+                        .uri(uri)
+                        .headers(headers)
+                        .body(request)
+                        .retrieve()
+                        .body(RestResponse.class))
                 .orElseThrow(() -> new DrivenAdapterManagerException("被动适配器服务返回信息为空"))
                 .validate(), responseClass));
     }

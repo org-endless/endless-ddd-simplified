@@ -10,14 +10,11 @@ import org.endless.ddd.simplified.starter.common.exception.model.infrastructure.
 import org.endless.ddd.simplified.starter.common.exception.model.infrastructure.data.persistence.mapper.MapperUnknownException;
 import org.endless.ddd.simplified.starter.common.exception.model.sidecar.rest.RestBadRequestException;
 import org.endless.ddd.simplified.starter.common.exception.model.sidecar.rest.RestNotFoundException;
-import org.endless.ddd.simplified.starter.common.exception.security.common.SecurityFailedException;
-import org.endless.ddd.simplified.starter.common.exception.security.common.SecurityUnknownException;
 import org.endless.ddd.simplified.starter.common.handler.result.type.ErrorCode;
 import org.endless.ddd.simplified.starter.common.model.sidecar.rest.RestResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.NoHandlerFoundException;
@@ -98,15 +95,6 @@ public abstract class AbstractRestAdapterExceptionHandler implements RestAdapter
         return response().notFound(errorCode, message);
     }
 
-    @ExceptionHandler(AuthorizationDeniedException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<RestResponse> handleAuthorizationDeniedException(AuthorizationDeniedException e) {
-        String message = addBrackets("没有访问权限");
-        log.error("[{}][{}]{}", ErrorCode.FORBIDN.getCode(), ErrorCode.FORBIDN.getDescription(), message, e);
-        return response().forbidden(ErrorCode.FORBIDN, message);
-    }
-
-
     @ExceptionHandler(MapperUnknownException.class)
     @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
     public ResponseEntity<RestResponse> handleMapperException(MapperUnknownException e) {
@@ -132,27 +120,9 @@ public abstract class AbstractRestAdapterExceptionHandler implements RestAdapter
         return response().unavailable(errorCode, message);
     }
 
-    @ExceptionHandler(SecurityUnknownException.class)
-    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
-    public ResponseEntity<RestResponse> handleSecurityUnknownException(SecurityUnknownException e) {
-        String message = addBrackets(e.getMessage());
-        ErrorCode errorCode = e.getErrorCode();
-        log.error("[{}][{}]{}", errorCode.getCode(), errorCode.getDescription(), message, e);
-        return response().unavailable(errorCode, message);
-    }
-
     @ExceptionHandler(FailedException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<RestResponse> handleFailedException(FailedException e) {
-        String message = addBrackets(e.getMessage());
-        ErrorCode errorCode = e.getErrorCode();
-        log.error("[{}][{}]{}", errorCode.getCode(), errorCode.getDescription(), message, e);
-        return response().error(errorCode, message);
-    }
-
-    @ExceptionHandler(SecurityFailedException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<RestResponse> handleSecurityFailedException(SecurityFailedException e) {
         String message = addBrackets(e.getMessage());
         ErrorCode errorCode = e.getErrorCode();
         log.error("[{}][{}]{}", errorCode.getCode(), errorCode.getDescription(), message, e);
