@@ -2,8 +2,8 @@ package org.endless.ddd.simplified.generator.components.generator.domain.sidecar
 
 import com.alibaba.fastjson2.JSONException;
 import org.endless.ddd.simplified.generator.common.model.sidecar.rest.DDDSimplifiedGeneratorRestController;
-import org.endless.ddd.simplified.generator.components.generator.domain.application.command.transfer.AggregateCreateReqCTransfer;
-import org.endless.ddd.simplified.generator.components.generator.domain.facade.adapter.AggregateDrivingAdapter;
+import org.endless.ddd.simplified.generator.components.generator.domain.application.command.transfer.DomainCreateReqCTransfer;
+import org.endless.ddd.simplified.generator.components.generator.domain.facade.adapter.DomainDrivingAdapter;
 import org.endless.ddd.simplified.starter.common.config.log.annotation.Log;
 import org.endless.ddd.simplified.starter.common.exception.model.application.command.transfer.CommandReqTransferNullException;
 import org.endless.ddd.simplified.starter.common.exception.model.sidecar.rest.RestErrorException;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Optional;
 
 /**
- * AggregateRestController
+ * DomainRestController
  * <p>
  * 聚合领域Rest控制器
  * <p>
@@ -33,22 +33,22 @@ import java.util.Optional;
 @Lazy
 @RestController
 @RequestMapping("/generator/aggregate")
-public class AggregateRestController implements DDDSimplifiedGeneratorRestController {
+public class DomainRestController implements DDDSimplifiedGeneratorRestController {
 
     /**
      * 聚合领域主动适配器
      */
-    private final AggregateDrivingAdapter aggregateDrivingAdapter;
+    private final DomainDrivingAdapter aggregateDrivingAdapter;
 
-    public AggregateRestController(AggregateDrivingAdapter aggregateDrivingAdapter) {
+    public DomainRestController(DomainDrivingAdapter aggregateDrivingAdapter) {
         this.aggregateDrivingAdapter = aggregateDrivingAdapter;
     }
 
     @PostMapping("/command/create")
     @Log(message = "聚合创建", value = "#command")
-    public ResponseEntity<RestResponse> create(@RequestBody AggregateCreateReqCTransfer command) {
+    public ResponseEntity<RestResponse> create(@RequestBody DomainCreateReqCTransfer command) {
         Optional.ofNullable(command)
-                .map(AggregateCreateReqCTransfer::validate)
+                .map(DomainCreateReqCTransfer::validate)
                 .orElseThrow(() -> new CommandReqTransferNullException("聚合创建参数不能为空"));
         try {
             aggregateDrivingAdapter.create(command);

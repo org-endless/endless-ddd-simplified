@@ -2,6 +2,8 @@ package org.endless.ddd.simplified.generator;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
  * DDDSimplifiedGeneratorApplication
@@ -13,6 +15,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author Deng Haozhi
  * @since 1.0.0
  */
+@EnableAsync
+@EnableAspectJAutoProxy
 @SpringBootApplication
 public class DDDSimplifiedGeneratorApplication {
 

@@ -32,7 +32,9 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>org.endless.domain.simplified.server.DomainSimplifiedApplication</mainClass>
+                    <mainClass>
+                        org.endless.ddd.simplified.generator.DDDSimplifiedGeneratorApplication
+                    </mainClass>
                 </configuration>
                 <executions>
                     <execution>
@@ -43,6 +45,6 @@
                 </executions>
             </plugin>
         </plugins>
-        <finalName>endless-ddd-simplified-server</finalName>
+        <finalName>endless-ddd-generator</finalName>
     </build>
 </project>

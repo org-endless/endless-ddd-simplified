@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN" monitorInterval="300">
     <properties>
-        <property name="APP_NAME" value="endless-ddd-simplified-generator-server"/>
+        <property name="APP_NAME" value="endless-ddd-simplified-generator"/>
         <property name="APP_HOME" value="/${APP_NAME}"/>
         <property name="LOG_HOME" value="/logs/${APP_NAME}"/>
         <property name="LOG_NAME" value="${APP_NAME}.log"/>

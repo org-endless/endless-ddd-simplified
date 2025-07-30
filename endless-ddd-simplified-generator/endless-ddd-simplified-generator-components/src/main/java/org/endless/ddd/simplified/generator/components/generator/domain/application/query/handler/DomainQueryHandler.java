@@ -3,7 +3,7 @@ package org.endless.ddd.simplified.generator.components.generator.domain.applica
 import org.endless.ddd.simplified.generator.common.model.application.query.handler.DDDSimplifiedGeneratorQueryHandler;
 
 /**
- * AggregateQueryHandler
+ * DomainQueryHandler
  * <p>
  * 聚合领域查询处理器
  * <p>
@@ -15,6 +15,6 @@ import org.endless.ddd.simplified.generator.common.model.application.query.handl
  * @see DDDSimplifiedGeneratorQueryHandler
  * @since 0.0.1
  */
-public interface AggregateQueryHandler extends DDDSimplifiedGeneratorQueryHandler {
+public interface DomainQueryHandler extends DDDSimplifiedGeneratorQueryHandler {
 
 }

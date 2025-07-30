@@ -9,7 +9,7 @@ import org.endless.ddd.simplified.starter.common.exception.model.application.com
 import org.springframework.util.StringUtils;
 
 /**
- * AggregateCreateReqCTransfer
+ * DomainCreateReqCTransfer
  * <p>
  * 聚合创建命令请求传输对象
  * <p>
@@ -24,8 +24,8 @@ import org.springframework.util.StringUtils;
 @Getter
 @ToString
 @Builder
-@JSONType(orders = { "name", "description", "contextId", "aggregateName", "aggregateDescription" })
-public class AggregateCreateReqCTransfer implements DDDSimplifiedGeneratorCommandTransfer {
+@JSONType(orders = {"name", "description", "contextId", "aggregateName", "aggregateDescription"})
+public class DomainCreateReqCTransfer implements DDDSimplifiedGeneratorCommandTransfer {
 
     /**
      * 聚合名称
@@ -53,7 +53,7 @@ public class AggregateCreateReqCTransfer implements DDDSimplifiedGeneratorComman
     private final String aggregateDescription;
 
     @Override
-    public AggregateCreateReqCTransfer validate() {
+    public DomainCreateReqCTransfer validate() {
         validateName();
         validateContextId();
         validateAggregateName();

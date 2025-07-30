@@ -1,10 +1,10 @@
 package org.endless.ddd.simplified.generator.components.generator.domain.facade.adapter;
 
 import org.endless.ddd.simplified.generator.common.model.facade.adapter.DDDSimplifiedGeneratorDrivingAdapter;
-import org.endless.ddd.simplified.generator.components.generator.domain.application.command.transfer.AggregateCreateReqCTransfer;
+import org.endless.ddd.simplified.generator.components.generator.domain.application.command.transfer.DomainCreateReqCTransfer;
 
 /**
- * AggregateDrivingAdapter
+ * DomainDrivingAdapter
  * <p>
  * 聚合领域主动适配器
  * <p>
@@ -16,7 +16,7 @@ import org.endless.ddd.simplified.generator.components.generator.domain.applicat
  * @see DDDSimplifiedGeneratorDrivingAdapter
  * @since 0.0.1
  */
-public interface AggregateDrivingAdapter extends DDDSimplifiedGeneratorDrivingAdapter {
+public interface DomainDrivingAdapter extends DDDSimplifiedGeneratorDrivingAdapter {
 
-    void create(AggregateCreateReqCTransfer command);
+    void create(DomainCreateReqCTransfer command);
 }

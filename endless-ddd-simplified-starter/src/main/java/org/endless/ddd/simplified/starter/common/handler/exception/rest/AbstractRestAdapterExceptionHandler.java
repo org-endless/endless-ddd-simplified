@@ -5,7 +5,6 @@ import org.endless.ddd.simplified.starter.common.exception.common.FailedExceptio
 import org.endless.ddd.simplified.starter.common.exception.common.UnknownException;
 import org.endless.ddd.simplified.starter.common.exception.model.application.command.handler.CommandHandlerNotFoundException;
 import org.endless.ddd.simplified.starter.common.exception.model.application.query.handler.QueryHandlerNotFoundException;
-import org.endless.ddd.simplified.starter.common.exception.model.infrastructure.adapter.filesystem.FileSystemException;
 import org.endless.ddd.simplified.starter.common.exception.model.infrastructure.data.manager.DataManagerNotFoundException;
 import org.endless.ddd.simplified.starter.common.exception.model.infrastructure.data.persistence.mapper.MapperUnknownException;
 import org.endless.ddd.simplified.starter.common.exception.model.sidecar.rest.RestBadRequestException;
@@ -100,14 +99,6 @@ public abstract class AbstractRestAdapterExceptionHandler implements RestAdapter
     public ResponseEntity<RestResponse> handleMapperException(MapperUnknownException e) {
         String message = addBrackets(e.getMessage());
         log.error("[{}]{}", ErrorCode.UNKNOWN.getDescription(), message, e);
-        return response().unavailable(ErrorCode.UNKNOWN, message);
-    }
-
-    @ExceptionHandler(FileSystemException.class)
-    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
-    public ResponseEntity<RestResponse> handleFileSystemException(FileSystemException e) {
-        String message = addBrackets(e.getMessage());
-        log.error("[{}][{}]{}", ErrorCode.UNKNOWN.getCode(), ErrorCode.UNKNOWN.getDescription(), message, e);
         return response().unavailable(ErrorCode.UNKNOWN, message);
     }
 

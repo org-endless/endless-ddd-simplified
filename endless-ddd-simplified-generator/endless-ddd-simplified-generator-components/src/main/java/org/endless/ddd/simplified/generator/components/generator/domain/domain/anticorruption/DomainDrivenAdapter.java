@@ -1,7 +1,7 @@
 package org.endless.ddd.simplified.generator.components.generator.domain.domain.anticorruption;
 
 import org.endless.ddd.simplified.generator.common.model.domain.anticorruption.DDDSimplifiedGeneratorDrivenAdapter;
-import org.endless.ddd.simplified.generator.components.generator.domain.domain.entity.AggregateDomainAggregate;
+import org.endless.ddd.simplified.generator.components.generator.domain.domain.entity.DomainAggregate;
 
 /**
  * AggregateDrivenAdapter
@@ -16,8 +16,8 @@ import org.endless.ddd.simplified.generator.components.generator.domain.domain.e
  * @see DDDSimplifiedGeneratorDrivenAdapter
  * @since 1.0.0
  */
-public interface AggregateDrivenAdapter extends DDDSimplifiedGeneratorDrivenAdapter {
+public interface DomainDrivenAdapter extends DDDSimplifiedGeneratorDrivenAdapter {
 
-    void save(AggregateDomainAggregate aggregate);
+    void save(DomainAggregate aggregate);
 
 }
