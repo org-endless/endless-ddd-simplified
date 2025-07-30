@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html data-bs-theme="dark" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>DDD代码生成器</title>
+    <!-- 第三方样式 -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <!-- 自定义样式 -->
+    <link href="/css/base.css" rel="stylesheet">
+    <link href="/css/components.css" rel="stylesheet">
+    <script src="/js/theme.toggle.js"></script>
+</head>
+<body class="bg-body-tertiary">
+<main style="margin: 10px auto">
+    <!-- 导航栏 -->
+    <div id="navbar-container"></div>
+
+    <!-- 项目配置向导 -->
+    <div id="project-wizard-container"></div>
+
+    <!-- 主界面 -->
+    <div id="mainInterface">
+        <div class="row" style="align-items: flex-start">
+            <!-- 左侧边栏 -->
+            <div id="sidebar-container"></div>
+
+            <!-- 右侧内容区域 -->
+            <div id="main-content-container"></div>
+        </div>
+    </div>
+
+    <!-- 模态框 -->
+    <div id="modal-container"></div>
+</main>
+
+<!-- 第三方库 -->
+<script src="/js/jquery.min.js"></script>
+<script src="/js/popper.min.js"></script>
+<script src="/js/bootstrap.bundle.min.js"></script>
+
+<!-- 核心模块 -->
+<script src="/js/core/DataTransform.js"></script>
+<script src="/js/core/DOMCore.js"></script>
+<script src="/js/core/DataManager.js"></script>
+
+<!-- UI模块 -->
+<script src="/js/ui/TabManager.js"></script>
+
+<!-- 工具模块 -->
+<script src="/js/AlertManager.js"></script>
+<script src="/js/ComponentLoader.js"></script>
+<script src="/js/ProjectConfigWizard.js"></script>
+<script src="/js/ContentManager.js"></script>
+<script src="/js/ProjectConfigManager.js"></script>
+<script src="/js/NewItemManager.js"></script>
+
+<!-- 主题模块 -->
+<script src="/js/theme.toggle.js"></script>
+
+<!-- 主应用 -->
+<script src="/js/app.js"></script>
+
+<!-- 页面初始化脚本已移至app.js -->
+</body>
+</html>

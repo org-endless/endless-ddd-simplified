@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="300">
+    <properties>
+        <property name="APP_NAME" value="endless-ddd-simplified-generator-server"/>
+        <property name="APP_HOME" value="/${APP_NAME}"/>
+        <property name="LOG_HOME" value="/logs/${APP_NAME}"/>
+        <property name="LOG_NAME" value="${APP_NAME}.log"/>
+        <Property name="LOG_PATTERN">[%d{yyyy-MM-dd HH:mm:ss.SSS}][%-5p][%T][%c.%M:%L] %msg%xEx%n</Property>
+        <property name="FILE_SIZE">20MB</property>
+    </properties>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${LOG_PATTERN}" charset="UTF-8"/>
+        </Console>
+        <RollingRandomAccessFile name="RollingRandomAccessFile" fileName="${LOG_HOME}/${LOG_NAME}.log"
+                                 filePattern="${LOG_HOME}/${date:yyyy-MM}/${LOG_NAME}-%d{yyyy-MM-dd HH-mm}-%i.log">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %l - %msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="20"/>
+        </RollingRandomAccessFile>
+    </Appenders>
+    <Loggers>
+        <Logger name="org.mongodb" level="INFO"/>
+        <Logger name="org.apache" level="INFO"/>
+        <Logger name="org.springframework" level="INFO"/>
+        <Logger name="_org.springframework" level="INFO"/>
+        <Logger name="org.jboss" level="INFO"/>
+        <Logger name="org.thymeleaf" level="INFO"/>
+        <Logger name="org.hibernate" level="INFO"/>
+        <Logger name="javax.management" level="INFO"/>
+        <Logger name="sun.rmi" level="INFO"/>
+        <Logger name="sun.net" level="INFO"/>
+        <Logger name="jdk.event" level="INFO"/>
+
+        <Root level="Debug">
+            <AppenderRef ref="Console"/>
+            <!--        <AppenderRef ref="RollingRandomAccessFile" />-->
+        </Root>
+    </Loggers>
+</Configuration>

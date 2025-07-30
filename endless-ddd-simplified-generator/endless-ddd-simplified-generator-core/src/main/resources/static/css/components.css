@@ -1,0 +1,305 @@
+/* 组件样式文件 */
+
+/* 向导样式 */
+.wizard-step {
+    display: none;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.wizard-step.active {
+    display: block;
+}
+
+.step-indicator {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.step-indicator .step {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #6c757d;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 10px;
+    position: relative;
+}
+
+.step-indicator .step.active {
+    background-color: #007bff;
+}
+
+.step-indicator .step.completed {
+    background-color: #28a745;
+}
+
+.step-indicator .step::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    width: 20px;
+    height: 2px;
+    background-color: #6c757d;
+    transform: translateY(-50%);
+}
+
+.step-indicator .step:last-child::after {
+    display: none;
+}
+
+.step-indicator .step.completed::after {
+    background-color: #28a745;
+}
+
+/* 模块卡片样式 */
+.module-card {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: var(--bs-body-bg);
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.module-card:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.module-card h5 {
+    color: var(--bs-primary);
+    margin-bottom: 15px;
+}
+
+/* AppBar样式 */
+.navbar-brand {
+    font-weight: 600;
+    font-size: 1.25rem;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: rgba(255, 255, 255, 0.9);
+    transition: color 0.3s ease;
+}
+
+.navbar-dark .navbar-nav .nav-link:hover {
+    color: rgba(255, 255, 255, 1);
+}
+
+/* AppBar中的路径显示样式 */
+.navbar .badge {
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.375rem 0.5rem;
+    border-radius: 4px;
+}
+
+.navbar .bi-chevron-right {
+    font-size: 0.75rem;
+}
+
+/* 响应式路径显示 */
+@media (max-width: 768px) {
+    .navbar .d-flex.align-items-center {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .navbar .badge {
+        font-size: 0.625rem;
+        padding: 0.25rem 0.375rem;
+    }
+    
+    .navbar .bi-chevron-right {
+        font-size: 0.625rem;
+    }
+}
+
+/* 内容区域样式 */
+.content-section {
+    background: var(--bs-body-bg);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.config-section {
+    background: var(--bs-body-tertiary);
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.config-section h4 {
+    color: var(--bs-primary);
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+}
+
+/* 按钮组样式 */
+.btn-group .btn {
+    border-radius: 4px;
+    margin: 0 2px;
+}
+
+/* 表单样式优化 */
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-control:not(:placeholder-shown) ~ label {
+    color: var(--bs-primary);
+}
+
+.form-control:focus {
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.25);
+}
+
+/* 新建功能按钮样式 */
+.module-card .btn {
+    transition: all 0.3s ease;
+}
+
+.module-card .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.module-card .btn-success {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    border: none;
+}
+
+.module-card .btn-info {
+    background: linear-gradient(135deg, #17a2b8, #6f42c1);
+    border: none;
+}
+
+.module-card .btn-warning {
+    background: linear-gradient(135deg, #ffc107, #fd7e14);
+    border: none;
+    color: #212529;
+}
+
+.module-card .btn-primary {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    border: none;
+}
+
+/* 模态框样式优化 */
+.modal-content {
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--bs-border-color);
+    background: var(--bs-body-tertiary);
+    border-radius: 8px 8px 0 0;
+}
+
+.modal-footer {
+    border-top: 1px solid var(--bs-border-color);
+    background: var(--bs-body-tertiary);
+    border-radius: 0 0 8px 8px;
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+    .navbar .d-flex.align-items-center {
+        flex-wrap: wrap;
+    }
+    
+    .navbar .nav-item {
+        margin-bottom: 0.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar .d-flex.align-items-center {
+        flex-direction: column;
+        align-items: stretch !important;
+    }
+    
+    .navbar .nav-item {
+        margin-bottom: 0.25rem;
+    }
+    
+    .navbar .form-select-sm {
+        width: 100% !important;
+    }
+}
+
+/* 选择框样式 */
+.form-select {
+    border-radius: 6px;
+    border: 1px solid #dee2e6;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-select:focus {
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* 复选框网格样式 */
+.form-check {
+    margin-bottom: 0.5rem;
+}
+
+.form-check-label.small {
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+/* 按钮组样式 */
+.d-grid.gap-2 .btn {
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.d-grid.gap-2 .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* 配置区域样式 */
+.config-section {
+    background-color: var(--bs-body-bg);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .step-indicator .step {
+        width: 30px;
+        height: 30px;
+        margin: 0 5px;
+    }
+    
+    .step-indicator .step::after {
+        width: 10px;
+    }
+    
+    .module-card {
+        padding: 15px;
+    }
+    
+    .config-section {
+        padding: 15px;
+    }
+}
+
+/* 主题适配 */
+[data-bs-theme="dark"] .module-card {
+    border-color: #495057;
+}
+
+[data-bs-theme="dark"] .config-section {
+    background-color: var(--bs-dark);
+} 

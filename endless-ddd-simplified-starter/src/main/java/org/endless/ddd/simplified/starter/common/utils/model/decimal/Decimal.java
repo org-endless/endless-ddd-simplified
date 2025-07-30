@@ -190,7 +190,7 @@ public class Decimal {
             throw new DecimalEmptyException();
         }
         try {
-            return format5Bit(decimal.add(augend));
+            return format5Bit(format5Bit(decimal).add(format5Bit(augend)));
         } catch (FailedException e) {
             throw e;
         } catch (Exception e) {
@@ -204,7 +204,7 @@ public class Decimal {
             throw new DecimalEmptyException();
         }
         try {
-            return format5Bit(decimal.subtract(subtrahend));
+            return format5Bit(format5Bit(decimal).subtract(subtrahend));
         } catch (FailedException e) {
             throw e;
         } catch (Exception e) {
@@ -218,7 +218,7 @@ public class Decimal {
             throw new DecimalEmptyException();
         }
         try {
-            return format5Bit(decimal.multiply(multiplicand));
+            return format5Bit(format5Bit(decimal).multiply(multiplicand));
         } catch (FailedException e) {
             throw e;
         } catch (Exception e) {
@@ -235,7 +235,7 @@ public class Decimal {
             throw new DecimalDivisionByZeroException();
         }
         try {
-            return format5Bit(decimal.divide(divisor, FIVE_SCALE, ROUNDING_MODE));
+            return format5Bit(format5Bit(decimal).divide(divisor, FIVE_SCALE, ROUNDING_MODE));
         } catch (FailedException e) {
             throw e;
         } catch (Exception e) {
@@ -244,9 +244,13 @@ public class Decimal {
     }
 
     public static BigDecimal max(List<BigDecimal> decimals) {
+        if (CollectionUtils.isEmpty(decimals)) {
+            return null;
+        }
         try {
             return format(decimals.stream()
                     .filter(Objects::nonNull)
+                    .map(Decimal::format5Bit)
                     .max(BigDecimal::compareTo)
                     .orElseThrow(DecimalEmptyException::new));
         } catch (FailedException e) {
@@ -257,9 +261,13 @@ public class Decimal {
     }
 
     public static BigDecimal min(List<BigDecimal> decimals) {
+        if (CollectionUtils.isEmpty(decimals)) {
+            return null;
+        }
         try {
             return format(decimals.stream()
                     .filter(Objects::nonNull)
+                    .map(Decimal::format5Bit)
                     .min(BigDecimal::compareTo)
                     .orElseThrow(DecimalEmptyException::new));
         } catch (FailedException e) {
@@ -274,13 +282,16 @@ public class Decimal {
                 .filter(l -> !CollectionUtils.isEmpty(l))
                 .orElseThrow(DecimalEmptyException::new)
                 .stream()
-                .filter(Objects::nonNull).toList();
+                .filter(Objects::nonNull)
+                .map(Decimal::format5Bit)
+                .toList();
         if (validDecimals.isEmpty()) {
             throw new DecimalEmptyException();
         }
         try {
-            BigDecimal sum = validDecimals.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
-            return format(divide(sum, BigDecimal.valueOf(validDecimals.size())));
+            BigDecimal sum = validDecimals.stream()
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+            return format5Bit(divide(sum, BigDecimal.valueOf(validDecimals.size())));
         } catch (FailedException e) {
             throw e;
         } catch (Exception e) {
@@ -294,6 +305,7 @@ public class Decimal {
                 .orElseThrow(DecimalEmptyException::new)
                 .stream()
                 .filter(Objects::nonNull)
+                .map(Decimal::format5Bit)
                 .sorted().toList();
         if (validDecimals.isEmpty()) {
             throw new DecimalEmptyException();
@@ -303,9 +315,9 @@ public class Decimal {
             if (size % 2 == 0) {
                 BigDecimal mid1 = validDecimals.get(size / 2 - 1);
                 BigDecimal mid2 = validDecimals.get(size / 2);
-                return format(divide(add(mid1, mid2), BigDecimal.valueOf(2)));
+                return format5Bit(divide(add(mid1, mid2), BigDecimal.valueOf(2)));
             } else {
-                return format(validDecimals.get(size / 2));
+                return format5Bit(validDecimals.get(size / 2));
             }
         } catch (FailedException e) {
             throw e;

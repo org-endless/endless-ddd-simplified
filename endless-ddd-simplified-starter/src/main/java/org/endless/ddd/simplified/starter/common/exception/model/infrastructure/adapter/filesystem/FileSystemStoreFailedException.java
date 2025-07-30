@@ -1,31 +1,36 @@
 package org.endless.ddd.simplified.starter.common.exception.model.infrastructure.adapter.filesystem;
 
-import org.endless.ddd.simplified.starter.common.utils.model.string.StringTools;
+import org.endless.ddd.simplified.starter.common.exception.common.FailedException;
+import org.endless.ddd.simplified.starter.common.handler.result.type.ErrorCode;
 
 /**
  * FileSystemStoreFailedException
  * <p>
  * create 2024/09/29 10:55
  * <p>
- * update 2024/11/17 16:16
+ * update 2025/07/29 22:01
  *
  * @author Deng Haozhi
- * @see FileSystemFailedException
+ * @see FailedException
  * @since 1.0.0
  */
-public class FileSystemStoreFailedException extends FileSystemFailedException {
+public class FileSystemStoreFailedException extends FailedException {
 
-    private static final String DEFAULT_MESSAGE = "存储文件失败";
+    private static final ErrorCode ERROR_CODE = ErrorCode.DFS0001;
 
-    public FileSystemStoreFailedException(String message) {
-        super("[" + DEFAULT_MESSAGE + "]" + StringTools.addBrackets(message));
+    public FileSystemStoreFailedException() {
+        super(ERROR_CODE);
     }
 
-    public FileSystemStoreFailedException(String message, Throwable throwable) {
-        super("[" + DEFAULT_MESSAGE + "]" + StringTools.addBrackets(message), throwable);
+    public FileSystemStoreFailedException(String message) {
+        super(ERROR_CODE, message);
     }
 
     public FileSystemStoreFailedException(Throwable throwable) {
-        super("[" + DEFAULT_MESSAGE + "]" + StringTools.addBrackets(throwable.getMessage()), throwable);
+        super(ERROR_CODE, throwable);
+    }
+
+    public FileSystemStoreFailedException(String message, Throwable throwable) {
+        super(ERROR_CODE, message, throwable);
     }
 }

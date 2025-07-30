@@ -1,0 +1,15 @@
+spring:
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false
+    mode: HTML
+  freemarker:
+    template-loader-path: classpath:/templates/freemarker/
+server:
+  port: 60003
+  error:
+    whitelabel:
+      enabled: false
+logging:
+  config: file:config/log4j2.xml

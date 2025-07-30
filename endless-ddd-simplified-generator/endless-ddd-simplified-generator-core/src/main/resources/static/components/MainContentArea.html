@@ -1,0 +1,229 @@
+<!-- 主内容区域组件 -->
+<div class="col-md-8">
+    <!-- 动态内容区域 -->
+    <div id="dynamic-content">
+        <!-- 默认显示聚合设计页面 -->
+        <div id="aggregate-design-content" class="content-section">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3><i class="bi bi-diagram-3"></i> 聚合设计</h3>
+                <div class="btn-group" role="group">
+                    <button class="btn btn-outline-primary btn-sm" onclick="ContentManager.showProjectConfig()">
+                        <i class="bi bi-gear"></i> 项目配置
+                    </button>
+                    <button class="btn btn-primary btn-sm" onclick="ContentManager.showAggregateDesign()">
+                        <i class="bi bi-diagram-3"></i> 聚合设计
+                    </button>
+                </div>
+            </div>
+
+            <!-- 聚合设计表单 -->
+    <form autocomplete="off" id="yamlForm" method="post">
+                <div class="config-section">
+                    <h4><i class="bi bi-info-circle"></i> 基本信息</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="authorInput" name="author" placeholder="作者" required type="text">
+                                <label for="authorInput">作者</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="versionInput" name="version" placeholder="版本" required type="text">
+                                <label for="versionInput">版本</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="serviceNameInput" name="serviceName" placeholder="服务名称" required type="text">
+                                <label for="serviceNameInput">服务名称</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="rootPathInput" name="rootPath" placeholder="服务根路径" required type="text">
+                                <label for="rootPathInput">服务根路径</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="serviceSubPackageInput" name="serviceSubPackage" placeholder="服务业务子包" required type="text">
+                                <label for="serviceSubPackageInput">服务业务子包</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="contextNameInput" name="contextName" placeholder="限界上下文名称" required type="text">
+                                <label for="contextNameInput">限界上下文名称</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="domainNameInput" name="domainName" placeholder="领域名称" required type="text">
+                                <label for="domainNameInput">领域名称</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="aggregateNameInput" name="aggregateName" placeholder="聚合名称" required type="text">
+                                <label for="aggregateNameInput">聚合名称</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input class="form-control" id="descriptionInput" name="description" placeholder="聚合描述" required type="text">
+                        <label for="descriptionInput">聚合描述</label>
+                    </div>
+                </div>
+
+                <!-- 字段设计 -->
+                <div class="config-section mt-4">
+                    <h4><i class="bi bi-list"></i> 字段设计</h4>
+                    <div class="field-container mb-3">
+                        <div class="fields"></div>
+                        <button class="btn btn-primary add-aggregate-field" type="button" onclick="AggregateFieldManager.addField()">
+                            <i class="bi bi-plus-circle"></i> 添加字段
+                        </button>
+                </div>
+            </div>
+
+                <!-- 实体设计 -->
+                <div class="config-section mt-4">
+                    <h4><i class="bi bi-box"></i> 实体设计</h4>
+                    <button class="btn btn-primary add-entities" type="button" onclick="EntityManager.addEntity()">
+                        <i class="bi bi-plus-circle"></i> 添加实体
+                    </button>
+                    <div class="entities-container mt-3"></div>
+            </div>
+
+                <!-- 枚举设计 -->
+                <div class="config-section mt-4">
+                    <h4><i class="bi bi-list-ul"></i> 枚举设计</h4>
+                    <button class="btn btn-primary add-enum" type="button" onclick="EnumManager.addEnum()">
+                        <i class="bi bi-plus-circle"></i> 添加枚举
+                    </button>
+                    <div class="enums-container mt-3"></div>
+            </div>
+
+                <!-- 值对象设计 -->
+                <div class="config-section mt-4">
+                    <h4><i class="bi bi-collection"></i> 值对象设计</h4>
+                    <button class="btn btn-primary add-value" type="button" onclick="ValueObjectManager.addValueObject()">
+                        <i class="bi bi-plus-circle"></i> 添加值对象
+                    </button>
+                    <div class="values-container mt-3"></div>
+            </div>
+
+                <!-- 方法设计 -->
+                <div class="config-section mt-4">
+                    <h4><i class="bi bi-gear"></i> 方法设计</h4>
+                    <button class="btn btn-primary add-method" type="button" onclick="MethodManager.addMethod()">
+                        <i class="bi bi-plus-circle"></i> 添加方法
+                    </button>
+                    <div class="methods-container mt-3"></div>
+            </div>
+
+                <!-- 传输对象设计 -->
+                <div class="config-section mt-4">
+                    <h4><i class="bi bi-arrow-left-right"></i> 传输对象设计</h4>
+                    <button class="btn btn-primary add-transfers" type="button" onclick="TransferObjectManager.addTransferObject()">
+                        <i class="bi bi-plus-circle"></i> 添加传输对象
+                    </button>
+                    <div class="transfers-container mt-3"></div>
+                </div>
+
+                <input id="yamlFormSubmit" style="display: none" type="submit"/>
+            </form>
+        </div>
+
+        <!-- 项目配置页面 -->
+        <div id="project-config-content" class="content-section" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3><i class="bi bi-gear"></i> 项目配置</h3>
+                <div class="btn-group" role="group">
+                    <button class="btn btn-primary btn-sm" onclick="ContentManager.showProjectConfig()">
+                        <i class="bi bi-gear"></i> 项目配置
+                    </button>
+                    <button class="btn btn-outline-primary btn-sm" onclick="ContentManager.showAggregateDesign()">
+                        <i class="bi bi-diagram-3"></i> 聚合设计
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 项目配置内容 -->
+            <div class="config-section">
+                <h4><i class="bi bi-folder"></i> 项目基本信息</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input class="form-control" id="projectNameInput" name="projectName" placeholder="项目名称" type="text">
+                            <label for="projectNameInput">项目名称</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input class="form-control" id="projectVersionInput" name="projectVersion" placeholder="项目版本" type="text">
+                            <label for="projectVersionInput">项目版本</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input class="form-control" id="basePackageInput" name="basePackage" placeholder="基础包名" type="text">
+                            <label for="basePackageInput">基础包名</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input class="form-control" id="outputPathInput" name="outputPath" placeholder="输出路径" type="text">
+                            <label for="outputPathInput">输出路径</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-floating mb-3">
+                    <textarea class="form-control" id="projectDescriptionInput" name="projectDescription" placeholder="项目描述" style="height: 100px"></textarea>
+                    <label for="projectDescriptionInput">项目描述</label>
+                </div>
+            </div>
+
+            <div class="config-section mt-4">
+                <h4><i class="bi bi-code-slash"></i> 代码生成配置</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" id="enableLombokCheckbox" name="enableLombok" type="checkbox" checked>
+                            <label class="form-check-label" for="enableLombokCheckbox">启用Lombok</label>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" id="enableValidationCheckbox" name="enableValidation" type="checkbox" checked>
+                            <label class="form-check-label" for="enableValidationCheckbox">启用验证注解</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" id="enableSwaggerCheckbox" name="enableSwagger" type="checkbox" checked>
+                            <label class="form-check-label" for="enableSwaggerCheckbox">启用Swagger文档</label>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" id="enableLoggingCheckbox" name="enableLogging" type="checkbox" checked>
+                            <label class="form-check-label" for="enableLoggingCheckbox">启用日志记录</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                <button class="btn btn-primary" onclick="ProjectConfigManager.saveConfig()">
+                    <i class="bi bi-save"></i> 保存配置
+                </button>
+            </div>
+        </div>
+    </div>
+</div> 

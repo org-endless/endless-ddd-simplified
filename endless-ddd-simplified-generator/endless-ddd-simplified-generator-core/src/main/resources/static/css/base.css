@@ -1,0 +1,110 @@
+/* 基础样式文件 */
+body {
+    /*background-color: #f8f9fa;*/
+}
+
+/* 标签页样式 */
+.tab-content {
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.nav-tabs {
+    position: sticky;
+    top: -1px;
+    z-index: 99;
+    cursor: pointer;
+}
+
+.nav-tabs .nav-link {
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--bs-body-color);
+}
+
+.nav-tabs .nav-link.active {
+    border-bottom-color: var(--bs-primary);
+    color: var(--bs-primary);
+}
+
+/* 按钮样式 */
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+/* 表单样式 */
+.form-group {
+    margin-bottom: 10px;
+}
+
+input[type='text'] {
+    color: #5798f8 !important;
+}
+
+/* 网格布局 */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    grid-gap: 10px;
+}
+
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    grid-gap: 10px;
+}
+
+.field {
+    display: grid;
+    grid-template-columns: repeat(5, auto);
+    grid-gap: 10px;
+}
+
+/* 容器样式 */
+.entities-container .entities,
+.enums-container .enums,
+.values-container .values,
+.methods-container .methods,
+.transfers-container .transfers {
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: var(--bs-border-width) solid var(--bs-border-color);
+}
+
+.flex {
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* 主题适配 */
+[data-bs-theme=light] {
+    /*--bs-tertiary-bg-rgb: 240, 242, 245;*/
+    filter: brightness(0.9)
+}
+
+/* 响应式设计 */
+@media screen and (min-width: 700px) {
+    main {
+        width: 600px;
+    }
+}
+
+@media screen and (min-width: 1100px) {
+    main {
+        width: 1000px;
+    }
+}
+
+@media screen and (min-width: 1500px) {
+    main {
+        width: 1400px;
+    }
+} 

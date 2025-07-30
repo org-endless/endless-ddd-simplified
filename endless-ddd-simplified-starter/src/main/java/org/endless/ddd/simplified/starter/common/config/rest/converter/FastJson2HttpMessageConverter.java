@@ -11,10 +11,15 @@ import org.endless.ddd.simplified.starter.common.utils.model.json.JsonTools;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.AbstractGenericHttpMessageConverter;
 import org.springframework.http.converter.AbstractHttpMessageConverter;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.lang.NonNull;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 
 /**
@@ -29,7 +34,7 @@ import java.nio.charset.Charset;
  * @since 1.0.0
  */
 @Slf4j
-public class FastJson2HttpMessageConverter<T> extends AbstractHttpMessageConverter<T> {
+public class FastJson2HttpMessageConverter<T> extends AbstractGenericHttpMessageConverter<T> {
 
     private final EndlessAutoConfiguration configuration;
 
@@ -48,11 +53,21 @@ public class FastJson2HttpMessageConverter<T> extends AbstractHttpMessageConvert
 
     @Override
     protected @NonNull T readInternal(@NonNull Class<? extends T> clazz, @NonNull HttpInputMessage inputMessage) {
+        try {
+            return read(clazz, clazz, inputMessage);
+        } catch (IOException | HttpMessageNotReadableException e) {
+            throw new RestErrorException("Rest反序列化对象异常: " + e.getMessage(), e);
+        }
+    }
+
+    @NonNull
+    @Override
+    public T read(@NonNull Type type, Class<?> contextClass, @NonNull HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
         try (InputStream inputStream = inputMessage.getBody()) {
             byte[] buffer = inputStream.readAllBytes();
             String string = new String(buffer, charset);
             log.trace("[Rest反序列化对象]: {}", JsonTools.maskSensitive(string.replaceAll("[\\r\\n\\s]", "")));
-            return JSON.parseObject(string, clazz, filter());
+            return JSON.parseObject(string, type, filter());
         } catch (Exception e) {
             throw new RestErrorException("Rest反序列化对象异常: " + e.getMessage(), e);
         }
@@ -60,6 +75,15 @@ public class FastJson2HttpMessageConverter<T> extends AbstractHttpMessageConvert
 
     @Override
     protected void writeInternal(@NonNull T t, @NonNull HttpOutputMessage outputMessage) {
+        try {
+            writeInternal(t, t.getClass(), outputMessage);
+        } catch (IOException | HttpMessageNotWritableException e) {
+            throw new RestErrorException("Rest序列化对象异常: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    protected void writeInternal(@NonNull T t, Type type, @NonNull HttpOutputMessage outputMessage) throws IOException, HttpMessageNotWritableException {
         try {
             String json = JSON.toJSONString(t, filter(), JSONWriter.Feature.PrettyFormat);
             log.trace("[Rest序列化对象]: {}", JsonTools.maskSensitive(json.replaceAll("[\\r\\n\\s]", "")));

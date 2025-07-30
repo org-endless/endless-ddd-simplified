@@ -1,0 +1,190 @@
+<!-- 项目配置向导组件 -->
+<div id="projectConfigWizard" class="wizard-step">
+    <div class="step-indicator">
+        <div class="step active" data-step="1">
+            <i class="bi bi-1-circle"></i>
+        </div>
+        <div class="step" data-step="2">
+            <i class="bi bi-2-circle"></i>
+        </div>
+        <div class="step" data-step="3">
+            <i class="bi bi-3-circle"></i>
+        </div>
+        <div class="step" data-step="4">
+            <i class="bi bi-4-circle"></i>
+        </div>
+    </div>
+
+    <!-- 步骤1：项目基本信息 -->
+    <div class="wizard-step active" id="step1">
+        <div class="config-section">
+            <h3><i class="bi bi-info-circle"></i> 项目基本信息</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input class="form-control" id="projectNameInput" placeholder="项目名称" type="text">
+                        <label for="projectNameInput">项目名称</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input class="form-control" id="projectVersionInput" placeholder="项目版本" type="text" value="1.0.0">
+                        <label for="projectVersionInput">项目版本</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input class="form-control" id="groupIdInput" placeholder="Group ID" type="text">
+                        <label for="groupIdInput">Group ID</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input class="form-control" id="artifactIdInput" placeholder="Artifact ID" type="text">
+                        <label for="artifactIdInput">Artifact ID</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-floating mb-3">
+                <textarea class="form-control" id="projectDescriptionInput" placeholder="项目描述" rows="3"></textarea>
+                <label for="projectDescriptionInput">项目描述</label>
+            </div>
+        </div>
+    </div>
+
+    <!-- 步骤2：DDD架构配置 -->
+    <div class="wizard-step" id="step2">
+        <div class="config-section">
+            <h3><i class="bi bi-diagram-3"></i> DDD架构配置</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input class="form-control" id="serviceNameInput" placeholder="服务名称" type="text">
+                        <label for="serviceNameInput">服务名称</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input class="form-control" id="contextNameInput" placeholder="限界上下文名称" type="text">
+                        <label for="contextNameInput">限界上下文名称</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input class="form-control" id="domainNameInput" placeholder="领域名称" type="text">
+                        <label for="domainNameInput">领域名称</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input class="form-control" id="aggregateNameInput" placeholder="聚合名称" type="text">
+                        <label for="aggregateNameInput">聚合名称</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-floating mb-3">
+                <input class="form-control" id="rootPathInput" placeholder="项目根路径" type="text">
+                <label for="rootPathInput">项目根路径</label>
+            </div>
+        </div>
+    </div>
+
+    <!-- 步骤3：技术栈配置 -->
+    <div class="wizard-step" id="step3">
+        <div class="config-section">
+            <h3><i class="bi bi-gear"></i> 技术栈配置</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>框架选择</h5>
+                    <div class="form-check">
+                        <input class="form-check-input" id="springBootCheckbox" type="checkbox" checked>
+                        <label class="form-check-label" for="springBootCheckbox">Spring Boot</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" id="mybatisPlusCheckbox" type="checkbox" checked>
+                        <label class="form-check-label" for="mybatisPlusCheckbox">MyBatis Plus</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" id="redisCheckbox" type="checkbox">
+                        <label class="form-check-label" for="redisCheckbox">Redis</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h5>数据库选择</h5>
+                    <div class="form-check">
+                        <input class="form-check-input" id="mysqlRadio" type="radio" name="database" checked>
+                        <label class="form-check-label" for="mysqlRadio">MySQL</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" id="postgresqlRadio" type="radio" name="database">
+                        <label class="form-check-label" for="postgresqlRadio">PostgreSQL</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" id="oracleRadio" type="radio" name="database">
+                        <label class="form-check-label" for="oracleRadio">Oracle</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 步骤4：代码生成配置 -->
+    <div class="wizard-step" id="step4">
+        <div class="config-section">
+            <h3><i class="bi bi-code-slash"></i> 代码生成配置</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>领域层</h5>
+                    <div class="form-check">
+                        <input class="form-check-input" id="enableEntityCheckbox" type="checkbox" checked>
+                        <label class="form-check-label" for="enableEntityCheckbox">实体</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" id="enableValueCheckbox" type="checkbox" checked>
+                        <label class="form-check-label" for="enableValueCheckbox">值对象</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" id="enableEnumCheckbox" type="checkbox" checked>
+                        <label class="form-check-label" for="enableEnumCheckbox">枚举</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" id="enableRepositoryCheckbox" type="checkbox" checked>
+                        <label class="form-check-label" for="enableRepositoryCheckbox">仓储</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h5>应用层</h5>
+                    <div class="form-check">
+                        <input class="form-check-input" id="enableCommandHandlerCheckbox" type="checkbox" checked>
+                        <label class="form-check-label" for="enableCommandHandlerCheckbox">命令处理器</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" id="enableQueryHandlerCheckbox" type="checkbox" checked>
+                        <label class="form-check-label" for="enableQueryHandlerCheckbox">查询处理器</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" id="enableTransferCheckbox" type="checkbox" checked>
+                        <label class="form-check-label" for="enableTransferCheckbox">传输对象</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 向导按钮 -->
+    <div class="d-flex justify-content-between mt-4">
+        <button class="btn btn-secondary" id="prevStepButton" onclick="ProjectConfigWizard.previousStep()" style="display: none;">
+            <i class="bi bi-arrow-left"></i> 上一步
+        </button>
+        <button class="btn btn-primary" id="nextStepButton" onclick="ProjectConfigWizard.nextStep()">
+            下一步 <i class="bi bi-arrow-right"></i>
+        </button>
+        <button class="btn btn-success" id="finishWizardButton" onclick="ProjectConfigWizard.finish()" style="display: none;">
+            <i class="bi bi-check-circle"></i> 完成配置
+        </button>
+    </div>
+</div> 

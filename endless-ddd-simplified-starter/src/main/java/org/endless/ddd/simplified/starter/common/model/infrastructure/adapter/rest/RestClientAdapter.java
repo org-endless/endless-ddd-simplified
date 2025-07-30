@@ -3,6 +3,7 @@ package org.endless.ddd.simplified.starter.common.model.infrastructure.adapter.r
 import com.alibaba.fastjson2.util.TypeUtils;
 import org.endless.ddd.simplified.starter.common.exception.model.infrastructure.adapter.manager.DrivenAdapterManagerException;
 import org.endless.ddd.simplified.starter.common.model.common.Transfer;
+import org.endless.ddd.simplified.starter.common.model.infrastructure.adapter.rest.transfer.RestExchangeTransfer;
 import org.endless.ddd.simplified.starter.common.model.sidecar.rest.RestResponse;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.ByteArrayResource;
@@ -12,6 +13,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -33,20 +35,6 @@ import java.util.function.Consumer;
  */
 public interface RestClientAdapter {
 
-    default <S extends Transfer, R extends Transfer> Optional<R> post(RestClient restClient, String uri, S request, Class<R> responseClass, Consumer<HttpHeaders> headers) {
-        Optional.ofNullable(request)
-                .map(Transfer::validate)
-                .orElseThrow(() -> new DrivenAdapterManagerException("被动适配器请求参数不能为空"));
-        return Optional.ofNullable(TypeUtils.cast(Optional.ofNullable(restClient.post()
-                        .uri(uri)
-                        .headers(headers)
-                        .body(request)
-                        .retrieve()
-                        .body(RestResponse.class))
-                .orElseThrow(() -> new DrivenAdapterManagerException("被动适配器服务返回信息为空"))
-                .validate(), responseClass));
-    }
-
     default Optional<byte[]> get(RestTemplate restTemplate, String url, HttpHeaders headers) {
         ResponseEntity<byte[]> responseEntity;
         try {
@@ -65,6 +53,28 @@ public interface RestClientAdapter {
         }
         return Optional.ofNullable(responseEntity.getBody());
     }
+
+    default <E extends RestExchangeTransfer> E exchange(RestClient restClient, Class<E> exchangeClass) {
+        HttpServiceProxyFactory factory = HttpServiceProxyFactory
+                .builderFor(org.springframework.web.client.support.RestClientAdapter.create(restClient))
+                .build();
+        return factory.createClient(exchangeClass);
+    }
+
+    default <S extends Transfer, R extends Transfer> Optional<R> post(RestClient restClient, String uri, S request, Class<R> responseClass, Consumer<HttpHeaders> headers) {
+        Optional.ofNullable(request)
+                .map(Transfer::validate)
+                .orElseThrow(() -> new DrivenAdapterManagerException("被动适配器请求参数不能为空"));
+        return Optional.ofNullable(TypeUtils.cast(Optional.ofNullable(restClient.post()
+                        .uri(uri)
+                        .headers(headers)
+                        .body(request)
+                        .retrieve()
+                        .body(RestResponse.class))
+                .orElseThrow(() -> new DrivenAdapterManagerException("被动适配器服务返回信息为空"))
+                .validate(), responseClass));
+    }
+
 
     default <S extends Transfer, R extends Transfer> Optional<R> post(
             RestTemplate restTemplate,

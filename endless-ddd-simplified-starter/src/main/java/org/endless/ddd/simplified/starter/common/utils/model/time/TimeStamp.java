@@ -66,6 +66,17 @@ public class TimeStamp {
         }
     }
 
+    public static Long fromISO(String timestamp) {
+        if (!StringUtils.hasText(timestamp)) {
+            throw new TimeStampException("格式化时间戳失败，时间为空");
+        }
+        try {
+            return Instant.parse(timestamp).toEpochMilli();
+        } catch (Exception e) {
+            throw new TimeStampException("格式化时间戳失败，时间格式错误: " + timestamp, e);
+        }
+    }
+
     protected static String format(Instant timestamp, String pattern) {
         ZonedDateTime zonedDateTime = timestamp.atZone(ZoneId.systemDefault());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);

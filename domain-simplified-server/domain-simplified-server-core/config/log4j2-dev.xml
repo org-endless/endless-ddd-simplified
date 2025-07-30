@@ -3,7 +3,7 @@
     <Properties>
         <property name="APP_NAME" value="endless-ddd-simplified-server"/>
         <property name="APP_HOME" value="/${APP_NAME}"/>
-        <property name="LOG_HOME" value="${APP_HOME}/logs/${APP_NAME}"/>
+        <property name="LOG_HOME" value="/logs/${APP_NAME}"/>
         <property name="LOG_NAME" value="${APP_NAME}.log"/>
         <Property name="LOG_PATTERN">[%d{yyyy-MM-dd HH:mm:ss.SSS}][%-5p][%T][%c.%M:%L] %msg%xEx%n</Property>
         <property name="FILE_SIZE">20MB</property>

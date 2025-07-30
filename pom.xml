@@ -29,11 +29,12 @@
         <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
 
         <!-- Framework -->
-        <spring-boot.version>3.4.1</spring-boot.version>
+        <spring-boot.version>3.5.4</spring-boot.version>
         <druid.version>1.2.24</druid.version>
         <mybatis-plus.version>3.5.9</mybatis-plus.version>
         <pagehelper.version>2.1.0</pagehelper.version>
         <tlog-all.version>1.5.2</tlog-all.version>
+        <freemarker.version>2.3.34</freemarker.version>
 
         <!-- Infrastructure -->
         <minio.version>8.5.14</minio.version>
@@ -95,6 +96,12 @@
                 <groupId>com.yomahub</groupId>
                 <artifactId>tlog-all-spring-boot-starter</artifactId>
                 <version>${tlog-all.version}</version>
+            </dependency>
+            <!-- Freemarker 分布式日志追踪 -->
+            <dependency>
+                <groupId>org.freemarker</groupId>
+                <artifactId>freemarker</artifactId>
+                <version>${freemarker.version}</version>
             </dependency>
             <!-- Infrastructure -->
             <!-- Adapter -->
