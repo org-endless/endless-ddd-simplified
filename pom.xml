@@ -12,7 +12,6 @@
     <description>Simplified DDD architecture for Spring Boot</description>
 
     <modules>
-        <module>domain-simplified-server</module>
         <module>endless-ddd-simplified-starter</module>
         <module>endless-ddd-simplified-generator</module>
     </modules>
