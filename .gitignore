@@ -6,6 +6,7 @@ build/*
 !gradle/wrapper/gradle-wrapper.jar
 target/
 !.mvn/wrapper/maven-wrapper.jar
+*.tar.gz
 ### IDE ###
 .history/
 .DS_Store
