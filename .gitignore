@@ -6,7 +6,6 @@ build/*
 !gradle/wrapper/gradle-wrapper.jar
 target/
 !.mvn/wrapper/maven-wrapper.jar
-*.tar.gz
 ci/*/lib/*.jar
 ### IDE ###
 .history/

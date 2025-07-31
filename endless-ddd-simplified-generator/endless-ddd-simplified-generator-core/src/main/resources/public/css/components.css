@@ -5,7 +5,24 @@
 
 /* 全局字体设置 */
 body {
-    font-family: "LXGW WenKai Screen", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    font-family: "LXGW WenKai Screen", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif !important;
+    font-weight: 500 !important;
+}
+
+/* 标题字体加粗 */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600 !important;
+}
+
+/* 按钮和重要文字加粗 */
+.btn, .feature-card h4, .stat-number {
+    font-weight: 600 !important;
+}
+
+/* 覆盖Bootstrap的字体变量 */
+:root {
+    --bs-font-sans-serif: "LXGW WenKai Screen", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    --bs-body-font-family: "LXGW WenKai Screen", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
 }
 
 /* 向导样式 */
@@ -16,6 +33,15 @@ body {
 
 .wizard-step.active {
     display: block;
+}
+
+/* 去掉input框内部的placeholder文字 */
+.form-control::placeholder {
+    color: transparent !important;
+}
+
+.form-control:focus::placeholder {
+    color: transparent !important;
 }
 
 .step-indicator {
@@ -315,11 +341,10 @@ body {
 /* 右侧提示容器样式 */
 .alert-container {
     position: fixed;
-    top: 20px;
-    right: 20px;
+    top: 80px;
+    left: 20px;
     z-index: 9999;
-    max-width: 400px;
-    min-width: 300px;
+    width: 350px;
     pointer-events: none;
 }
 
@@ -329,16 +354,17 @@ body {
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     transition: all 0.3s ease;
-    animation: slideInRight 0.3s ease-out;
+    animation: slideInLeft 0.3s ease-out;
+    position: relative;
 }
 
 .alert-container .alert-item:hover {
-    transform: translateX(-5px);
+    transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 }
 
 .alert-container .alert-item.fade-out {
-    animation: slideOutRight 0.3s ease-in forwards;
+    animation: slideOutLeft 0.3s ease-in forwards;
 }
 
 .alert-container .alert {
@@ -353,23 +379,56 @@ body {
 .alert-container .alert .alert-message {
     word-wrap: break-word;
     overflow-wrap: break-word;
+    margin-left: 30px;
+    padding-top: 2px;
 }
 
 .alert-container .btn-close {
-    padding: 0.25rem;
+    padding: 0.125rem;
     margin: 0;
-    opacity: 0.7;
-    transition: opacity 0.2s ease;
+    opacity: 0.6;
+    transition: all 0.2s ease;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.1);
+    border: none;
+    position: absolute;
+    top: 8px;
+    left: 8px;
 }
 
 .alert-container .btn-close:hover {
     opacity: 1;
+    background: rgba(0, 0, 0, 0.2);
+    transform: scale(1.1);
+}
+
+.alert-container .btn-close::before,
+.alert-container .btn-close::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 1.2px;
+    background-color: currentColor;
+    border-radius: 1px;
+}
+
+.alert-container .btn-close::before {
+    transform: rotate(45deg);
+}
+
+.alert-container .btn-close::after {
+    transform: rotate(-45deg);
 }
 
 /* 动画效果 */
-@keyframes slideInRight {
+@keyframes slideInLeft {
     from {
-        transform: translateX(100%);
+        transform: translateX(-100%);
         opacity: 0;
     }
     to {
@@ -378,13 +437,13 @@ body {
     }
 }
 
-@keyframes slideOutRight {
+@keyframes slideOutLeft {
     from {
         transform: translateX(0);
         opacity: 1;
     }
     to {
-        transform: translateX(100%);
+        transform: translateX(-100%);
         opacity: 0;
     }
 }
@@ -392,10 +451,9 @@ body {
 /* 响应式设计 */
 @media (max-width: 768px) {
     .alert-container {
-        right: 10px;
         left: 10px;
-        max-width: none;
-        min-width: auto;
+        right: 10px;
+        width: auto;
     }
     
     .alert-container .alert-item {
@@ -410,10 +468,10 @@ body {
 
 /* 暗黑模式主题变量 */
 :root {
-    --dark-bg-primary: #1a1a1a;
-    --dark-bg-secondary: #2d2d2d;
+    --dark-bg-primary: #1e1e1e;
+    --dark-bg-secondary: #2a2a2a;
     --dark-bg-tertiary: #3a3a3a;
-    --dark-bg-card: #2a2a2a;
+    --dark-bg-card: #2d2d2d;
     --dark-text-primary: #ffffff;
     --dark-text-secondary: #e0e0e0;
     --dark-text-muted: #a0a0a0;
@@ -726,6 +784,16 @@ body {
     color: var(--dark-text-primary);
 }
 
+[data-bs-theme="dark"] .alert-container .btn-close {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--dark-text-secondary);
+}
+
+[data-bs-theme="dark"] .alert-container .btn-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: var(--dark-text-primary);
+}
+
 [data-bs-theme="dark"] .modal-content {
     background-color: var(--dark-bg-secondary);
     border-color: var(--dark-border);
@@ -1014,4 +1082,57 @@ body {
 
 [data-bs-theme="dark"] .table-striped > tbody > tr:nth-of-type(odd) {
     background-color: var(--dark-bg-tertiary);
+}
+
+/* 暗黑模式主页样式 */
+[data-bs-theme="dark"] .feature-card {
+    background-color: var(--dark-bg-card);
+    border: 1px solid var(--dark-border);
+    color: var(--dark-text-primary);
+}
+
+[data-bs-theme="dark"] .feature-card h4 {
+    color: var(--dark-text-primary);
+}
+
+[data-bs-theme="dark"] .feature-card p {
+    color: var(--dark-text-secondary);
+}
+
+[data-bs-theme="dark"] .feature-icon {
+    color: var(--bs-primary);
+}
+
+[data-bs-theme="dark"] .hero-section {
+    color: var(--dark-text-primary);
+}
+
+[data-bs-theme="dark"] .hero-section h1 {
+    color: var(--dark-text-primary);
+}
+
+[data-bs-theme="dark"] .hero-section p {
+    color: var(--dark-text-secondary);
+}
+
+[data-bs-theme="dark"] .stats-section {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--dark-text-primary);
+}
+
+[data-bs-theme="dark"] .stat-item {
+    color: var(--dark-text-primary);
+}
+
+[data-bs-theme="dark"] .stat-number {
+    color: var(--dark-text-primary);
+}
+
+[data-bs-theme="dark"] .stat-label {
+    color: var(--dark-text-secondary);
+}
+
+[data-bs-theme="dark"] .footer {
+    background-color: rgba(0, 0, 0, 0.2);
+    color: var(--dark-text-primary);
 }

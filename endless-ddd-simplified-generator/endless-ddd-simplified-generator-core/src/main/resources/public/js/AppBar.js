@@ -15,6 +15,7 @@ class AppBar {
         this.createAppBar();
         this.setupEventListeners();
         this.applyTheme();
+        this.updateThemeIcon();
     }
 
     /**
@@ -79,6 +80,9 @@ class AppBar {
     setupEventListeners() {
         const themeToggle = document.getElementById('themeToggle');
         if (themeToggle) {
+            // 移除可能存在的旧事件监听器
+            themeToggle.removeEventListener('click', this.toggleTheme.bind(this));
+            // 添加新的事件监听器
             themeToggle.addEventListener('click', () => {
                 this.toggleTheme();
             });

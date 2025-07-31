@@ -44,9 +44,8 @@ class AlertManager {
         
         alertElement.innerHTML = `
             <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
-                <i class="bi ${iconClass} me-2"></i>
                 <span class="alert-message">${parsedMessage}</span>
-                <button type="button" class="btn-close" onclick="AlertManager.removeMessage('${messageId}')" aria-label="Close"></button>
+                <button type="button" class="btn-close" onclick="AlertManager.removeMessage('${messageId}')" aria-label="Close" title="关闭"></button>
             </div>
         `;
         

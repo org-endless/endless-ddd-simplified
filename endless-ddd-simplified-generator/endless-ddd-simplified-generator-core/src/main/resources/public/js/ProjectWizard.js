@@ -98,10 +98,21 @@ class ProjectWizard {
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
         const createBtn = document.getElementById('createBtn');
+        const buttonContainer = document.querySelector('.d-flex.justify-content-end');
         
+        // 更新按钮显示状态
         prevBtn.style.display = this.currentStep > 1 ? 'block' : 'none';
         nextBtn.style.display = this.currentStep < this.totalSteps ? 'block' : 'none';
         createBtn.style.display = this.currentStep === this.totalSteps ? 'block' : 'none';
+        
+        // 动态调整布局
+        if (this.currentStep === 1) {
+            // 第一步：只有下一步按钮，显示在右边
+            buttonContainer.className = 'd-flex justify-content-end mt-4';
+        } else {
+            // 其他步骤：上一步和下一步/创建按钮，左右分布
+            buttonContainer.className = 'd-flex justify-content-between mt-4';
+        }
     }
 
     validateCurrentStep() {
@@ -131,6 +142,8 @@ class ProjectWizard {
         
         return true;
     }
+
+
 
     validateStep1(errors, emptyFieldErrors) {
         const requiredFields = [

@@ -11,7 +11,6 @@
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         .wizard-container {
@@ -393,7 +392,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-floating">
-                            <input class="form-control" id="version" placeholder="项目版本号" type="text" value="1.0.0">
+                            <input class="form-control" id="version" placeholder="项目版本号" type="text">
                             <label for="version">项目版本号 *</label>
                         </div>
                     </div>
@@ -538,8 +537,8 @@
             </div>
         </div>
         <!-- 导航按钮 -->
-        <div class="d-flex justify-content-between mt-4">
-            <button class="btn btn-secondary" id="prevBtn" onclick="prevStep()" style="display: none;" type="button">
+        <div class="d-flex justify-content-end mt-4">
+            <button class="btn btn-secondary me-2" id="prevBtn" onclick="prevStep()" style="display: none;" type="button">
                 <i class="bi bi-arrow-left"></i> 上一步
             </button>
             <button class="btn btn-primary" id="nextBtn" onclick="nextStep()" type="button">
