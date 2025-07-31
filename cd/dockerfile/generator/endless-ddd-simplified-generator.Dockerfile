@@ -14,6 +14,8 @@ ADD ./resource/${APPNAME}.tar.gz ${HOME}
 
 RUN chmod -R 755 ${HOME}
 
+WORKDIR ${HOME}
+
 # 暴露端口
 EXPOSE 80
 

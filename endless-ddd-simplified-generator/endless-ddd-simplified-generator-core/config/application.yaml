@@ -19,7 +19,7 @@ spring:
   application:
     name: endless-ddd-simplified-generator
   profiles:
-    active: dev
+    active: prod
   freemarker:
     enabled: true  # 启用 Freemarker 模板引擎
     template-loader-path: classpath:/templates/freemarker/ # Freemarker 模板路径
