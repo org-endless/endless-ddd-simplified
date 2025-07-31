@@ -37,7 +37,8 @@
 
 如果你觉得本项目对你有帮助，请我喝一杯咖啡 ☕ 😊
 
-<img src="https://github.com/user-attachments/assets/e4679771-83d1-4e14-ba47-79e96a92f86f/b21d529b9bd43b6eb6641776489d0e91" width="256" alt="Buy Me a Coffee QR" />
+<img src="![b21d529b9bd43b6eb6641776489d0e91](https://github.com/user-attachments/assets/01daca5d-ed7c-4dcc-9fe9-9c2fcec8e18b)" width="256" alt="Buy Me a Coffee QR" />
+
 
 ---
 
