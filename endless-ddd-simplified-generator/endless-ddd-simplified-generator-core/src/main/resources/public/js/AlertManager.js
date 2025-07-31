@@ -3,70 +3,136 @@
  * 负责显示各种类型的提示信息
  */
 class AlertManager {
+    static messageQueue = [];
+    static isInitialized = false;
+
+    /**
+     * 初始化提示容器
+     */
+    static initialize() {
+        if (this.isInitialized) return;
+        
+        // 创建右侧提示容器
+        const container = document.createElement('div');
+        container.id = 'alertContainer';
+        container.className = 'alert-container';
+        document.body.appendChild(container);
+        
+        this.isInitialized = true;
+    }
+
     /**
      * 显示提示信息
      * @param {string} message - 提示消息
      * @param {string} type - 提示类型 (success, info, warning, danger)
+     * @param {number} duration - 自动关闭时间（毫秒），默认30秒
      */
-    static show(message, type = 'info') {
-        const modal = document.getElementById('alertModal');
-        if (!modal) {
-            console.error('提示模态框不存在');
-            return;
-        }
-
+    static show(message, type = 'info', duration = 30000) {
+        this.initialize();
+        
         // 解析异常消息
         const parsedMessage = this.parseMessage(message);
         
-        const modalBody = modal.querySelector('.modal-body');
-        const alertClass = this.getAlertClass(type);
+        // 创建消息元素
+        const messageId = 'alert-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+        const alertElement = document.createElement('div');
+        alertElement.id = messageId;
+        alertElement.className = `alert-item alert-${type} fade-in`;
         
-        modalBody.innerHTML = `
+        const alertClass = this.getAlertClass(type);
+        const iconClass = this.getIconClass(type);
+        
+        alertElement.innerHTML = `
             <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
-                <i class="bi ${this.getIconClass(type)}"></i>
-                ${parsedMessage}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <i class="bi ${iconClass} me-2"></i>
+                <span class="alert-message">${parsedMessage}</span>
+                <button type="button" class="btn-close" onclick="AlertManager.removeMessage('${messageId}')" aria-label="Close"></button>
             </div>
         `;
-
-        const bootstrapModal = new bootstrap.Modal(modal);
-        bootstrapModal.show();
+        
+        // 添加到容器
+        const container = document.getElementById('alertContainer');
+        container.appendChild(alertElement);
+        
+        // 添加到队列
+        this.messageQueue.push({
+            id: messageId,
+            element: alertElement,
+            timer: null
+        });
+        
+        // 设置自动关闭
+        if (duration > 0) {
+            const timer = setTimeout(() => {
+                this.removeMessage(messageId);
+            }, duration);
+            
+            // 更新队列中的timer
+            const queueItem = this.messageQueue.find(item => item.id === messageId);
+            if (queueItem) {
+                queueItem.timer = timer;
+            }
+        }
+        
+        // 限制最大显示数量（最多5条）
+        this.limitMessageCount();
     }
     
+    /**
+     * 移除指定消息
+     * @param {string} messageId - 消息ID
+     */
+    static removeMessage(messageId) {
+        const element = document.getElementById(messageId);
+        if (element) {
+            element.classList.add('fade-out');
+            setTimeout(() => {
+                if (element.parentNode) {
+                    element.parentNode.removeChild(element);
+                }
+            }, 300);
+        }
+        
+        // 从队列中移除
+        const queueIndex = this.messageQueue.findIndex(item => item.id === messageId);
+        if (queueIndex > -1) {
+            const item = this.messageQueue[queueIndex];
+            if (item.timer) {
+                clearTimeout(item.timer);
+            }
+            this.messageQueue.splice(queueIndex, 1);
+        }
+    }
+    
+    /**
+     * 限制消息数量
+     */
+    static limitMessageCount() {
+        const maxMessages = 5;
+        if (this.messageQueue.length > maxMessages) {
+            const oldestMessage = this.messageQueue.shift();
+            if (oldestMessage) {
+                this.removeMessage(oldestMessage.id);
+            }
+        }
+    }
+
     /**
      * 解析异常消息
      * @param {string} message - 原始消息
      * @returns {string} 解析后的消息
      */
     static parseMessage(message) {
-        // 如果ExceptionMessageParser存在，使用它来解析
+        // 优先使用ExceptionMessageParser
         if (typeof ExceptionMessageParser !== 'undefined') {
             return ExceptionMessageParser.parse(message);
         }
-        
-        // 简单的解析逻辑作为备用
+
+        // 备用方案：直接返回原0始消息
         if (!message || typeof message !== 'string') {
-            return message || '未知错误';
+            return '未知错误';
         }
-        
-        // 首先尝试解析<>中的内容
-        const angleBracketMatch = message.match(/<([^>]+)>/);
-        if (angleBracketMatch) {
-            return angleBracketMatch[1].trim();
-        }
-        
-        // 如果没有<>，则解析最后一个[]中的内容
-        const squareBracketMatches = message.match(/\[([^\]]+)\]/g);
-        if (squareBracketMatches && squareBracketMatches.length > 0) {
-            // 获取最后一个[]中的内容
-            const lastMatch = squareBracketMatches[squareBracketMatches.length - 1];
-            const content = lastMatch.match(/\[([^\]]+)\]/);
-            if (content) {
-                return content[1].trim();
-            }
-        }
-        
-        // 如果都没有，返回原始消息
+
         return message.trim();
     }
 
@@ -103,7 +169,7 @@ class AlertManager {
     }
 
     /**
-     * 显示确认对话框
+     * 显示确认对话框（使用模态框）
      * @param {string} message - 确认消息
      * @param {Function} onConfirm - 确认回调函数
      * @param {Function} onCancel - 取消回调函数
@@ -117,10 +183,10 @@ class AlertManager {
 
         const modalBody = modal.querySelector('.modal-body');
         const modalFooter = modal.querySelector('.modal-footer');
-        
+
         modalBody.innerHTML = `
             <div class="alert alert-info">
-                <i class="bi bi-question-circle"></i>
+                <i class="bi bi-question-circle me-2"></i>
                 ${message}
             </div>
         `;
@@ -157,7 +223,7 @@ class AlertManager {
     static getAlertClass(type) {
         const alertClasses = {
             'success': 'alert-success',
-            'info': 'alert-info', 
+            'info': 'alert-info',
             'warning': 'alert-warning',
             'danger': 'alert-danger'
         };
@@ -180,7 +246,7 @@ class AlertManager {
     }
 
     /**
-     * 显示加载提示
+     * 显示加载提示（使用模态框）
      * @param {string} message - 加载消息
      */
     static showLoading(message = '加载中...') {
@@ -192,7 +258,7 @@ class AlertManager {
 
         const modalBody = modal.querySelector('.modal-body');
         const modalFooter = modal.querySelector('.modal-footer');
-        
+
         modalBody.innerHTML = `
             <div class="text-center">
                 <div class="spinner-border text-primary" role="status">
@@ -221,4 +287,9 @@ class AlertManager {
             }
         }
     }
+}
+
+// 在浏览器环境中暴露到全局
+if (typeof window !== 'undefined') {
+    window.AlertManager = AlertManager;
 } 

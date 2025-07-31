@@ -302,4 +302,285 @@
 
 [data-bs-theme="dark"] .config-section {
     background-color: var(--bs-dark);
+}
+
+/* 右侧提示容器样式 */
+.alert-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    max-width: 400px;
+    min-width: 300px;
+    pointer-events: none;
+}
+
+.alert-container .alert-item {
+    pointer-events: auto;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    animation: slideInRight 0.3s ease-out;
+}
+
+.alert-container .alert-item:hover {
+    transform: translateX(-5px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.alert-container .alert-item.fade-out {
+    animation: slideOutRight 0.3s ease-in forwards;
+}
+
+.alert-container .alert {
+    margin: 0;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.alert-container .alert .alert-message {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.alert-container .btn-close {
+    padding: 0.25rem;
+    margin: 0;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+.alert-container .btn-close:hover {
+    opacity: 1;
+}
+
+/* 动画效果 */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .alert-container {
+        right: 10px;
+        left: 10px;
+        max-width: none;
+        min-width: auto;
+    }
+    
+    .alert-container .alert-item {
+        margin-bottom: 8px;
+    }
+    
+    .alert-container .alert {
+        padding: 10px 14px;
+        font-size: 0.85rem;
+    }
+}
+
+/* AppBar样式 */
+.app-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background-color: var(--bs-body-bg);
+    border-bottom: 1px solid var(--bs-border-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    background-color: rgba(var(--bs-body-bg-rgb), 0.95);
+}
+
+.app-bar-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    padding: 0 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.app-bar-left {
+    display: flex;
+    align-items: center;
+}
+
+.app-bar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--bs-body-color);
+    transition: all 0.2s ease;
+    border-radius: 8px;
+    padding: 4px 8px;
+}
+
+.app-bar-brand:hover {
+    opacity: 0.8;
+    text-decoration: none;
+    color: var(--bs-body-color);
+    background-color: rgba(var(--bs-primary-rgb), 0.1);
+    transform: translateY(-1px);
+}
+
+.app-bar-logo {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    transition: transform 0.2s ease;
+}
+
+.app-bar-brand:hover .app-bar-logo {
+    transform: scale(1.05);
+}
+
+.app-bar-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--bs-primary);
+}
+
+.app-bar-subtitle {
+    font-size: 0.875rem;
+    color: var(--bs-secondary);
+    font-weight: 400;
+}
+
+.app-bar-center {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    justify-content: center;
+}
+
+.app-bar-right {
+    display: flex;
+    align-items: center;
+}
+
+.app-bar-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.app-bar-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.app-bar-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.theme-toggle {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.theme-toggle .light-icon,
+.theme-toggle .dark-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.theme-toggle .light-icon {
+    color: #ffc107;
+}
+
+.theme-toggle .dark-icon {
+    color: #6c757d;
+}
+
+/* 页面内容调整 */
+body {
+    padding-top: 60px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .app-bar-container {
+        padding: 0 15px;
+    }
+    
+    .app-bar-title {
+        font-size: 1.1rem;
+    }
+    
+    .app-bar-subtitle {
+        display: none;
+    }
+    
+    .app-bar-center {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .app-bar {
+        height: 50px;
+    }
+    
+    body {
+        padding-top: 50px;
+    }
+    
+    .app-bar-container {
+        padding: 0 10px;
+    }
+    
+    .app-bar-logo {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .app-bar-title {
+        font-size: 1rem;
+    }
 } 

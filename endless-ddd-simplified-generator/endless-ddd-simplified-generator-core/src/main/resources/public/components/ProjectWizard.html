@@ -2,50 +2,51 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Endless DDD 项目创建向导</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/bootstrap-icons.css" rel="stylesheet">
+    <link href="../css/components.css" rel="stylesheet">
     <style>
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         .wizard-container {
             max-width: 800px;
             margin: 2rem auto;
             background: white;
             border-radius: 15px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
-        
+
         .wizard-header {
             background: linear-gradient(135deg, #3B82F6 0%, #1E3A8A 100%);
             color: white;
             padding: 2rem;
             text-align: center;
         }
-        
+
         .wizard-steps {
             display: flex;
             justify-content: center;
             margin: 2rem 0;
         }
-        
+
         .step-indicator {
             display: flex;
             align-items: center;
             margin: 0 1rem;
         }
-        
+
         .step-number {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.3);
             color: white;
             display: flex;
             align-items: center;
@@ -53,55 +54,55 @@
             font-weight: bold;
             margin-right: 0.5rem;
         }
-        
+
         .step-number.active {
             background: #10B981;
         }
-        
+
         .step-number.completed {
             background: #059669;
         }
-        
+
         .wizard-content {
             padding: 2rem;
         }
-        
+
         .wizard-step {
             display: none;
         }
-        
+
         .wizard-step.active {
             display: block;
         }
-        
+
         .form-section {
             background: #f8f9fa;
             border-radius: 10px;
             padding: 1.5rem;
             margin-bottom: 1.5rem;
         }
-        
+
         .form-section h4 {
             color: #374151;
             margin-bottom: 1rem;
             display: flex;
             align-items: center;
         }
-        
+
         .form-section h4 i {
             margin-right: 0.5rem;
             color: #3B82F6;
         }
-        
+
         .form-floating {
             margin-bottom: 1rem;
         }
-        
+
         .form-control:focus {
             border-color: #3B82F6;
             box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
         }
-        
+
         .btn-primary {
             background: linear-gradient(135deg, #3B82F6 0%, #1E3A8A 100%);
             border: none;
@@ -109,12 +110,12 @@
             border-radius: 8px;
             font-weight: 600;
         }
-        
+
         .btn-primary:hover {
             background: linear-gradient(135deg, #2563EB 0%, #1E40AF 100%);
             transform: translateY(-1px);
         }
-        
+
         .btn-secondary {
             background: #6B7280;
             border: none;
@@ -122,11 +123,11 @@
             border-radius: 8px;
             font-weight: 600;
         }
-        
+
         .btn-secondary:hover {
             background: #4B5563;
         }
-        
+
         .service-item {
             background: white;
             border: 1px solid #E5E7EB;
@@ -137,14 +138,14 @@
             align-items: center;
             justify-content: space-between;
         }
-        
+
         .service-item input {
             border: none;
             outline: none;
             flex: 1;
             margin-right: 1rem;
         }
-        
+
         .btn-remove {
             background: #EF4444;
             color: white;
@@ -156,11 +157,11 @@
             align-items: center;
             justify-content: center;
         }
-        
+
         .btn-remove:hover {
             background: #DC2626;
         }
-        
+
         .btn-add {
             background: #10B981;
             color: white;
@@ -169,43 +170,43 @@
             padding: 0.5rem 1rem;
             font-size: 0.875rem;
         }
-        
+
         .btn-add:hover {
             background: #059669;
         }
-        
+
         .summary-item {
             display: flex;
             justify-content: space-between;
             padding: 0.5rem 0;
             border-bottom: 1px solid #E5E7EB;
         }
-        
+
         .summary-item:last-child {
             border-bottom: none;
         }
-        
+
         .alert {
             border-radius: 8px;
             border: none;
         }
-        
+
         .progress {
             height: 8px;
             border-radius: 4px;
             background: #E5E7EB;
         }
-        
+
         .progress-bar {
             background: linear-gradient(135deg, #3B82F6 0%, #1E3A8A 100%);
             border-radius: 4px;
         }
-        
+
         .form-control.is-invalid {
             border-color: #dc3545;
             box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
         }
-        
+
         .invalid-feedback {
             display: block;
             width: 100%;
@@ -213,30 +214,30 @@
             font-size: 0.875rem;
             color: #dc3545;
         }
-        
+
         .col-md-6.is-invalid {
             border: 1px solid #dc3545;
             border-radius: 8px;
             padding: 1rem;
             margin-bottom: 0.5rem;
         }
-        
+
         #serviceArtifactIdsContainer.is-invalid {
             border: 1px solid #dc3545 !important;
             border-radius: 8px;
             margin-bottom: 1rem;
         }
-        
+
         #serviceArtifactIdsContainer:not(.is-invalid) {
             margin-bottom: 0;
         }
-        
+
         /* 拖拽相关样式 */
         .draggable-container {
             min-height: 50px;
             margin-bottom: 0;
         }
-        
+
         .service-item {
             display: flex;
             align-items: center;
@@ -250,16 +251,16 @@
             cursor: default;
             user-select: none;
         }
-        
+
         .service-item:last-child {
             margin-bottom: 0;
         }
-        
+
         .service-item:hover {
             background: #e9ecef;
             border-color: #adb5bd;
         }
-        
+
         .service-item.dragging {
             opacity: 0.9;
             transform: scale(1.02);
@@ -267,27 +268,27 @@
             z-index: 1000;
             position: relative;
         }
-        
+
         .service-item.drag-over {
             border-color: #007bff;
             background: #e3f2fd;
             transform: translateY(-1px);
             box-shadow: 0 2px 8px rgba(0, 123, 255, 0.15);
         }
-        
+
         .service-item.drag-enter {
             border-color: #28a745;
             background: #d4edda;
             transform: translateY(-1px);
             box-shadow: 0 2px 8px rgba(40, 167, 69, 0.15);
         }
-        
+
         .service-item.drag-placeholder {
             opacity: 0.4;
             background: #f8f9fa;
             border: 1px dashed #6c757d;
         }
-        
+
         /* 拖拽手柄动画 */
         .drag-handle {
             cursor: grab;
@@ -296,19 +297,19 @@
             border-radius: 4px;
             transition: color 0.2s ease;
         }
-        
+
         .drag-handle:hover {
             color: #007bff;
         }
-        
+
         .service-item.dragging .drag-handle {
             color: #007bff;
         }
-        
+
         .drag-handle:active {
             cursor: grabbing;
         }
-        
+
         .service-artifact-id {
             flex: 1;
             border: 1px solid #ced4da;
@@ -316,13 +317,13 @@
             padding: 8px 12px;
             font-size: 14px;
         }
-        
+
         .service-artifact-id:focus {
             border-color: #007bff;
             box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
             outline: none;
         }
-        
+
         .btn-remove {
             background: #dc3545;
             color: white;
@@ -332,239 +333,277 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
-        
+
         .btn-remove:hover {
             background: #c82333;
         }
     </style>
 </head>
 <body>
-    <div class="wizard-container">
-        <div class="wizard-header">
-            <h1><i class="bi bi-gear-wide-connected"></i> Endless DDD 项目创建向导</h1>
-            <p class="mb-0">按照步骤配置您的DDD项目</p>
-            
-            <div class="wizard-steps">
-                <div class="step-indicator">
-                    <div class="step-number active" id="step1-number">1</div>
-                    <span>基本信息</span>
-                </div>
-                <div class="step-indicator">
-                    <div class="step-number" id="step2-number">2</div>
-                    <span>技术配置</span>
-                </div>
-                <div class="step-indicator">
-                    <div class="step-number" id="step3-number">3</div>
-                    <span>服务配置</span>
-                </div>
-                <div class="step-indicator">
-                    <div class="step-number" id="step4-number">4</div>
-                    <span>确认创建</span>
-                </div>
+<div class="wizard-container">
+    <div class="wizard-header">
+        <h1><i class="bi bi-gear-wide-connected"></i> Endless DDD 项目创建向导</h1>
+        <p class="mb-0">按照步骤配置您的DDD项目</p>
+
+        <div class="wizard-steps">
+            <div class="step-indicator">
+                <div class="step-number active" id="step1-number">1</div>
+                <span>基本信息</span>
+            </div>
+            <div class="step-indicator">
+                <div class="step-number" id="step2-number">2</div>
+                <span>技术配置</span>
+            </div>
+            <div class="step-indicator">
+                <div class="step-number" id="step3-number">3</div>
+                <span>服务配置</span>
+            </div>
+            <div class="step-indicator">
+                <div class="step-number" id="step4-number">4</div>
+                <span>确认创建</span>
             </div>
         </div>
-        
-        <div class="wizard-content">
-            <!-- 步骤1：基本信息 -->
-            <div class="wizard-step active" id="step1">
-                <div class="form-section">
-                    <h4><i class="bi bi-info-circle"></i> 项目基本信息</h4>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-floating">
-                                <input type="text" class="form-control" id="projectArtifactId" placeholder="项目构件ID">
-                                <label for="projectArtifactId">项目构件ID *</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-floating">
-                                <input type="text" class="form-control" id="groupId" placeholder="组织ID">
-                                <label for="groupId">组织ID *</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-floating">
-                                <input type="text" class="form-control" id="name" placeholder="项目名称">
-                                <label for="name">项目名称 *</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-floating">
-                                <input type="text" class="form-control" id="version" placeholder="项目版本号" value="1.0.0">
-                                <label for="version">项目版本号 *</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-floating">
-                                <input type="text" class="form-control" id="author" placeholder="项目作者">
-                                <label for="author">项目作者 *</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-floating">
-                                <input type="text" class="form-control" id="rootPath" placeholder="项目根路径">
-                                <label for="rootPath">项目根路径 *</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-floating">
-                                <input type="text" class="form-control" id="basePackage" placeholder="项目基础包名">
-                                <label for="basePackage">项目基础包名 *</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-floating">
-                                <textarea class="form-control" id="description" placeholder="项目描述" style="height: 100px"></textarea>
-                                <label for="description">项目描述 *</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- 步骤2：技术配置 -->
-            <div class="wizard-step" id="step2">
-                <div class="form-section">
-                    <h4><i class="bi bi-cpu"></i> 技术栈配置</h4>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="form-label">Java版本 *</label>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="javaVersion" id="java8" value="JAVA_8" checked>
-                                <label class="form-check-label" for="java8">Java 8</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="javaVersion" id="java11" value="JAVA_11">
-                                <label class="form-check-label" for="java11">Java 11</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="javaVersion" id="java17" value="JAVA_17">
-                                <label class="form-check-label" for="java17">Java 17</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="javaVersion" id="java21" value="JAVA_21">
-                                <label class="form-check-label" for="java21">Java 21</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">日志框架 *</label>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="loggingFramework" id="logback" value="LOGBACK" checked>
-                                <label class="form-check-label" for="logback">Logback</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="loggingFramework" id="log4j2" value="LOG4J2">
-                                <label class="form-check-label" for="log4j2">Log4j2</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="loggingFramework" id="log4j" value="LOG4J">
-                                <label class="form-check-label" for="log4j">Log4j</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col-md-6">
-                            <label class="form-label">持久化框架 *</label>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="persistenceFramework" id="mybatisPlus" value="MYBATIS_PLUS" checked>
-                                <label class="form-check-label" for="mybatisPlus">MyBatis Plus</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="persistenceFramework" id="mybatis" value="MYBATIS">
-                                <label class="form-check-label" for="mybatis">MyBatis</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="persistenceFramework" id="jpa" value="JPA">
-                                <label class="form-check-label" for="jpa">JPA</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Spring Doc</label>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="enableSpringDoc" value="true">
-                                <label class="form-check-label" for="enableSpringDoc">启用Spring Doc文档</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- 步骤3：服务配置 -->
-            <div class="wizard-step" id="step3">
-                <div class="form-section">
-                    <h4><i class="bi bi-server"></i> 服务配置</h4>
-                    <p class="text-muted">添加项目所需的服务构件ID</p>
-                    <div id="serviceArtifactIdsContainer" class="draggable-container">
-                        <div class="service-item" draggable="true" data-index="0">
-                            <div class="drag-handle">
-                                <i class="bi bi-grip-vertical"></i>
-                            </div>
-                            <input type="text" placeholder="输入服务构件ID" class="service-artifact-id">
-                            <button type="button" class="btn-remove" onclick="removeService(this)">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <button type="button" class="btn-add" onclick="addService()">
-                        <i class="bi bi-plus"></i> 添加服务构件ID
-                    </button>
-                </div>
-            </div>
-            
-            <!-- 步骤4：确认创建 -->
-            <div class="wizard-step" id="step4">
-                <div class="form-section">
-                    <h4><i class="bi bi-check-circle"></i> 确认项目配置</h4>
-                    <div id="projectSummary">
-                        <!-- 配置摘要将在这里动态生成 -->
-                    </div>
-                </div>
-            </div>
-            
-            <!-- 导航按钮 -->
-            <div class="d-flex justify-content-between mt-4">
-                <button type="button" class="btn btn-secondary" id="prevBtn" onclick="prevStep()" style="display: none;">
-                    <i class="bi bi-arrow-left"></i> 上一步
-                </button>
-                <button type="button" class="btn btn-primary" id="nextBtn" onclick="nextStep()">
-                    下一步 <i class="bi bi-arrow-right"></i>
-                </button>
-                <button type="button" class="btn btn-success" id="createBtn" onclick="createProject()" style="display: none;">
-                    <i class="bi bi-check-lg"></i> 创建项目
-                </button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- 进度条 -->
-    <div class="progress mt-3" style="max-width: 800px; margin: 0 auto;">
-        <div class="progress-bar" id="progressBar" style="width: 25%"></div>
-    </div>
-    
-    <!-- 成功提示 -->
-    <div class="alert alert-success alert-dismissible fade" id="successAlert" style="position: fixed; top: 20px; right: 20px; z-index: 1000;">
-        <i class="bi bi-check-circle"></i> 项目创建成功！
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-    
-    <!-- 错误提示 -->
-    <div class="alert alert-danger alert-dismissible fade" id="errorAlert" style="position: fixed; top: 20px; right: 20px; z-index: 1000;">
-        <i class="bi bi-exclamation-triangle"></i> <span id="errorMessage"></span>
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../js/ExceptionMessageParser.js"></script>
-    <script src="../js/AlertManager.js"></script>
-    <script src="../js/HttpClient.js"></script>
-    <script src="../js/ErrorHandler.js"></script>
-    <script src="../js/ListManager.js"></script>
-    <script src="../js/ProjectWizard.js"></script>
+    <div class="wizard-content">
+        <!-- 步骤1：基本信息 -->
+        <div class="wizard-step active" id="step1">
+            <div class="form-section">
+                <h4><i class="bi bi-info-circle"></i> 项目基本信息</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input class="form-control" id="projectArtifactId" placeholder="项目构件ID" type="text">
+                            <label for="projectArtifactId">项目构件ID *</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input class="form-control" id="groupId" placeholder="组织ID" type="text">
+                            <label for="groupId">组织ID *</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input class="form-control" id="name" placeholder="项目名称" type="text">
+                            <label for="name">项目名称 *</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input class="form-control" id="version" placeholder="项目版本号" type="text" value="1.0.0">
+                            <label for="version">项目版本号 *</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input class="form-control" id="author" placeholder="项目作者" type="text">
+                            <label for="author">项目作者 *</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input class="form-control" id="basePackage" placeholder="项目基础包名" type="text">
+                            <label for="basePackage">项目基础包名 *</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-floating">
+                            <input class="form-control" id="rootPath" placeholder="项目根路径" type="text">
+                            <label for="rootPath">项目根路径 *</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-floating">
+                            <textarea class="form-control" id="description" placeholder="项目描述"
+                                      style="height: 100px"></textarea>
+                            <label for="description">项目描述 *</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 步骤2：技术配置 -->
+        <div class="wizard-step" id="step2">
+            <div class="form-section">
+                <h4><i class="bi bi-cpu"></i> 技术栈配置</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="form-label">Java版本 *</label>
+                        <div class="form-check">
+                            <input checked class="form-check-input" id="java8" name="javaVersion" type="radio"
+                                   value="JAVA_8">
+                            <label class="form-check-label" for="java8">Java 8</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" id="java11" name="javaVersion" type="radio" value="JAVA_11">
+                            <label class="form-check-label" for="java11">Java 11</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" id="java17" name="javaVersion" type="radio" value="JAVA_17">
+                            <label class="form-check-label" for="java17">Java 17</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" id="java21" name="javaVersion" type="radio" value="JAVA_21">
+                            <label class="form-check-label" for="java21">Java 21</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">日志框架 *</label>
+                        <div class="form-check">
+                            <input checked class="form-check-input" id="logback" name="loggingFramework"
+                                   type="radio" value="LOGBACK">
+                            <label class="form-check-label" for="logback">Logback</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" id="log4j2" name="loggingFramework" type="radio"
+                                   value="LOG4J2">
+                            <label class="form-check-label" for="log4j2">Log4j2</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" id="log4j" name="loggingFramework" type="radio"
+                                   value="LOG4J">
+                            <label class="form-check-label" for="log4j">Log4j</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <label class="form-label">持久化框架 *</label>
+                        <div class="form-check">
+                            <input checked class="form-check-input" id="mybatisPlus" name="persistenceFramework"
+                                   type="radio" value="MYBATIS_PLUS">
+                            <label class="form-check-label" for="mybatisPlus">MyBatis Plus</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" id="mybatis" name="persistenceFramework" type="radio"
+                                   value="MYBATIS">
+                            <label class="form-check-label" for="mybatis">MyBatis</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" id="jpa" name="persistenceFramework" type="radio"
+                                   value="JPA">
+                            <label class="form-check-label" for="jpa">JPA</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Spring Doc</label>
+                        <div class="form-check">
+                            <input class="form-check-input" id="enableSpringDoc" type="checkbox" value="true">
+                            <label class="form-check-label" for="enableSpringDoc">启用Spring Doc文档</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 步骤3：服务配置 -->
+        <div class="wizard-step" id="step3">
+            <div class="form-section">
+                <h4><i class="bi bi-server"></i> 服务配置</h4>
+                <p class="text-muted">添加项目所需的服务构件ID</p>
+                <div class="draggable-container" id="serviceArtifactIdsContainer">
+                    <div class="service-item" data-index="0" draggable="true">
+                        <div class="drag-handle">
+                            <i class="bi bi-grip-vertical"></i>
+                        </div>
+                        <label>
+                            <input class="service-artifact-id" placeholder="输入服务构件ID" type="text">
+                        </label>
+                        <button class="btn-remove" onclick="removeService(this)" type="button">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                <button class="btn-add" onclick="addService()" type="button">
+                    <i class="bi bi-plus"></i> 添加服务构件ID
+                </button>
+            </div>
+        </div>
+        <!-- 步骤4：确认创建 -->
+        <div class="wizard-step" id="step4">
+            <div class="form-section">
+                <h4><i class="bi bi-check-circle"></i> 确认项目配置</h4>
+                <div id="projectSummary">
+                    <!-- 配置摘要将在这里动态生成 -->
+                </div>
+            </div>
+        </div>
+        <!-- 导航按钮 -->
+        <div class="d-flex justify-content-between mt-4">
+            <button class="btn btn-secondary" id="prevBtn" onclick="prevStep()" style="display: none;" type="button">
+                <i class="bi bi-arrow-left"></i> 上一步
+            </button>
+            <button class="btn btn-primary" id="nextBtn" onclick="nextStep()" type="button">
+                下一步 <i class="bi bi-arrow-right"></i>
+            </button>
+            <button class="btn btn-success" id="createBtn" onclick="createProject()" style="display: none;"
+                    type="button">
+                <i class="bi bi-check-lg"></i> 创建项目
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- 进度条 -->
+<div class="progress mt-3" style="max-width: 800px; margin: 0 auto;">
+    <div class="progress-bar" id="progressBar" style="width: 25%"></div>
+</div>
+
+<!-- 成功提示 -->
+<div class="alert alert-success alert-dismissible fade" id="successAlert"
+     style="position: fixed; top: 20px; right: 20px; z-index: 1000;">
+    <i class="bi bi-check-circle"></i> 项目创建成功！
+    <button class="btn-close" data-bs-dismiss="alert" type="button"></button>
+</div>
+
+<!-- 错误提示 -->
+<div class="alert alert-danger alert-dismissible fade" id="errorAlert"
+     style="position: fixed; top: 20px; right: 20px; z-index: 1000;">
+    <i class="bi bi-exclamation-triangle"></i> <span id="errorMessage"></span>
+    <button class="btn-close" data-bs-dismiss="alert" type="button"></button>
+</div>
+
+<!-- 提示模态框 -->
+<div aria-hidden="true" aria-labelledby="alertModalLabel" class="modal fade" id="alertModal" role="dialog"
+     tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="alertModalLabel">提示</h5>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+            </div>
+            <div class="modal-body">
+                <!-- 提示内容将在这里动态生成 -->
+            </div>
+            <div class="modal-footer">
+                <!-- 按钮将在这里动态生成 -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../js/bootstrap.bundle.min.js"></script>
+<script src="../js/ExceptionMessageParser.js"></script>
+<script src="../js/AlertManager.js"></script>
+<script src="../js/HttpClient.js"></script>
+<script src="../js/ErrorHandler.js"></script>
+<script src="../js/ListManager.js"></script>
+<script src="../js/AppBar.js"></script>
+<script src="../js/ProjectWizard.js"></script>
+<script>
+    // 初始化AppBar
+    document.addEventListener('DOMContentLoaded', function() {
+        new AppBar();
+    });
+</script>
 </body>
 </html> 

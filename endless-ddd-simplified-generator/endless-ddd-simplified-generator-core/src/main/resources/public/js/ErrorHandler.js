@@ -29,8 +29,37 @@ class ErrorHandler {
         
         // 如果是对象，尝试获取message字段
         if (typeof error === 'object' && error !== null) {
-            const message = error.message || error.error || error.msg || error.toString();
-            return this.parseErrorMessage(message);
+            // 尝试从对象中提取错误消息
+            let message = null;
+            
+            // 检查常见的错误消息字段
+            if (error.message) {
+                message = error.message;
+            } else if (error.error) {
+                message = error.error;
+            } else if (error.msg) {
+                message = error.msg;
+            } else if (error.detail) {
+                message = error.detail;
+            } else if (error.reason) {
+                message = error.reason;
+            } else if (typeof error === 'object') {
+                // 如果是对象但没有明确的message字段，尝试JSON序列化
+                try {
+                    const jsonStr = JSON.stringify(error);
+                    if (jsonStr !== '{}' && jsonStr !== '[]') {
+                        message = jsonStr;
+                    } else {
+                        message = '未知错误';
+                    }
+                } catch (e) {
+                    message = '未知错误';
+                }
+            }
+            
+            if (message) {
+                return this.parseErrorMessage(message);
+            }
         }
         
         return '未知错误';
@@ -46,38 +75,12 @@ class ErrorHandler {
             return '未知错误';
         }
         
-        // 使用ExceptionMessageParser解析消息
+        // 优先使用ExceptionMessageParser
         if (typeof ExceptionMessageParser !== 'undefined') {
             return ExceptionMessageParser.parse(message);
         }
         
-        // 简单的解析逻辑作为备用
-        return this.simpleParse(message);
-    }
-    
-    /**
-     * 简单解析错误消息（备用方案）
-     * @param {string} message - 原始错误消息
-     * @returns {string} 解析后的错误消息
-     */
-    static simpleParse(message) {
-        // 首先尝试解析<>中的内容
-        const angleBracketMatch = message.match(/<([^>]+)>/);
-        if (angleBracketMatch) {
-            return angleBracketMatch[1].trim();
-        }
-        
-        // 如果没有<>，则解析最后一个[]中的内容
-        const squareBracketMatches = message.match(/\[([^\]]+)\]/g);
-        if (squareBracketMatches && squareBracketMatches.length > 0) {
-            const lastMatch = squareBracketMatches[squareBracketMatches.length - 1];
-            const content = lastMatch.match(/\[([^\]]+)\]/);
-            if (content) {
-                return content[1].trim();
-            }
-        }
-        
-        // 如果都没有，返回原始消息
+        // 备用方案：直接返回原始消息
         return message.trim();
     }
 }

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AppBar 调试页面</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/components.css" rel="stylesheet">
+    <style>
+        body {
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .debug-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .debug-info {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="debug-container">
+        <h1>AppBar 调试页面</h1>
+        <p>这个页面用于测试AppBar是否正常工作。</p>
+        
+        <div class="debug-info">
+            <strong>当前页面路径:</strong> <span id="currentPath"></span><br>
+            <strong>图片路径:</strong> <span id="imagePath"></span><br>
+            <strong>AppBar状态:</strong> <span id="appBarStatus">未初始化</span>
+        </div>
+        
+        <div class="mt-3">
+            <button class="btn btn-primary" onclick="testAppBar()">测试AppBar</button>
+            <button class="btn btn-secondary" onclick="checkConsole()">检查控制台</button>
+            <button class="btn btn-info" onclick="reloadPage()">重新加载页面</button>
+        </div>
+        
+        <div class="mt-4">
+            <h3>调试信息</h3>
+            <div id="debugOutput"></div>
+        </div>
+    </div>
+
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/AppBar.js"></script>
+    <script>
+        let appBar = null;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('页面加载完成');
+            
+            // 显示当前路径
+            document.getElementById('currentPath').textContent = window.location.pathname;
+            
+            try {
+                console.log('开始初始化AppBar...');
+                appBar = new AppBar();
+                document.getElementById('appBarStatus').textContent = '已初始化';
+                console.log('AppBar初始化成功');
+                
+                // 显示图片路径
+                if (appBar && typeof appBar.getImagePath === 'function') {
+                    const imagePath = appBar.getImagePath();
+                    document.getElementById('imagePath').textContent = imagePath;
+                    console.log('图片路径:', imagePath);
+                }
+            } catch (error) {
+                console.error('AppBar初始化失败:', error);
+                document.getElementById('appBarStatus').textContent = '初始化失败: ' + error.message;
+                document.getElementById('debugOutput').innerHTML = '<div class="alert alert-danger">错误: ' + error.message + '</div>';
+            }
+        });
+        
+        function testAppBar() {
+            if (appBar) {
+                const imagePath = appBar.getImagePath();
+                document.getElementById('debugOutput').innerHTML = 
+                    '<div class="alert alert-success">AppBar正常工作，图片路径: ' + imagePath + '</div>';
+            } else {
+                document.getElementById('debugOutput').innerHTML = 
+                    '<div class="alert alert-danger">AppBar未初始化</div>';
+            }
+        }
+        
+        function checkConsole() {
+            document.getElementById('debugOutput').innerHTML = 
+                '<div class="alert alert-info">请打开浏览器控制台查看详细日志</div>';
+        }
+        
+        function reloadPage() {
+            location.reload();
+        }
+    </script>
+</body>
+</html> 

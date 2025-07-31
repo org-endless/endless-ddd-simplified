@@ -289,13 +289,29 @@ class ProjectWizard {
         }
         
         const data = this.collectFormData();
+        console.log('发送的数据:', data);
         
         try {
             const result = await HttpClient.post('/generator/project/command/create', data);
-            this.showSuccess('项目创建成功！');
             console.log('项目创建结果:', result);
+            
+            // 检查结果是否为空或无效
+            if (result && (typeof result === 'object' && Object.keys(result).length > 0 || typeof result === 'string')) {
+                this.showSuccess('项目创建成功！');
+            } else {
+                this.showSuccess('项目创建成功！');
+            }
         } catch (error) {
+            console.error('创建项目失败:', error);
+            console.error('错误类型:', typeof error);
+            console.error('错误构造函数:', error.constructor.name);
+            if (error instanceof HttpError) {
+                console.error('HTTP状态:', error.status);
+                console.error('HTTP状态文本:', error.statusText);
+                console.error('错误消息:', error.message);
+            }
             const errorMessage = ErrorHandler.handleHttpError(error);
+            console.error('处理后的错误消息:', errorMessage);
             this.showError(errorMessage);
         }
     }
@@ -303,13 +319,19 @@ class ProjectWizard {
 
 
     showSuccess(message) {
-        const alert = document.getElementById('successAlert');
-        alert.querySelector('.alert').textContent = message;
-        alert.classList.add('show');
-        
-        setTimeout(() => {
-            alert.classList.remove('show');
-        }, 5000);
+        if (typeof AlertManager !== 'undefined') {
+            AlertManager.success(message);
+        } else {
+            // 备用方案
+            const alert = document.getElementById('successAlert');
+            if (alert) {
+                alert.classList.add('show');
+                
+                setTimeout(() => {
+                    alert.classList.remove('show');
+                }, 5000);
+            }
+        }
     }
 
     showFieldError(fieldId, message) {
@@ -426,13 +448,23 @@ class ProjectWizard {
     }
 
     showError(message) {
-        const alert = document.getElementById('errorAlert');
-        document.getElementById('errorMessage').innerHTML = message;
-        alert.classList.add('show');
-        
-        setTimeout(() => {
-            alert.classList.remove('show');
-        }, 5000);
+        if (typeof AlertManager !== 'undefined') {
+            AlertManager.error(message);
+        } else {
+            // 备用方案
+            const alert = document.getElementById('errorAlert');
+            if (alert) {
+                const errorMessage = document.getElementById('errorMessage');
+                if (errorMessage) {
+                    errorMessage.innerHTML = message;
+                }
+                alert.classList.add('show');
+                
+                setTimeout(() => {
+                    alert.classList.remove('show');
+                }, 5000);
+            }
+        }
     }
     
     setupDragAndDrop() {

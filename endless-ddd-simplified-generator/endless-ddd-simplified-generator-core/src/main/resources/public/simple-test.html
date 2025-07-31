@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简单测试</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/components.css" rel="stylesheet">
+</head>
+<body>
+    <h1>AppBar 简单测试</h1>
+    <p>如果AppBar正常工作，你应该在页面顶部看到一个导航栏。</p>
+    
+    <script src="js/AppBar.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                new AppBar();
+                console.log('AppBar 创建成功');
+            } catch (error) {
+                console.error('AppBar 创建失败:', error);
+                document.body.innerHTML += '<div style="color: red; padding: 20px;">AppBar 创建失败: ' + error.message + '</div>';
+            }
+        });
+    </script>
+</body>
+</html> 

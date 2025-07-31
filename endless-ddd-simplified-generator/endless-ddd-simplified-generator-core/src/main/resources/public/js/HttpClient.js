@@ -137,17 +137,21 @@ class HttpClient {
         try {
             const contentType = response.headers.get('content-type');
             let errorData;
+            let errorMessage;
             
             if (contentType && contentType.includes('application/json')) {
                 errorData = await response.json();
+                // 从JSON对象中提取错误消息
+                errorMessage = this.extractErrorMessage(errorData);
             } else {
                 errorData = await response.text();
+                errorMessage = errorData;
             }
             
             return new HttpError(
                 response.status,
                 response.statusText,
-                errorData,
+                errorMessage,
                 response.url
             );
         } catch (error) {
@@ -158,6 +162,41 @@ class HttpClient {
                 response.url
             );
         }
+    }
+    
+    /**
+     * 从错误数据中提取错误消息
+     * @param {Object|string} errorData - 错误数据
+     * @returns {string} 错误消息
+     */
+    static extractErrorMessage(errorData) {
+        if (typeof errorData === 'string') {
+            return errorData;
+        }
+        
+        if (typeof errorData === 'object' && errorData !== null) {
+            // 检查常见的错误消息字段
+            if (errorData.message) {
+                return errorData.message;
+            } else if (errorData.error) {
+                return errorData.error;
+            } else if (errorData.msg) {
+                return errorData.msg;
+            } else if (errorData.detail) {
+                return errorData.detail;
+            } else if (errorData.reason) {
+                return errorData.reason;
+            } else {
+                // 如果没有明确的错误消息字段，返回JSON字符串
+                try {
+                    return JSON.stringify(errorData);
+                } catch (e) {
+                    return '未知错误';
+                }
+            }
+        }
+        
+        return '未知错误';
     }
     
     /**
