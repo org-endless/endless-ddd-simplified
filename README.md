@@ -31,16 +31,7 @@
 | 架构模式        | CQRS（命令查询职责分离）    |
 | 模型设计        | DDD 分层架构（不使用事件驱动） |
 
----
 
-## ☕ Buy Me a Cup of Coffee
-
-如果你觉得本项目对你有帮助，请我喝一杯咖啡 ☕ 😊
-
-<img src="https://github.com/user-attachments/assets/01daca5d-ed7c-4dcc-9fe9-9c2fcec8e18b" width="256" alt="Buy Me a Coffee QR" />
-
-
----
 
 ## 📁 项目结构（示例）
 
@@ -114,3 +105,14 @@ http://localhost:60001/
 - [Lombok](https://projectlombok.org/) - 简化 Java 代码
 - [Hibernate Validator](https://hibernate.org/validator/) - 校验框架
 - 领域驱动设计相关思想与资料来自 Eric Evans 和 DDD 社区
+  
+---
+
+## ☕ Buy Me a Cup of Coffee
+
+如果你觉得本项目对你有帮助，请我喝一杯咖啡 ☕ 😊
+
+<img src="https://github.com/user-attachments/assets/01daca5d-ed7c-4dcc-9fe9-9c2fcec8e18b" width="256" alt="Buy Me a Coffee QR" />
+
+
+---
