@@ -101,9 +101,7 @@ http://localhost:60001/
 本项目参考或集成了以下优秀开源组件：
 
 - [Spring Boot](https://spring.io/projects/spring-boot)
-- [MapStruct](https://mapstruct.org/) - Java Bean 映射器
 - [Lombok](https://projectlombok.org/) - 简化 Java 代码
-- [Hibernate Validator](https://hibernate.org/validator/) - 校验框架
 - 领域驱动设计相关思想与资料来自 Eric Evans 和 DDD 社区
   
 ---
