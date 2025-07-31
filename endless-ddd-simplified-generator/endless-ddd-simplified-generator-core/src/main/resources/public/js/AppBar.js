@@ -103,9 +103,15 @@ class AppBar {
         if (this.isDarkMode) {
             html.setAttribute('data-bs-theme', 'dark');
             html.classList.add('dark-mode');
+            // 设置暗黑模式背景
+            document.body.style.backgroundColor = 'var(--dark-bg-primary)';
+            document.body.style.color = 'var(--dark-text-primary)';
         } else {
             html.setAttribute('data-bs-theme', 'light');
             html.classList.remove('dark-mode');
+            // 恢复明亮模式背景
+            document.body.style.backgroundColor = '';
+            document.body.style.color = '';
         }
     }
 

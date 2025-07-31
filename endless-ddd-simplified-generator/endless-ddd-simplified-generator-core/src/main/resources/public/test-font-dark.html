@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>字体和暗黑模式测试</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/components.css">
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/AppBar.js"></script>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>字体和暗黑模式测试</h3>
+                    </div>
+                    <div class="card-body">
+                        <h4>字体测试</h4>
+                        <p>这是LXGW WenKai Screen字体的测试文本。</p>
+                        <p>中文字体显示：你好世界！</p>
+                        <p>English text: Hello World!</p>
+                        <p>数字：1234567890</p>
+                        <p>特殊字符：@#$%^&*()</p>
+                        
+                        <hr>
+                        
+                        <h4>输入框测试</h4>
+                        <div class="mb-3">
+                            <label for="testInput" class="form-label">测试输入框</label>
+                            <input type="text" class="form-control" id="testInput" placeholder="请输入内容...">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="testSelect" class="form-label">测试下拉框</label>
+                            <select class="form-select" id="testSelect">
+                                <option>选择选项...</option>
+                                <option>选项1</option>
+                                <option>选项2</option>
+                                <option>选项3</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="testTextarea" class="form-label">测试文本域</label>
+                            <textarea class="form-control" id="testTextarea" rows="3" placeholder="请输入多行文本..."></textarea>
+                        </div>
+                        
+                        <hr>
+                        
+                        <h4>按钮测试</h4>
+                        <div class="d-flex gap-2 mb-3">
+                            <button class="btn btn-primary">主要按钮</button>
+                            <button class="btn btn-secondary">次要按钮</button>
+                            <button class="btn btn-success">成功按钮</button>
+                            <button class="btn btn-danger">危险按钮</button>
+                        </div>
+                        
+                        <hr>
+                        
+                        <h4>卡片测试</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">卡片标题</h5>
+                                        <p class="card-text">这是卡片内容的测试文本。</p>
+                                        <button class="btn btn-primary">卡片按钮</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="module-card">
+                                    <h5>模块卡片</h5>
+                                    <p>这是模块卡片的测试内容。</p>
+                                    <button class="btn btn-info">模块按钮</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <hr>
+                        
+                        <h4>进度条测试</h4>
+                        <div class="progress mb-3">
+                            <div class="progress-bar" role="progressbar" style="width: 25%">25%</div>
+                        </div>
+                        <div class="progress mb-3">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 50%">50%</div>
+                        </div>
+                        <div class="progress mb-3">
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: 75%">75%</div>
+                        </div>
+                        
+                        <hr>
+                        
+                        <h4>警告框测试</h4>
+                        <div class="alert alert-primary" role="alert">
+                            这是一个主要警告框。
+                        </div>
+                        <div class="alert alert-success" role="alert">
+                            这是一个成功警告框。
+                        </div>
+                        <div class="alert alert-warning" role="alert">
+                            这是一个警告框。
+                        </div>
+                        <div class="alert alert-danger" role="alert">
+                            这是一个危险警告框。
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化AppBar
+            new AppBar();
+            
+            // 添加主题切换按钮
+            const themeToggle = document.createElement('button');
+            themeToggle.className = 'btn btn-outline-secondary position-fixed';
+            themeToggle.style.cssText = 'top: 20px; right: 20px; z-index: 1000;';
+            themeToggle.innerHTML = '<i class="bi bi-moon"></i> 切换主题';
+            document.body.appendChild(themeToggle);
+            
+            themeToggle.addEventListener('click', function() {
+                const html = document.documentElement;
+                const isDark = html.getAttribute('data-bs-theme') === 'dark';
+                
+                if (isDark) {
+                    html.setAttribute('data-bs-theme', 'light');
+                    themeToggle.innerHTML = '<i class="bi bi-moon"></i> 切换暗黑模式';
+                } else {
+                    html.setAttribute('data-bs-theme', 'dark');
+                    themeToggle.innerHTML = '<i class="bi bi-sun"></i> 切换明亮模式';
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

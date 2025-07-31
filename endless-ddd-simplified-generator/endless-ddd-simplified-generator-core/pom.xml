@@ -54,6 +54,6 @@
                 </executions>
             </plugin>
         </plugins>
-        <finalName>endless-ddd-generator</finalName>
+        <finalName>endless-ddd-simplified-generator</finalName>
     </build>
 </project>

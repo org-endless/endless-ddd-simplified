@@ -1,13 +1,32 @@
-spring:
-  freemarker:
-    enabled: true
-    template-loader-path: classpath:/templates/freemarker/
-    suffix: .ftl
-    check-template-location: false
+endless:
+  version: 1.0.0-SNAPSHOT
+  charset: UTF-8
+  springdoc-path: /springdoc
+#------------------------Server-------------------------
 server:
-  port: 60003
+  port: ${server-port} # 服务端口
+  tomcat:
+    connection-timeout: ${tomcat-connection-timeout} # 设置连接超时时间，单位为毫秒
+    max-threads: ${tomcat-max-threads} # 设置最大线程数
+    min-spare-threads: ${tomcat-min-spare-threads} # 设置最小闲置线程数
+    accept-count: ${tomcat-accept-count} # 设置最大请求队列数
+    max-http-header-size: ${tomcat-max-http-header-size} # 设置最大 HTTP 请求头大小，单位为字节
+    uri-encoding: ${tomcat-uri-encoding} # 设置 URI 编码格式
   error:
     whitelabel:
-      enabled: false
+      enabled: false # 禁用默认错误页面
+spring:
+  application:
+    name: endless-ddd-simplified-generator
+  profiles:
+    active: dev
+  freemarker:
+    enabled: true  # 启用 Freemarker 模板引擎
+    template-loader-path: classpath:/templates/freemarker/ # Freemarker 模板路径
+    suffix: .ftl # Freemarker 模板后缀
+    check-template-location: false  #
+  mvc:
+    throw-exception-if-no-handler-found: true # 未找到请求处理器时，抛出异常
+#------------------------Logging------------------------
 logging:
-  config: file:config/log4j2.xml
+  config: ${logging-config}

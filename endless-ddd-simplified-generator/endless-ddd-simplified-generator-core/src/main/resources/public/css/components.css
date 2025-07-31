@@ -1,5 +1,13 @@
 /* 组件样式文件 */
 
+/* 字体定义 - 使用CDN链接 */
+@import url('https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.1.0/style.css');
+
+/* 全局字体设置 */
+body {
+    font-family: "LXGW WenKai Screen", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+}
+
 /* 向导样式 */
 .wizard-step {
     display: none;
@@ -400,6 +408,25 @@
     }
 }
 
+/* 暗黑模式主题变量 */
+:root {
+    --dark-bg-primary: #0f0f0f;
+    --dark-bg-secondary: #1a1a1a;
+    --dark-bg-tertiary: #2d2d2d;
+    --dark-bg-card: #1e1e1e;
+    --dark-text-primary: #ffffff;
+    --dark-text-secondary: #e0e0e0;
+    --dark-text-muted: #a0a0a0;
+    --dark-border: #333333;
+    --dark-border-focus: #4a9eff;
+    --dark-shadow: rgba(0, 0, 0, 0.5);
+    --dark-hover: #2a2a2a;
+    --dark-input-bg: #2a2a2a;
+    --dark-input-border: #404040;
+    --dark-input-text: #ffffff;
+    --dark-input-placeholder: #666666;
+}
+
 /* AppBar样式 */
 .app-bar {
     position: fixed;
@@ -583,4 +610,277 @@ body {
     .app-bar-title {
         font-size: 1rem;
     }
-} 
+}
+
+/* 暗黑模式样式 */
+[data-bs-theme="dark"] {
+    --bs-body-bg: var(--dark-bg-primary);
+    --bs-body-color: var(--dark-text-primary);
+    --bs-border-color: var(--dark-border);
+    --bs-secondary: var(--dark-text-secondary);
+    --bs-secondary-rgb: 224, 224, 224;
+    --bs-primary: #4a9eff;
+    --bs-primary-rgb: 74, 158, 255;
+}
+
+[data-bs-theme="dark"] body {
+    background-color: var(--dark-bg-primary);
+    color: var(--dark-text-primary);
+    background-image: linear-gradient(135deg, var(--dark-bg-primary) 0%, var(--dark-bg-secondary) 100%);
+    min-height: 100vh;
+}
+
+[data-bs-theme="dark"] .app-bar {
+    background-color: rgba(26, 26, 26, 0.95);
+    border-bottom-color: var(--dark-border);
+    box-shadow: 0 4px 20px var(--dark-shadow);
+    backdrop-filter: blur(20px);
+}
+
+[data-bs-theme="dark"] .app-bar-brand {
+    color: var(--dark-text-primary);
+}
+
+[data-bs-theme="dark"] .app-bar-brand:hover {
+    background-color: var(--dark-hover);
+}
+
+[data-bs-theme="dark"] .app-bar-title {
+    color: var(--bs-primary);
+}
+
+[data-bs-theme="dark"] .app-bar-subtitle {
+    color: var(--dark-text-secondary);
+}
+
+[data-bs-theme="dark"] .btn-outline-secondary {
+    color: var(--dark-text-secondary);
+    border-color: var(--dark-border);
+}
+
+[data-bs-theme="dark"] .btn-outline-secondary:hover {
+    background-color: var(--dark-hover);
+    border-color: var(--dark-border);
+    color: var(--dark-text-primary);
+}
+
+[data-bs-theme="dark"] .card,
+[data-bs-theme="dark"] .wizard-container,
+[data-bs-theme="dark"] .module-card {
+    background-color: var(--dark-bg-card);
+    border-color: var(--dark-border);
+    box-shadow: 0 4px 12px var(--dark-shadow);
+    backdrop-filter: blur(10px);
+}
+
+[data-bs-theme="dark"] .form-control,
+[data-bs-theme="dark"] .form-select {
+    background-color: var(--dark-input-bg);
+    border-color: var(--dark-input-border);
+    color: var(--dark-input-text);
+    border-width: 2px;
+    transition: all 0.3s ease;
+}
+
+[data-bs-theme="dark"] .form-control:focus,
+[data-bs-theme="dark"] .form-select:focus {
+    background-color: var(--dark-input-bg);
+    border-color: var(--dark-border-focus);
+    color: var(--dark-input-text);
+    box-shadow: 0 0 0 0.2rem rgba(74, 158, 255, 0.3);
+    transform: translateY(-1px);
+}
+
+[data-bs-theme="dark"] .form-control::placeholder,
+[data-bs-theme="dark"] .form-select::placeholder {
+    color: var(--dark-input-placeholder);
+}
+
+[data-bs-theme="dark"] .form-floating > .form-control:focus ~ label,
+[data-bs-theme="dark"] .form-floating > .form-control:not(:placeholder-shown) ~ label {
+    color: var(--dark-text-secondary);
+}
+
+[data-bs-theme="dark"] .text-muted {
+    color: var(--dark-text-muted) !important;
+}
+
+[data-bs-theme="dark"] .alert-container .alert-item {
+    background-color: var(--dark-bg-secondary);
+    border-color: var(--dark-border);
+    color: var(--dark-text-primary);
+}
+
+[data-bs-theme="dark"] .modal-content {
+    background-color: var(--dark-bg-secondary);
+    border-color: var(--dark-border);
+}
+
+[data-bs-theme="dark"] .modal-header {
+    border-bottom-color: var(--dark-border);
+}
+
+[data-bs-theme="dark"] .modal-footer {
+    border-top-color: var(--dark-border);
+}
+
+[data-bs-theme="dark"] .progress {
+    background-color: var(--dark-bg-tertiary);
+}
+
+[data-bs-theme="dark"] .progress-bar {
+    background-color: var(--bs-primary);
+}
+
+[data-bs-theme="dark"] .wizard-header {
+    background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+}
+
+[data-bs-theme="dark"] .form-section {
+    background-color: var(--dark-bg-tertiary);
+}
+
+[data-bs-theme="dark"] .form-section h4 {
+    color: var(--dark-text-primary);
+}
+
+[data-bs-theme="dark"] .service-item {
+    background-color: var(--dark-bg-tertiary);
+    border-color: var(--dark-border);
+}
+
+[data-bs-theme="dark"] .service-item input {
+    background-color: var(--dark-bg-secondary);
+    border-color: var(--dark-border);
+    color: var(--dark-text-primary);
+}
+
+[data-bs-theme="dark"] .service-item input:focus {
+    background-color: var(--dark-bg-secondary);
+    border-color: var(--bs-primary);
+    color: var(--dark-text-primary);
+}
+
+[data-bs-theme="dark"] .drag-handle {
+    color: var(--dark-text-secondary);
+}
+
+[data-bs-theme="dark"] .btn-remove {
+    color: var(--dark-text-secondary);
+}
+
+[data-bs-theme="dark"] .btn-remove:hover {
+    color: #dc3545;
+}
+
+[data-bs-theme="dark"] .btn-add {
+    background-color: var(--dark-bg-secondary);
+    border-color: var(--dark-border);
+    color: var(--dark-text-primary);
+}
+
+[data-bs-theme="dark"] .btn-add:hover {
+    background-color: var(--dark-hover);
+    border-color: var(--dark-border);
+    color: var(--dark-text-primary);
+}
+
+/* 暗黑模式额外样式 */
+[data-bs-theme="dark"] .step-indicator .step {
+    background-color: var(--dark-bg-tertiary);
+    border: 2px solid var(--dark-border);
+}
+
+[data-bs-theme="dark"] .step-indicator .step.active {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+}
+
+[data-bs-theme="dark"] .step-indicator .step.completed {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+[data-bs-theme="dark"] .step-indicator .step::after {
+    background-color: var(--dark-border);
+}
+
+[data-bs-theme="dark"] .step-indicator .step.completed::after {
+    background-color: #28a745;
+}
+
+[data-bs-theme="dark"] .wizard-step {
+    background-color: transparent;
+}
+
+[data-bs-theme="dark"] .config-section {
+    background-color: var(--dark-bg-card);
+    border-color: var(--dark-border);
+    box-shadow: 0 2px 8px var(--dark-shadow);
+}
+
+[data-bs-theme="dark"] .config-section h4 {
+    color: var(--dark-text-primary);
+}
+
+[data-bs-theme="dark"] .btn {
+    border-width: 2px;
+    transition: all 0.3s ease;
+}
+
+[data-bs-theme="dark"] .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px var(--dark-shadow);
+}
+
+[data-bs-theme="dark"] .form-floating > label {
+    color: var(--dark-text-secondary);
+}
+
+[data-bs-theme="dark"] .form-floating > .form-control:focus ~ label,
+[data-bs-theme="dark"] .form-floating > .form-control:not(:placeholder-shown) ~ label {
+    color: var(--dark-border-focus);
+}
+
+[data-bs-theme="dark"] .service-item {
+    background-color: var(--dark-bg-card);
+    border-color: var(--dark-border);
+    box-shadow: 0 2px 4px var(--dark-shadow);
+}
+
+[data-bs-theme="dark"] .service-item:hover {
+    box-shadow: 0 4px 8px var(--dark-shadow);
+    transform: translateY(-1px);
+}
+
+[data-bs-theme="dark"] .drag-handle {
+    color: var(--dark-text-secondary);
+}
+
+[data-bs-theme="dark"] .drag-handle:hover {
+    color: var(--dark-text-primary);
+}
+
+[data-bs-theme="dark"] .btn-remove {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: white;
+}
+
+[data-bs-theme="dark"] .btn-remove:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+    color: white;
+}
+
+[data-bs-theme="dark"] .btn-add {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+    color: white;
+}
+
+[data-bs-theme="dark"] .btn-add:hover {
+    background-color: #3a7bd5;
+    border-color: #3a7bd5;
+    color: white;
+}
