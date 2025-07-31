@@ -7,6 +7,7 @@ build/*
 target/
 !.mvn/wrapper/maven-wrapper.jar
 *.tar.gz
+ci/*/lib/*.jar
 ### IDE ###
 .history/
 .DS_Store
