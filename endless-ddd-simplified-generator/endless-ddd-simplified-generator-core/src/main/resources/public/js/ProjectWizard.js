@@ -29,6 +29,13 @@ class ProjectWizard {
             radio.addEventListener('change', () => this.clearRadioError(radio.name));
         });
         
+        // 监听服务ID输入框变化
+        document.addEventListener('input', (e) => {
+            if (e.target.classList.contains('service-artifact-id')) {
+                this.validateServiceInput();
+            }
+        });
+        
         // 设置拖拽事件监听器
         this.setupDragAndDrop();
     }
@@ -192,6 +199,16 @@ class ProjectWizard {
         if (serviceArtifactIds.length === 0) {
             emptyFieldErrors.push('请至少添加一个服务构件ID');
             this.showServiceError('请至少添加一个服务构件ID');
+        } else {
+            // 如果有服务ID，清除错误状态
+            const container = document.getElementById('serviceArtifactIdsContainer');
+            if (container) {
+                container.classList.remove('is-invalid');
+                const errorDiv = container.parentElement.querySelector('.invalid-feedback');
+                if (errorDiv) {
+                    errorDiv.style.display = 'none';
+                }
+            }
         }
         
         serviceArtifactIds.forEach((id, index) => {
@@ -274,27 +291,16 @@ class ProjectWizard {
         const data = this.collectFormData();
         
         try {
-            const response = await fetch('/generator/project/command/create', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data)
-            });
-            
-            if (response.ok) {
-                const result = await response.json();
-                this.showSuccess('项目创建成功！');
-                console.log('项目创建结果:', result);
-            } else {
-                const error = await response.text();
-                this.showError(`项目创建失败: ${error}`);
-            }
+            const result = await HttpClient.post('/generator/project/command/create', data);
+            this.showSuccess('项目创建成功！');
+            console.log('项目创建结果:', result);
         } catch (error) {
-            console.error('创建项目失败:', error);
-            this.showError('网络错误，请稍后重试');
+            const errorMessage = ErrorHandler.handleHttpError(error);
+            this.showError(errorMessage);
         }
     }
+    
+
 
     showSuccess(message) {
         const alert = document.getElementById('successAlert');
@@ -351,8 +357,6 @@ class ProjectWizard {
         
         // 添加错误样式
         container.classList.add('is-invalid');
-        container.style.border = '1px solid #dc3545';
-        container.style.borderRadius = '8px';
         
         // 创建或更新错误提示
         let errorDiv = container.parentElement.querySelector('.invalid-feedback');
@@ -418,7 +422,6 @@ class ProjectWizard {
         const serviceContainer = document.getElementById('serviceArtifactIdsContainer');
         if (serviceContainer) {
             serviceContainer.classList.remove('is-invalid');
-            serviceContainer.style.border = '';
         }
     }
 
@@ -580,6 +583,22 @@ class ProjectWizard {
                 hasDragEnd: !!item._dragEndHandler
             });
         });
+    }
+    
+    validateServiceInput() {
+        const serviceArtifactIds = this.getServiceArtifactIds();
+        const container = document.getElementById('serviceArtifactIdsContainer');
+        
+        if (serviceArtifactIds.length > 0 && serviceArtifactIds.some(id => id.trim())) {
+            // 如果有服务ID且至少有一个不为空，清除错误状态
+            if (container) {
+                container.classList.remove('is-invalid');
+                const errorDiv = container.parentElement.querySelector('.invalid-feedback');
+                if (errorDiv) {
+                    errorDiv.style.display = 'none';
+                }
+            }
+        }
     }
     
 

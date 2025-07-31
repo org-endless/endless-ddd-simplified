@@ -1,6 +1,9 @@
 spring:
   freemarker:
+    enabled: true
     template-loader-path: classpath:/templates/freemarker/
+    suffix: .ftl
+    check-template-location: false
 server:
   port: 60003
   error:

@@ -19,16 +19,18 @@ import org.springframework.core.env.Environment;
  * @author Deng Haozhi
  * @since 1.0.0
  */
-@ConditionalOnProperty(name = "spring", havingValue = "freemarker")
+@ConditionalOnProperty(name = "spring.freemarker.enabled", havingValue = "true", matchIfMissing = true)
 public class FreemarkerConfiguration {
 
     @Lazy
     @ConditionalOnMissingBean
-    public @Bean Configuration freemarkerConfiguration(Environment environment, EndlessAutoConfiguration configuration) {
+    public @Bean Configuration freemarkerConfiguration(Environment environment,
+            EndlessAutoConfiguration configuration) {
         Configuration config = new Configuration(Configuration.VERSION_2_3_34);
         config.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
         config.setDefaultEncoding(environment.getProperty("spring.freemarker.charset", configuration.charset().name()));
-        config.setClassForTemplateLoading(this.getClass(), environment.getProperty("spring.freemarker.template-loader-path", "classpath:/templates"));
+        config.setClassForTemplateLoading(this.getClass(),
+                environment.getProperty("spring.freemarker.template-loader-path", "classpath:/templates/freemarker"));
         return config;
     }
 }

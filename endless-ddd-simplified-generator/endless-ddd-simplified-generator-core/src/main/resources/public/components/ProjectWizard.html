@@ -218,17 +218,23 @@
             border: 1px solid #dc3545;
             border-radius: 8px;
             padding: 1rem;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
         }
         
         #serviceArtifactIdsContainer.is-invalid {
             border: 1px solid #dc3545 !important;
             border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        
+        #serviceArtifactIdsContainer:not(.is-invalid) {
+            margin-bottom: 0;
         }
         
         /* 拖拽相关样式 */
         .draggable-container {
             min-height: 50px;
+            margin-bottom: 0;
         }
         
         .service-item {
@@ -236,13 +242,17 @@
             align-items: center;
             gap: 10px;
             padding: 10px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             background: #f8f9fa;
             border: 1px solid #dee2e6;
             border-radius: 8px;
             transition: all 0.2s ease;
             cursor: default;
             user-select: none;
+        }
+        
+        .service-item:last-child {
+            margin-bottom: 0;
         }
         
         .service-item:hover {
@@ -550,6 +560,11 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/ExceptionMessageParser.js"></script>
+    <script src="../js/AlertManager.js"></script>
+    <script src="../js/HttpClient.js"></script>
+    <script src="../js/ErrorHandler.js"></script>
+    <script src="../js/ListManager.js"></script>
     <script src="../js/ProjectWizard.js"></script>
 </body>
 </html> 

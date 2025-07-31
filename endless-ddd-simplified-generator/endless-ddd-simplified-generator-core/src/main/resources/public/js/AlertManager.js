@@ -15,19 +15,59 @@ class AlertManager {
             return;
         }
 
+        // 解析异常消息
+        const parsedMessage = this.parseMessage(message);
+        
         const modalBody = modal.querySelector('.modal-body');
         const alertClass = this.getAlertClass(type);
         
         modalBody.innerHTML = `
             <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
                 <i class="bi ${this.getIconClass(type)}"></i>
-                ${message}
+                ${parsedMessage}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         `;
 
         const bootstrapModal = new bootstrap.Modal(modal);
         bootstrapModal.show();
+    }
+    
+    /**
+     * 解析异常消息
+     * @param {string} message - 原始消息
+     * @returns {string} 解析后的消息
+     */
+    static parseMessage(message) {
+        // 如果ExceptionMessageParser存在，使用它来解析
+        if (typeof ExceptionMessageParser !== 'undefined') {
+            return ExceptionMessageParser.parse(message);
+        }
+        
+        // 简单的解析逻辑作为备用
+        if (!message || typeof message !== 'string') {
+            return message || '未知错误';
+        }
+        
+        // 首先尝试解析<>中的内容
+        const angleBracketMatch = message.match(/<([^>]+)>/);
+        if (angleBracketMatch) {
+            return angleBracketMatch[1].trim();
+        }
+        
+        // 如果没有<>，则解析最后一个[]中的内容
+        const squareBracketMatches = message.match(/\[([^\]]+)\]/g);
+        if (squareBracketMatches && squareBracketMatches.length > 0) {
+            // 获取最后一个[]中的内容
+            const lastMatch = squareBracketMatches[squareBracketMatches.length - 1];
+            const content = lastMatch.match(/\[([^\]]+)\]/);
+            if (content) {
+                return content[1].trim();
+            }
+        }
+        
+        // 如果都没有，返回原始消息
+        return message.trim();
     }
 
     /**

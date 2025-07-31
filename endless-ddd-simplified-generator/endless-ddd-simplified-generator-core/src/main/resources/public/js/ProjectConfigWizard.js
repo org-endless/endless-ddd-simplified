@@ -231,12 +231,36 @@ class ProjectConfigWizard {
                 AlertManager.show('项目创建成功！', 'success');
                 console.log('项目创建结果:', result);
             } else {
-                const error = await response.text();
-                AlertManager.show(`项目创建失败: ${error}`, 'error');
+                // 使用异常消息解析器解析错误信息
+                const errorMessage = await this.parseErrorResponse(response);
+                AlertManager.show(errorMessage, 'error');
             }
         } catch (error) {
             console.error('发送配置到后端失败:', error);
             AlertManager.show('网络错误，请稍后重试', 'error');
+        }
+    }
+    
+    /**
+     * 解析错误响应
+     * @param {Response} response - HTTP响应对象
+     * @returns {Promise<string>} 解析后的错误消息
+     */
+    static async parseErrorResponse(response) {
+        try {
+            const text = await response.text();
+            
+            // 尝试解析JSON
+            try {
+                const json = JSON.parse(text);
+                const message = json.message || json.error || json.msg || text;
+                return `项目创建失败: ${message}`;
+            } catch (e) {
+                // 如果不是JSON，直接使用文本
+                return `项目创建失败: ${text}`;
+            }
+        } catch (error) {
+            return '项目创建失败: 网络错误';
         }
     }
 
