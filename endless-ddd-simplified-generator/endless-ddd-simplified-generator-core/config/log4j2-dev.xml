@@ -54,7 +54,7 @@
             <AppenderRef ref="Console_aspect"/>
         </Logger>
         <!-- 其他日志配置，Root 配置不再冗余打印 LogAspect 的日志 -->
-        <Root level="ERROR">
+        <Root level="TRACE">
             <AppenderRef ref="Console"/>
         </Root>
     </Loggers>

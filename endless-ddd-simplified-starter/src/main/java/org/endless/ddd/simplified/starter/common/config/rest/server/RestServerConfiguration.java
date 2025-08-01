@@ -1,6 +1,5 @@
 package org.endless.ddd.simplified.starter.common.config.rest.server;
 
-import jakarta.validation.constraints.NotNull;
 import org.endless.ddd.simplified.starter.common.config.endless.EndlessAutoConfiguration;
 import org.endless.ddd.simplified.starter.common.config.rest.converter.FastJson2HttpMessageConverter;
 import org.endless.ddd.simplified.starter.common.config.rest.converter.FormHttpMessageConverter;
@@ -8,6 +7,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.lang.NonNull;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Collections;
@@ -34,7 +34,7 @@ public class RestServerConfiguration implements WebMvcConfigurer {
     }
 
     @Override
-    public void configureMessageConverters(@NotNull List<HttpMessageConverter<?>> converters) {
+    public void configureMessageConverters(@NonNull List<HttpMessageConverter<?>> converters) {
         converters.clear();
         converters.add(new ByteArrayHttpMessageConverter());
         FastJson2HttpMessageConverter<Object> converter = new FastJson2HttpMessageConverter<>(configuration);

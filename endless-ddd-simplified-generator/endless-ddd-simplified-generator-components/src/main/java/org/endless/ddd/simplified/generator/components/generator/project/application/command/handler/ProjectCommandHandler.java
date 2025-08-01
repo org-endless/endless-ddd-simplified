@@ -2,6 +2,7 @@ package org.endless.ddd.simplified.generator.components.generator.project.applic
 
 import org.endless.ddd.simplified.generator.common.model.application.command.handler.DDDSimplifiedGeneratorCommandHandler;
 import org.endless.ddd.simplified.generator.components.generator.project.application.command.transfer.ProjectCreateReqCTransfer;
+import org.endless.ddd.simplified.generator.components.generator.project.application.command.transfer.ProjectCreateRespCTransfer;
 import org.endless.ddd.simplified.generator.components.generator.project.domain.entity.ProjectAggregate;
 
 /**
@@ -18,6 +19,6 @@ import org.endless.ddd.simplified.generator.components.generator.project.domain.
  */
 public interface ProjectCommandHandler extends DDDSimplifiedGeneratorCommandHandler<ProjectAggregate> {
 
-    void create(ProjectCreateReqCTransfer command);
+    ProjectCreateRespCTransfer create(ProjectCreateReqCTransfer command);
 
 }

@@ -4,6 +4,7 @@ import org.endless.ddd.simplified.generator.components.generator.service.applica
 import org.endless.ddd.simplified.generator.components.generator.service.application.command.handler.impl.ServiceCommandHandlerImpl;
 import org.endless.ddd.simplified.generator.components.generator.service.application.query.handler.ServiceQueryHandler;
 import org.endless.ddd.simplified.generator.components.generator.service.application.query.handler.impl.ServiceQueryHandlerImpl;
+import org.endless.ddd.simplified.generator.components.generator.service.domain.anticorruption.ServiceDrivenAdapter;
 import org.endless.ddd.simplified.generator.components.generator.service.facade.adapter.ServiceDrivingAdapter;
 import org.endless.ddd.simplified.generator.components.generator.service.facade.adapter.spring.SpringServiceDrivingAdapter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -32,14 +33,14 @@ public class ServiceDrivingConfiguration {
     @Primary
     @ConditionalOnMissingBean
     public @Bean ServiceDrivingAdapter springServiceDrivingAdapter(ServiceCommandHandler commandHandler,
-            ServiceQueryHandler queryHandler) {
+                                                                   ServiceQueryHandler queryHandler) {
         return new SpringServiceDrivingAdapter(commandHandler, queryHandler);
     }
 
     @Lazy
     @ConditionalOnMissingBean
-    protected @Bean ServiceCommandHandler serviceCommandHandler() {
-        return new ServiceCommandHandlerImpl();
+    protected @Bean ServiceCommandHandler serviceCommandHandler(ServiceDrivenAdapter serviceDrivenAdapter) {
+        return new ServiceCommandHandlerImpl(serviceDrivenAdapter);
     }
 
     @Lazy

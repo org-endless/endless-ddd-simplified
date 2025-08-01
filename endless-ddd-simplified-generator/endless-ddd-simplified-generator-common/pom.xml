@@ -15,6 +15,12 @@
     <description>DDD简易代码生成器-公共模块</description>
 
     <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
         <!-- Starters -->
         <dependency>
             <groupId>org.endless</groupId>

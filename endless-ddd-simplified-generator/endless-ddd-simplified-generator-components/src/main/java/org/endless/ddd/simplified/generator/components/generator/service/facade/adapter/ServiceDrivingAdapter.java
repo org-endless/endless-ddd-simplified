@@ -2,6 +2,7 @@ package org.endless.ddd.simplified.generator.components.generator.service.facade
 
 import org.endless.ddd.simplified.generator.common.model.facade.adapter.DDDSimplifiedGeneratorDrivingAdapter;
 import org.endless.ddd.simplified.generator.components.generator.service.application.command.transfer.ServiceCreateReqCTransfer;
+import org.endless.ddd.simplified.generator.components.generator.service.application.command.transfer.ServiceCreateRespCTransfer;
 
 /**
  * ServiceDrivingAdapter
@@ -18,5 +19,5 @@ import org.endless.ddd.simplified.generator.components.generator.service.applica
  */
 public interface ServiceDrivingAdapter extends DDDSimplifiedGeneratorDrivingAdapter {
 
-    void create(ServiceCreateReqCTransfer command);
+    ServiceCreateRespCTransfer create(ServiceCreateReqCTransfer command);
 }

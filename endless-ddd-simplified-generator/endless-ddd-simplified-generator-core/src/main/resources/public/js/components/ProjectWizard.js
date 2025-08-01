@@ -8,6 +8,7 @@ class ProjectWizard {
     constructor() {
         this.currentStep = 1;
         this.totalSteps = 4;
+        this.storageManager = null;
         this.init();
     }
 
@@ -15,29 +16,262 @@ class ProjectWizard {
         this.updateStepIndicators();
         this.updateProgressBar();
         this.setupEventListeners();
+        this.setupFolderSelection();
+        this.loadSavedProjectPath();
     }
 
-    setupEventListeners() {
-        // 监听表单变化
-        document.querySelectorAll('input, textarea').forEach(input => {
-            input.addEventListener('change', () => this.validateCurrentStep());
-            input.addEventListener('input', () => this.clearFieldError(input.id));
-        });
+    setupFolderSelection() {
+        const selectFolderBtn = document.getElementById('selectFolderBtn');
+        const rootPathInput = document.getElementById('rootPath');
         
-        // 监听单选按钮变化
-        document.querySelectorAll('input[type="radio"]').forEach(radio => {
-            radio.addEventListener('change', () => this.clearRadioError(radio.name));
-        });
+        if (selectFolderBtn) {
+            selectFolderBtn.addEventListener('click', () => this.selectFolder());
+        }
         
-        // 监听服务ID输入框变化
-        document.addEventListener('input', (e) => {
-            if (e.target.classList.contains('service-artifact-id')) {
-                this.validateServiceInput();
+        // 让整个输入框都可以点击
+        if (rootPathInput) {
+            rootPathInput.addEventListener('click', () => this.selectFolder());
+        }
+    }
+
+    async selectFolder() {
+        try {
+            // 使用现代浏览器的 File System Access API
+            if ('showDirectoryPicker' in window) {
+                const dirHandle = await window.showDirectoryPicker({
+                    mode: 'read'
+                });
+                
+                await this.processSelectedFolder(dirHandle);
+            } else {
+                // 降级方案：使用传统文件输入
+                this.showLegacyFolderInput();
+            }
+        } catch (error) {
+            // 检查是否是用户取消操作
+            if (error.name === 'AbortError' || error.message.includes('cancel')) {
+                console.log('用户取消了文件夹选择');
+                return; // 用户取消，不显示错误信息
+            }
+            console.error('选择文件夹失败:', error);
+            this.showError('选择文件夹失败: ' + error.message);
+        }
+    }
+
+    async processSelectedFolder(dirHandle) {
+        try {
+            this.showLoading('正在处理文件夹...');
+            
+            // 获取完整的文件夹路径
+            const fullPath = await this.getFullPath(dirHandle);
+            const rootPathInput = document.getElementById('rootPath');
+            
+            // 设置路径到输入框
+            rootPathInput.value = fullPath;
+            
+            // 保存到存储
+            if (this.storageManager) {
+                this.storageManager.setSessionData({
+                    selectedProjectPath: fullPath,
+                    lastSelectedAt: new Date().toISOString()
+                });
+            }
+            
+            this.hideLoading();
+            this.showSuccess('文件夹选择成功');
+            
+            // 清除错误状态
+            this.clearFieldError('rootPath');
+            
+        } catch (error) {
+            console.error('处理文件夹失败:', error);
+            this.hideLoading();
+            this.showError('处理文件夹失败: ' + error.message);
+        }
+    }
+
+    async getFullPath(dirHandle) {
+        try {
+            // 尝试获取完整路径
+            const pathParts = [];
+            let currentHandle = dirHandle;
+            
+            // 向上遍历获取完整路径
+            while (currentHandle) {
+                pathParts.unshift(currentHandle.name);
+                try {
+                    currentHandle = await currentHandle.getParent();
+                } catch (e) {
+                    // 到达根目录，停止遍历
+                    break;
+                }
+            }
+            
+            // 如果获取到了路径，返回完整路径
+            if (pathParts.length > 0) {
+                // 根据操作系统返回不同格式的路径
+                if (navigator.platform.includes('Win')) {
+                    // Windows 系统使用反斜杠
+                    return pathParts.join('\\');
+                } else {
+                    // Unix/Linux/Mac 系统使用正斜杠
+                    return pathParts.join('/');
+                }
+            }
+            
+            // 如果无法获取完整路径，至少返回文件夹名称
+            return dirHandle.name;
+            
+        } catch (error) {
+            console.warn('无法获取完整路径，使用文件夹名称:', error);
+            return dirHandle.name;
+        }
+    }
+
+    showLegacyFolderInput() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.webkitdirectory = true;
+        input.multiple = true;
+        
+        input.addEventListener('change', (event) => {
+            const files = event.target.files;
+            if (files.length > 0) {
+                this.processLegacyFolderSelection(files);
             }
         });
         
+        input.click();
+    }
+
+    processLegacyFolderSelection(files) {
+        try {
+            this.showLoading('正在处理文件夹...');
+            
+            const firstFile = files[0];
+            // 获取完整的文件夹路径
+            const fullPath = this.getLegacyFullPath(firstFile);
+            const rootPathInput = document.getElementById('rootPath');
+            
+            // 设置路径到输入框
+            rootPathInput.value = fullPath;
+            
+            // 保存到存储
+            if (this.storageManager) {
+                this.storageManager.setSessionData({
+                    selectedProjectPath: fullPath,
+                    lastSelectedAt: new Date().toISOString()
+                });
+            }
+            
+            this.hideLoading();
+            this.showSuccess('文件夹选择成功');
+            
+            // 清除错误状态
+            this.clearFieldError('rootPath');
+            
+        } catch (error) {
+            console.error('处理文件夹失败:', error);
+            this.hideLoading();
+            this.showError('处理文件夹失败: ' + error.message);
+        }
+    }
+
+    getLegacyFullPath(file) {
+        try {
+            // 从webkitRelativePath中提取完整路径
+            const relativePath = file.webkitRelativePath;
+            const pathParts = relativePath.split('/');
+            
+            // 移除文件名，只保留文件夹路径
+            pathParts.pop();
+            
+            // 如果路径部分存在，返回完整路径
+            if (pathParts.length > 0) {
+                // 根据操作系统返回不同格式的路径
+                if (navigator.platform.includes('Win')) {
+                    // Windows 系统使用反斜杠
+                    return pathParts.join('\\');
+                } else {
+                    // Unix/Linux/Mac 系统使用正斜杠
+                    return pathParts.join('/');
+                }
+            }
+            
+            // 如果无法获取完整路径，返回文件夹名称
+            return pathParts[0] || 'selected-folder';
+            
+        } catch (error) {
+            console.warn('无法获取完整路径，使用默认名称:', error);
+            return 'selected-folder';
+        }
+    }
+
+    loadSavedProjectPath() {
+        try {
+            // 尝试加载StorageManager
+            if (typeof StorageManager !== 'undefined') {
+                this.storageManager = new StorageManager();
+                
+                // 从存储中加载上次选择的路径
+                const sessionData = this.storageManager.getSessionData();
+                if (sessionData.selectedProjectPath) {
+                    const rootPathInput = document.getElementById('rootPath');
+                    rootPathInput.value = sessionData.selectedProjectPath;
+                }
+            }
+        } catch (error) {
+            console.warn('无法加载存储管理器:', error);
+        }
+    }
+
+    showLoading(message) {
+        // 显示加载状态
+        const selectFolderBtn = document.getElementById('selectFolderBtn');
+        if (selectFolderBtn) {
+            const originalText = selectFolderBtn.innerHTML;
+            selectFolderBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> 处理中...';
+            selectFolderBtn.disabled = true;
+            
+            // 保存原始文本，以便恢复
+            selectFolderBtn._originalText = originalText;
+        }
+    }
+
+    hideLoading() {
+        // 隐藏加载状态
+        const selectFolderBtn = document.getElementById('selectFolderBtn');
+        if (selectFolderBtn && selectFolderBtn._originalText) {
+            selectFolderBtn.innerHTML = selectFolderBtn._originalText;
+            selectFolderBtn.disabled = false;
+            delete selectFolderBtn._originalText;
+        }
+    }
+
+    setupEventListeners() {
         // 设置拖拽事件监听器
         this.setupDragAndDrop();
+        
+        // 监听所有input和textarea的输入事件
+        document.addEventListener('input', (e) => {
+            if (e.target.matches('input, textarea')) {
+                this.handleInputChange(e.target);
+            }
+        });
+        
+        // 监听所有input和textarea的blur事件
+        document.addEventListener('blur', (e) => {
+            if (e.target.matches('input, textarea')) {
+                this.handleInputBlur(e.target);
+            }
+        }, true);
+        
+        // 监听单选按钮的change事件
+        document.addEventListener('change', (e) => {
+            if (e.target.matches('input[type="radio"]')) {
+                this.handleRadioChange(e.target);
+            }
+        });
     }
 
     nextStep() {
@@ -48,7 +282,7 @@ class ProjectWizard {
                 this.updateStepIndicators();
                 this.updateProgressBar();
                 this.updateButtons();
-                
+
                 if (this.currentStep === this.totalSteps) {
                     this.generateSummary();
                 }
@@ -71,7 +305,7 @@ class ProjectWizard {
         document.querySelectorAll('.wizard-step').forEach(stepEl => {
             stepEl.classList.remove('active');
         });
-        
+
         // 显示当前步骤
         document.getElementById(`step${step}`).classList.add('active');
     }
@@ -80,7 +314,7 @@ class ProjectWizard {
         document.querySelectorAll('.step-number').forEach((indicator, index) => {
             const stepNumber = index + 1;
             indicator.classList.remove('active', 'completed');
-            
+
             if (stepNumber === this.currentStep) {
                 indicator.classList.add('active');
             } else if (stepNumber < this.currentStep) {
@@ -98,13 +332,13 @@ class ProjectWizard {
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
         const createBtn = document.getElementById('createBtn');
-        const buttonContainer = document.querySelector('.d-flex.justify-content-end');
-        
+        const buttonContainer = prevBtn.parentElement;
+
         // 更新按钮显示状态
         prevBtn.style.display = this.currentStep > 1 ? 'block' : 'none';
         nextBtn.style.display = this.currentStep < this.totalSteps ? 'block' : 'none';
         createBtn.style.display = this.currentStep === this.totalSteps ? 'block' : 'none';
-        
+
         // 动态调整布局
         if (this.currentStep === 1) {
             // 第一步：只有下一步按钮，显示在右边
@@ -117,38 +351,32 @@ class ProjectWizard {
 
     validateCurrentStep() {
         const errors = [];
-        const emptyFieldErrors = [];
-        
+
         switch (this.currentStep) {
             case 1:
-                this.validateStep1(errors, emptyFieldErrors);
+                this.validateStep1(errors);
                 break;
             case 2:
-                this.validateStep2(errors, emptyFieldErrors);
+                this.validateStep2(errors);
                 break;
             case 3:
-                this.validateStep3(errors, emptyFieldErrors);
+                this.validateStep3(errors);
                 break;
         }
-        
-        // 如果有任何错误（包括必输项为空），都阻止进入下一步
-        if (errors.length > 0 || emptyFieldErrors.length > 0) {
-            // 只显示非空字段错误，不显示必输项为空的错误
-            if (errors.length > 0) {
-                this.showError(errors.join('<br>'));
-            }
+
+        // 如果有任何错误，都阻止进入下一步
+        if (errors.length > 0) {
             return false;
         }
-        
+
         return true;
     }
 
 
-
-    validateStep1(errors, emptyFieldErrors) {
+    validateStep1(errors) {
         const requiredFields = [
             'projectArtifactId',
-            'groupId', 
+            'groupId',
             'name',
             'description',
             'version',
@@ -156,61 +384,64 @@ class ProjectWizard {
             'rootPath',
             'basePackage'
         ];
-        
+
         // 清除所有错误状态
         this.clearAllErrors();
-        
+
         requiredFields.forEach(field => {
             const element = document.getElementById(field);
             const value = element.value.trim();
             if (!value) {
                 const label = document.querySelector(`label[for="${field}"]`).textContent.replace(' *', '');
                 // 必输项为空只显示输入框错误，不弹出提示
-                emptyFieldErrors.push(`${label}不能为空`);
+                errors.push(`${label}不能为空`);
                 this.showFieldError(field, `${label}不能为空`);
             } else {
-                // 其他格式验证错误会显示弹出框
+                // 格式验证错误直接在字段上显示，并收集到errors数组
                 if (field === 'projectArtifactId' && !/^[a-z][a-z0-9-]*$/.test(value)) {
-                    errors.push('项目构件ID只能包含小写字母、数字和连字符，且必须以字母开头');
+                    this.showFieldError(field, '项目构件ID只能包含小写字母、数字和连字符，且必须以字母开头');
+                    errors.push('项目构件ID格式不正确');
                 }
                 if (field === 'groupId' && !/^[a-z][a-z0-9.]*$/.test(value)) {
-                    errors.push('组织ID只能包含小写字母、数字和点号，且必须以字母开头');
+                    this.showFieldError(field, '组织ID只能包含小写字母、数字和点号，且必须以字母开头');
+                    errors.push('组织ID格式不正确');
                 }
                 if (field === 'version' && !/^\d+\.\d+\.\d+$/.test(value)) {
-                    errors.push('版本号格式不正确，请使用 x.y.z 格式（如：1.0.0）');
+                    this.showFieldError(field, '版本号格式不正确，请使用 x.y.z 格式，例如：1.0.0');
+                    errors.push('版本号格式不正确');
                 }
             }
         });
     }
 
-    validateStep2(errors, emptyFieldErrors) {
+    validateStep2(errors) {
         // 验证Java版本
         const javaVersion = document.querySelector('input[name="javaVersion"]:checked');
         if (!javaVersion) {
-            emptyFieldErrors.push('请选择Java版本');
+            errors.push('请选择Java版本');
             this.showRadioError('javaVersion', '请选择Java版本');
         }
-        
+
         // 验证日志框架
         const loggingFramework = document.querySelector('input[name="loggingFramework"]:checked');
         if (!loggingFramework) {
-            emptyFieldErrors.push('请选择日志框架');
+            errors.push('请选择日志框架');
             this.showRadioError('loggingFramework', '请选择日志框架');
         }
-        
+
         // 验证持久化框架
         const persistenceFramework = document.querySelector('input[name="persistenceFramework"]:checked');
         if (!persistenceFramework) {
-            emptyFieldErrors.push('请选择持久化框架');
+            errors.push('请选择持久化框架');
             this.showRadioError('persistenceFramework', '请选择持久化框架');
         }
     }
 
-    validateStep3(errors, emptyFieldErrors) {
+    validateStep3(errors) {
         const serviceArtifactIds = this.getServiceArtifactIds();
-        
+
         if (serviceArtifactIds.length === 0) {
-            emptyFieldErrors.push('请至少添加一个服务构件ID');
+            errors.push('请至少添加一个服务构件ID');
             this.showServiceError('请至少添加一个服务构件ID');
         } else {
             // 如果有服务ID，清除错误状态
@@ -223,10 +454,17 @@ class ProjectWizard {
                 }
             }
         }
-        
+
         serviceArtifactIds.forEach((id, index) => {
             if (!id.trim()) {
-                emptyFieldErrors.push(`第${index + 1}个服务构件ID不能为空`);
+                errors.push(`第${index + 1}个服务构件ID不能为空`);
+                // 在对应的输入框上显示错误
+                const inputs = document.querySelectorAll('.service-artifact-id');
+                if (inputs[index]) {
+                    inputs[index].classList.add('is-invalid');
+                    inputs[index].style.borderColor = '#dc3545';
+                    inputs[index].style.boxShadow = '0 0 0 0.2rem rgba(220, 53, 69, 0.25)';
+                }
             }
         });
     }
@@ -234,9 +472,9 @@ class ProjectWizard {
     generateSummary() {
         const summary = document.getElementById('projectSummary');
         const data = this.collectFormData();
-        
+
         let html = '<div class="row">';
-        
+
         // 基本信息
         html += '<div class="col-md-6"><h5>基本信息</h5>';
         html += `<div class="summary-item"><span>项目构件ID:</span><span>${data.projectArtifactId}</span></div>`;
@@ -248,7 +486,7 @@ class ProjectWizard {
         html += `<div class="summary-item"><span>基础包名:</span><span>${data.basePackage}</span></div>`;
         html += `<div class="summary-item"><span>项目描述:</span><span>${data.description}</span></div>`;
         html += '</div>';
-        
+
         // 技术配置
         html += '<div class="col-md-6"><h5>技术配置</h5>';
         html += `<div class="summary-item"><span>Java版本:</span><span>${data.javaVersion}</span></div>`;
@@ -256,9 +494,9 @@ class ProjectWizard {
         html += `<div class="summary-item"><span>持久化框架:</span><span>${data.persistenceFramework}</span></div>`;
         html += `<div class="summary-item"><span>Spring Doc:</span><span>${data.enableSpringDoc ? '启用' : '禁用'}</span></div>`;
         html += '</div>';
-        
+
         html += '</div>';
-        
+
         // 服务配置
         html += '<div class="row mt-3"><div class="col-12"><h5>服务配置</h5>';
         if (data.serviceArtifactIds.length > 0) {
@@ -269,7 +507,7 @@ class ProjectWizard {
             html += '<div class="summary-item"><span>服务构件ID:</span><span>无</span></div>';
         }
         html += '</div></div>';
-        
+
         summary.innerHTML = html;
     }
 
@@ -300,17 +538,21 @@ class ProjectWizard {
         if (!this.validateCurrentStep()) {
             return;
         }
-        
+
         const data = this.collectFormData();
         console.log('发送的数据:', data);
-        
+
         try {
+            // 显示创建进度
+            this.showProjectCreationProgress('正在创建项目...');
+            
             const result = await HttpClient.post('/generator/project/command/create', data);
             console.log('项目创建结果:', result);
-            
+
             // 检查结果是否为空或无效
             if (result && (typeof result === 'object' && Object.keys(result).length > 0 || typeof result === 'string')) {
-                this.showSuccess('项目创建成功！');
+                // 尝试写入文件
+                await this.handleProjectFileWriting(result);
             } else {
                 this.showSuccess('项目创建成功！');
             }
@@ -326,36 +568,157 @@ class ProjectWizard {
             const errorMessage = ErrorHandler.handleHttpError(error);
             console.error('处理后的错误消息:', errorMessage);
             this.showError(errorMessage);
+        } finally {
+            this.hideProjectCreationProgress();
         }
     }
-    
+
+    /**
+     * 处理项目文件写入
+     * @param {Object} projectResponse - 项目创建响应
+     */
+    async handleProjectFileWriting(projectResponse) {
+        try {
+            // 检查是否有FileWriter支持
+            if (typeof FileWriter === 'undefined') {
+                console.warn('FileWriter未加载，跳过文件写入');
+                this.showSuccess('项目创建成功！文件写入功能未启用');
+                return;
+            }
+
+            const fileWriter = new FileWriter();
+            const features = fileWriter.getSupportedFeatures();
+            console.log('文件写入功能支持:', features);
+
+            if (features.fileSystemAccess && features.fileSystem) {
+                // 尝试直接写入文件系统
+                await this.writeFilesToFileSystem(fileWriter, projectResponse);
+            } else if (features.download) {
+                // 降级到文件下载
+                await this.downloadProjectFiles(fileWriter, projectResponse);
+            } else {
+                // 不支持文件操作
+                this.showSuccess('项目创建成功！当前浏览器不支持文件操作');
+            }
+
+        } catch (error) {
+            console.error('文件写入失败:', error);
+            
+            // 尝试降级到下载方式
+            try {
+                if (typeof FileWriter !== 'undefined') {
+                    const fileWriter = new FileWriter();
+                    await this.downloadProjectFiles(fileWriter, projectResponse);
+                } else {
+                    this.showSuccess('项目创建成功！文件写入失败，请手动保存文件');
+                }
+            } catch (downloadError) {
+                console.error('下载也失败了:', downloadError);
+                this.showSuccess('项目创建成功！文件写入和下载都失败，请手动保存文件');
+            }
+        }
+    }
+
+    /**
+     * 写入文件到文件系统
+     * @param {FileWriter} fileWriter - 文件写入器
+     * @param {Object} projectResponse - 项目响应
+     */
+    async writeFilesToFileSystem(fileWriter, projectResponse) {
+        try {
+            this.updateProjectCreationProgress('正在写入文件到本地...');
+            
+            await fileWriter.writeProjectFiles(projectResponse);
+            
+            this.showSuccess('项目创建成功！文件已写入到本地目录');
+            
+        } catch (error) {
+            console.error('写入文件系统失败:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * 下载项目文件
+     * @param {FileWriter} fileWriter - 文件写入器
+     * @param {Object} projectResponse - 项目响应
+     */
+    async downloadProjectFiles(fileWriter, projectResponse) {
+        try {
+            this.updateProjectCreationProgress('正在准备文件下载...');
+            
+            await fileWriter.downloadProjectFiles(projectResponse);
+            
+            this.showSuccess('项目创建成功！文件已下载到本地');
+            
+        } catch (error) {
+            console.error('下载文件失败:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * 显示项目创建进度
+     * @param {string} message - 进度消息
+     */
+    showProjectCreationProgress(message) {
+        // 创建进度提示
+        const progressHtml = `
+            <div class="alert alert-info d-flex align-items-center" role="alert">
+                <div class="spinner-border spinner-border-sm me-2" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <span id="projectCreationProgressMessage">${message}</span>
+            </div>
+        `;
+        
+        // 插入到页面顶部
+        const container = document.querySelector('.wizard-container');
+        if (container) {
+            const progressDiv = document.createElement('div');
+            progressDiv.id = 'projectCreationProgress';
+            progressDiv.innerHTML = progressHtml;
+            container.insertBefore(progressDiv, container.firstChild);
+        }
+    }
+
+    /**
+     * 更新项目创建进度消息
+     * @param {string} message - 新的进度消息
+     */
+    updateProjectCreationProgress(message) {
+        const progressMessage = document.getElementById('projectCreationProgressMessage');
+        if (progressMessage) {
+            progressMessage.textContent = message;
+        }
+    }
+
+    /**
+     * 隐藏项目创建进度
+     */
+    hideProjectCreationProgress() {
+        const progressDiv = document.getElementById('projectCreationProgress');
+        if (progressDiv) {
+            progressDiv.remove();
+        }
+    }
 
 
     showSuccess(message) {
         if (typeof AlertManager !== 'undefined') {
             AlertManager.success(message);
-        } else {
-            // 备用方案
-            const alert = document.getElementById('successAlert');
-            if (alert) {
-                alert.classList.add('show');
-                
-                setTimeout(() => {
-                    alert.classList.remove('show');
-                }, 5000);
-            }
         }
     }
 
     showFieldError(fieldId, message) {
         const element = document.getElementById(fieldId);
         const formControl = element.closest('.form-floating');
-        
+
         // 添加错误样式
         element.classList.add('is-invalid');
         element.style.borderColor = '#dc3545';
         element.style.boxShadow = '0 0 0 0.2rem rgba(220, 53, 69, 0.25)';
-        
+
         // 创建或更新错误提示
         let errorDiv = formControl.querySelector('.invalid-feedback');
         if (!errorDiv) {
@@ -369,10 +732,10 @@ class ProjectWizard {
 
     showRadioError(name, message) {
         const radioGroup = document.querySelector(`input[name="${name}"]`).closest('.col-md-6');
-        
+
         // 添加错误样式到整个组
         radioGroup.classList.add('is-invalid');
-        
+
         // 创建或更新错误提示
         let errorDiv = radioGroup.querySelector('.invalid-feedback');
         if (!errorDiv) {
@@ -389,10 +752,10 @@ class ProjectWizard {
 
     showServiceError(message) {
         const container = document.getElementById('serviceArtifactIdsContainer');
-        
+
         // 添加错误样式
         container.classList.add('is-invalid');
-        
+
         // 创建或更新错误提示
         let errorDiv = container.parentElement.querySelector('.invalid-feedback');
         if (!errorDiv) {
@@ -413,7 +776,7 @@ class ProjectWizard {
             element.classList.remove('is-invalid');
             element.style.borderColor = '';
             element.style.boxShadow = '';
-            
+
             const formControl = element.closest('.form-floating');
             if (formControl) {
                 const errorDiv = formControl.querySelector('.invalid-feedback');
@@ -442,17 +805,17 @@ class ProjectWizard {
             element.style.borderColor = '';
             element.style.boxShadow = '';
         });
-        
+
         // 清除所有错误提示
         document.querySelectorAll('.invalid-feedback').forEach(element => {
             element.style.display = 'none';
         });
-        
+
         // 清除单选按钮组错误
         document.querySelectorAll('.col-md-6.is-invalid').forEach(element => {
             element.classList.remove('is-invalid');
         });
-        
+
         // 清除服务容器错误
         const serviceContainer = document.getElementById('serviceArtifactIdsContainer');
         if (serviceContainer) {
@@ -463,26 +826,12 @@ class ProjectWizard {
     showError(message) {
         if (typeof AlertManager !== 'undefined') {
             AlertManager.error(message);
-        } else {
-            // 备用方案
-            const alert = document.getElementById('errorAlert');
-            if (alert) {
-                const errorMessage = document.getElementById('errorMessage');
-                if (errorMessage) {
-                    errorMessage.innerHTML = message;
-                }
-                alert.classList.add('show');
-                
-                setTimeout(() => {
-                    alert.classList.remove('show');
-                }, 5000);
-            }
         }
     }
-    
+
     setupDragAndDrop() {
         const container = document.getElementById('serviceArtifactIdsContainer');
-        
+
         // 清除现有的事件监听器
         if (container._dragOverHandler) {
             container.removeEventListener('dragover', container._dragOverHandler);
@@ -490,7 +839,7 @@ class ProjectWizard {
         if (container._dropHandler) {
             container.removeEventListener('drop', container._dropHandler);
         }
-        
+
         // 创建新的事件监听器并保存引用
         container._dragOverHandler = (e) => {
             e.preventDefault();
@@ -504,7 +853,7 @@ class ProjectWizard {
                 }
             }
         };
-        
+
         container._dropHandler = (e) => {
             e.preventDefault();
             // 清除所有拖拽状态
@@ -512,22 +861,22 @@ class ProjectWizard {
                 item.classList.remove('drag-enter', 'drag-over');
             });
         };
-        
+
         // 为容器添加拖拽事件监听器
         container.addEventListener('dragover', container._dragOverHandler);
         container.addEventListener('drop', container._dropHandler);
-        
+
         // 为每个服务项添加拖拽事件监听器
         this.updateDragListeners();
     }
-    
+
     updateDragListeners() {
         const serviceItems = document.querySelectorAll('.service-item');
-        
+
         serviceItems.forEach((item, index) => {
             // 更新data-index属性
             item.setAttribute('data-index', index);
-            
+
             // 移除现有的事件监听器（使用匿名函数引用）
             if (item._dragStartHandler) {
                 item.removeEventListener('dragstart', item._dragStartHandler);
@@ -535,17 +884,17 @@ class ProjectWizard {
             if (item._dragEndHandler) {
                 item.removeEventListener('dragend', item._dragEndHandler);
             }
-            
+
             // 创建新的事件监听器并保存引用
             item._dragStartHandler = this.handleDragStart.bind(this);
             item._dragEndHandler = this.handleDragEnd.bind(this);
-            
+
             // 添加新的事件监听器
             item.addEventListener('dragstart', item._dragStartHandler);
             item.addEventListener('dragend', item._dragEndHandler);
         });
     }
-    
+
     handleDragStart(e) {
         const item = e.target.closest('.service-item');
         if (item) {
@@ -554,34 +903,34 @@ class ProjectWizard {
             e.dataTransfer.setData('text/html', item.outerHTML);
         }
     }
-    
+
     handleDragEnd(e) {
         const item = e.target.closest('.service-item');
         if (item) {
             setTimeout(() => {
                 item.classList.remove('dragging');
             }, 100);
-            
+
             // 更新所有项的索引
             this.updateDragListeners();
         }
     }
-    
+
     getDragAfterElement(container, y) {
         const draggableElements = [...container.querySelectorAll('.service-item:not(.dragging)')];
-        
+
         return draggableElements.reduce((closest, child) => {
             const box = child.getBoundingClientRect();
             const offset = y - box.top - box.height / 2;
-            
+
             if (offset < 0 && offset > closest.offset) {
-                return { offset: offset, element: child };
+                return {offset: offset, element: child};
             } else {
                 return closest;
             }
-        }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }, {offset: Number.NEGATIVE_INFINITY}).element;
     }
-    
+
     // 清理所有事件监听器
     cleanupEventListeners() {
         const container = document.getElementById('serviceArtifactIdsContainer');
@@ -595,7 +944,7 @@ class ProjectWizard {
                 container.removeEventListener('drop', container._dropHandler);
                 delete container._dropHandler;
             }
-            
+
             // 清理所有服务项的事件监听器
             const serviceItems = document.querySelectorAll('.service-item');
             serviceItems.forEach(item => {
@@ -610,17 +959,17 @@ class ProjectWizard {
             });
         }
     }
-    
+
     // 调试方法：检查事件监听器状态
     debugEventListeners() {
         const container = document.getElementById('serviceArtifactIdsContainer');
         const serviceItems = document.querySelectorAll('.service-item');
-        
+
         console.log('容器事件监听器:', {
             hasDragOver: !!container._dragOverHandler,
             hasDrop: !!container._dropHandler
         });
-        
+
         console.log('服务项事件监听器数量:', serviceItems.length);
         serviceItems.forEach((item, index) => {
             console.log(`项目${index}:`, {
@@ -629,8 +978,8 @@ class ProjectWizard {
             });
         });
     }
-    
-    validateServiceInput() {
+
+        validateServiceInput() {
         const serviceArtifactIds = this.getServiceArtifactIds();
         const container = document.getElementById('serviceArtifactIdsContainer');
         
@@ -646,6 +995,77 @@ class ProjectWizard {
         }
     }
     
+    /**
+     * 处理输入框输入事件
+     * @param {HTMLElement} input - 输入框元素
+     */
+    handleInputChange(input) {
+        const value = input.value.trim();
+        if (value) {
+            // 如果有输入内容，清除错误状态
+            if (input.id) {
+                this.clearFieldError(input.id);
+            } else if (input.classList.contains('service-artifact-id')) {
+                // 清除服务构件ID输入框的错误状态
+                input.classList.remove('is-invalid');
+                input.style.borderColor = '';
+                input.style.boxShadow = '';
+            }
+        }
+    }
+    
+    /**
+     * 处理输入框失去焦点事件
+     * @param {HTMLElement} input - 输入框元素
+     */
+    handleInputBlur(input) {
+        const value = input.value.trim();
+        if (!value) {
+            // 如果没有内容，显示错误
+            const label = document.querySelector(`label[for="${input.id}"]`);
+            const fieldName = label ? label.textContent.replace(' *', '') : input.id;
+            this.showFieldError(input.id, `${fieldName}不能为空`);
+        } else {
+            // 如果有内容，进行格式验证
+            this.validateFieldFormat(input);
+        }
+    }
+    
+    /**
+     * 处理单选按钮变化事件
+     * @param {HTMLElement} radio - 单选按钮元素
+     */
+    handleRadioChange(radio) {
+        // 清除对应字段的错误状态
+        this.clearRadioError(radio.name);
+    }
+    
+    /**
+     * 验证字段格式
+     * @param {HTMLElement} input - 输入框元素
+     */
+    validateFieldFormat(input) {
+        const value = input.value.trim();
+        
+        switch (input.id) {
+            case 'projectArtifactId':
+                if (!/^[a-z][a-z0-9-]*$/.test(value)) {
+                    this.showFieldError(input.id, '项目构件ID只能包含小写字母、数字和连字符，且必须以字母开头');
+                }
+                break;
+            case 'groupId':
+                if (!/^[a-z][a-z0-9.]*$/.test(value)) {
+                    this.showFieldError(input.id, '组织ID只能包含小写字母、数字和点号，且必须以字母开头');
+                }
+                break;
+            case 'version':
+                if (!/^\d+\.\d+\.\d+$/.test(value)) {
+                    this.showFieldError(input.id, '版本号格式不正确，请使用 x.y.z 格式（如：1.0.0）');
+                }
+                break;
+        }
+    }
+
 
 }
 
@@ -665,7 +1085,7 @@ function addService() {
         </button>
     `;
     container.appendChild(serviceItem);
-    
+
     // 更新拖拽监听器
     if (projectWizard) {
         projectWizard.updateDragListeners();
@@ -676,7 +1096,7 @@ function removeService(button) {
     const container = document.getElementById('serviceArtifactIdsContainer');
     if (container.children.length > 1) {
         button.parentElement.remove();
-        
+
         // 更新拖拽监听器
         if (projectWizard) {
             projectWizard.updateDragListeners();
@@ -708,4 +1128,4 @@ window.addEventListener('beforeunload', () => {
     if (projectWizard) {
         projectWizard.cleanupEventListeners();
     }
-}); 
+});

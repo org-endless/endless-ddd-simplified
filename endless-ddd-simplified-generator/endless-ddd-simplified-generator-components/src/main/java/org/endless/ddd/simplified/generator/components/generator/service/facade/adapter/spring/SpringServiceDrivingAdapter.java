@@ -2,6 +2,7 @@ package org.endless.ddd.simplified.generator.components.generator.service.facade
 
 import org.endless.ddd.simplified.generator.components.generator.service.application.command.handler.ServiceCommandHandler;
 import org.endless.ddd.simplified.generator.components.generator.service.application.command.transfer.ServiceCreateReqCTransfer;
+import org.endless.ddd.simplified.generator.components.generator.service.application.command.transfer.ServiceCreateRespCTransfer;
 import org.endless.ddd.simplified.generator.components.generator.service.application.query.handler.ServiceQueryHandler;
 import org.endless.ddd.simplified.generator.components.generator.service.facade.adapter.ServiceDrivingAdapter;
 
@@ -31,13 +32,13 @@ public class SpringServiceDrivingAdapter implements ServiceDrivingAdapter {
     private final ServiceQueryHandler serviceQueryHandler;
 
     public SpringServiceDrivingAdapter(ServiceCommandHandler serviceCommandHandler,
-            ServiceQueryHandler serviceQueryHandler) {
+                                       ServiceQueryHandler serviceQueryHandler) {
         this.serviceCommandHandler = serviceCommandHandler;
         this.serviceQueryHandler = serviceQueryHandler;
     }
 
     @Override
-    public void create(ServiceCreateReqCTransfer command) {
-        serviceCommandHandler.create(command);
+    public ServiceCreateRespCTransfer create(ServiceCreateReqCTransfer command) {
+        return serviceCommandHandler.create(command);
     }
 }

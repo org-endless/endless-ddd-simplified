@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>文件处理器 - Endless DDD</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/bootstrap-icons.css" />
+    <link rel="stylesheet" href="../css/components.css" />
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="card mt-4">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="bi bi-file-earmark-arrow-up"></i>
+                文件处理器
+              </h5>
+            </div>
+            <div class="card-body">
+              <!-- 文件上传区域 -->
+              <div class="upload-section mb-4">
+                <div class="upload-area" id="uploadArea">
+                  <div class="upload-content">
+                    <i class="bi bi-cloud-upload upload-icon"></i>
+                    <h6>拖拽文件到此处或点击选择文件</h6>
+                    <p class="text-muted">支持 JSON、XML、CSV 等格式</p>
+                    <input
+                      type="file"
+                      id="fileInput"
+                      accept=".json,.xml,.csv,.txt"
+                      multiple
+                      style="display: none" />
+                    <button
+                      class="btn btn-primary"
+                      onclick="document.getElementById('fileInput').click()">
+                      <i class="bi bi-folder2-open"></i>
+                      选择文件
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 文件列表 -->
+              <div
+                class="file-list-section mb-4"
+                id="fileListSection"
+                style="display: none">
+                <h6><i class="bi bi-list-ul"></i> 已选择的文件</h6>
+                <div class="file-list" id="fileList"></div>
+              </div>
+
+              <!-- 聚合配置 -->
+              <div
+                class="aggregate-config-section mb-4"
+                id="aggregateConfigSection"
+                style="display: none">
+                <h6><i class="bi bi-gear"></i> 聚合配置</h6>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="projectPath" class="form-label"
+                        >项目路径</label
+                      >
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="projectPath"
+                        placeholder="例如: /path/to/project" />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="servicePath" class="form-label"
+                        >服务路径</label
+                      >
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="servicePath"
+                        placeholder="例如: src/main/java" />
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="basePackage" class="form-label"
+                        >基础包名</label
+                      >
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="basePackage"
+                        placeholder="例如: com.example" />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="aggregateName" class="form-label"
+                        >聚合名称</label
+                      >
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="aggregateName"
+                        placeholder="例如: User" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 处理按钮 -->
+              <div
+                class="action-section"
+                id="actionSection"
+                style="display: none">
+                <button
+                  class="btn btn-success"
+                  id="processBtn"
+                  onclick="FileProcessor.processFiles()">
+                  <i class="bi bi-play-circle"></i>
+                  开始处理
+                </button>
+                <button
+                  class="btn btn-secondary"
+                  onclick="FileProcessor.clearAll()">
+                  <i class="bi bi-trash"></i>
+                  清空所有
+                </button>
+              </div>
+
+              <!-- 处理结果 -->
+              <div
+                class="result-section mt-4"
+                id="resultSection"
+                style="display: none">
+                <h6><i class="bi bi-check-circle"></i> 处理结果</h6>
+                <div class="result-content" id="resultContent"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/lib/bootstrap.bundle.min.js"></script>
+    <script src="../js/core/ExceptionMessageParser.js"></script>
+    <script src="../js/core/AlertManager.js"></script>
+    <script src="../js/core/HttpClient.js"></script>
+    <script src="../js/core/ErrorHandler.js"></script>
+    <script src="../js/core/AppBar.js"></script>
+    <script src="../js/components/FileProcessor.js"></script>
+    <script>
+      // 初始化AppBar
+      document.addEventListener("DOMContentLoaded", function () {
+        new AppBar();
+        FileProcessor.init();
+      });
+    </script>
+  </body>
+</html>

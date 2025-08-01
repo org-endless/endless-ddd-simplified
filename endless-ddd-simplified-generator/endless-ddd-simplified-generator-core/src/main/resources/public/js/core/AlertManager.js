@@ -11,13 +11,13 @@ class AlertManager {
      */
     static initialize() {
         if (this.isInitialized) return;
-        
+
         // 创建右侧提示容器
         const container = document.createElement('div');
         container.id = 'alertContainer';
         container.className = 'alert-container';
         document.body.appendChild(container);
-        
+
         this.isInitialized = true;
     }
 
@@ -25,58 +25,58 @@ class AlertManager {
      * 显示提示信息
      * @param {string} message - 提示消息
      * @param {string} type - 提示类型 (success, info, warning, danger)
-     * @param {number} duration - 自动关闭时间（毫秒），默认30秒
+     * @param {number} duration - 自动关闭时间（毫秒），默认20秒
      */
-    static show(message, type = 'info', duration = 30000) {
+    static show(message, type = 'info', duration = 20000) {
         this.initialize();
-        
+
         // 解析异常消息
         const parsedMessage = this.parseMessage(message);
-        
+
         // 创建消息元素
         const messageId = 'alert-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
         const alertElement = document.createElement('div');
         alertElement.id = messageId;
         alertElement.className = `alert-item alert-${type} fade-in`;
-        
+
         const alertClass = this.getAlertClass(type);
         const iconClass = this.getIconClass(type);
-        
+
         alertElement.innerHTML = `
             <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
                 <span class="alert-message">${parsedMessage}</span>
                 <button type="button" class="btn-close" onclick="AlertManager.removeMessage('${messageId}')" aria-label="Close" title="关闭"></button>
             </div>
         `;
-        
+
         // 添加到容器
         const container = document.getElementById('alertContainer');
         container.appendChild(alertElement);
-        
+
         // 添加到队列
         this.messageQueue.push({
             id: messageId,
             element: alertElement,
             timer: null
         });
-        
+
         // 设置自动关闭
         if (duration > 0) {
             const timer = setTimeout(() => {
                 this.removeMessage(messageId);
             }, duration);
-            
+
             // 更新队列中的timer
             const queueItem = this.messageQueue.find(item => item.id === messageId);
             if (queueItem) {
                 queueItem.timer = timer;
             }
         }
-        
+
         // 限制最大显示数量（最多5条）
         this.limitMessageCount();
     }
-    
+
     /**
      * 移除指定消息
      * @param {string} messageId - 消息ID
@@ -91,7 +91,7 @@ class AlertManager {
                 }
             }, 300);
         }
-        
+
         // 从队列中移除
         const queueIndex = this.messageQueue.findIndex(item => item.id === messageId);
         if (queueIndex > -1) {
@@ -102,7 +102,7 @@ class AlertManager {
             this.messageQueue.splice(queueIndex, 1);
         }
     }
-    
+
     /**
      * 限制消息数量
      */

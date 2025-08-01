@@ -3,6 +3,7 @@
 ## 项目创建流程
 
 ### 步骤1：项目基本信息
+
 - **项目构件ID**: 项目的唯一标识符
 - **组织ID**: Maven Group ID
 - **项目名称**: 项目的显示名称
@@ -13,36 +14,43 @@
 - **项目描述**: 项目的详细描述
 
 ### 步骤2：技术栈配置
+
 - **Java版本**: 选择Java 8、11、17或21
-- **日志框架**: 选择Logback、Log4j2或Log4j
+- **日志框架**: 选择Log4j2
 - **持久化框架**: 选择MyBatis Plus、MyBatis或JPA
 - **Spring Doc**: 是否启用Spring Doc文档
 
 ### 步骤3：服务配置
+
 - **服务构件ID列表**: 添加一个或多个服务构件ID
-  - 点击"添加服务构件ID"按钮可以添加更多服务
-  - 点击删除按钮可以移除不需要的服务
+    - 点击"添加服务构件ID"按钮可以添加更多服务
+    - 点击删除按钮可以移除不需要的服务
 
 ### 步骤4：确认配置
+
 - 显示所有配置的摘要信息
 - 确认无误后点击"完成配置"按钮
 
 ## 功能特性
 
 ### ✅ 表单验证
+
 - 每个步骤都有相应的验证规则
 - 必填字段检查
 - 数据格式验证
 
 ### ✅ 数据持久化
+
 - 配置数据自动保存到本地存储
 - 页面刷新后自动恢复配置
 
 ### ✅ 后端集成
+
 - 配置完成后自动发送到后端API
 - 支持项目创建和代码生成
 
 ### ✅ 响应式设计
+
 - 支持桌面和移动设备
 - 自适应布局
 
@@ -92,11 +100,13 @@ static/
 ## API接口
 
 ### 项目创建接口
+
 - **URL**: `/api/generator/project`
 - **方法**: `POST`
 - **Content-Type**: `application/json`
 
 ### 请求参数
+
 ```json
 {
   "projectArtifactId": "项目构件ID",
@@ -111,23 +121,29 @@ static/
   "javaVersion": "JAVA_11",
   "loggingFramework": "LOGBACK",
   "persistenceFramework": "MYBATIS_PLUS",
-  "serviceArtifactIds": ["服务1", "服务2"]
+  "serviceArtifactIds": [
+    "服务1",
+    "服务2"
+  ]
 }
 ```
 
 ## 开发说明
 
 ### 添加新字段
+
 1. 在`ProjectConfigWizard.html`中添加表单字段
 2. 在`ProjectConfigWizard.js`中添加验证逻辑
 3. 更新配置保存和加载方法
 4. 更新配置摘要生成方法
 
 ### 修改验证规则
+
 1. 在`ProjectConfigWizard.js`的`validateStep*`方法中修改验证逻辑
 2. 确保验证错误信息清晰明确
 
 ### 自定义样式
+
 1. 在`components.css`中添加自定义样式
 2. 使用CSS变量支持主题切换
 3. 确保响应式设计

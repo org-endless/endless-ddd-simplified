@@ -8,6 +8,8 @@ import org.endless.ddd.simplified.starter.common.model.application.command.trans
  * create 2024/09/12 12:44
  * <p>
  * update 2024/09/12 12:45
+ * update 2025/07/31 22:58
+ * update 2025/07/31 22:58
  *
  * @author Deng Haozhi
  * @see CommandTransfer

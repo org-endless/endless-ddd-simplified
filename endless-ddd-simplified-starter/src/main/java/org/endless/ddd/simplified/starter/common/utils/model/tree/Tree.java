@@ -1,6 +1,5 @@
 package org.endless.ddd.simplified.starter.common.utils.model.tree;
 
-import cn.hutool.core.collection.CollUtil;
 import org.endless.ddd.simplified.starter.common.exception.utils.model.TreeException;
 import org.endless.ddd.simplified.starter.common.model.common.Transfer;
 import org.springframework.util.CollectionUtils;
@@ -118,7 +117,7 @@ public class Tree {
                 Object parentId = node.parentId();
                 Object id = node.fields().get(idFieldName);
                 if (parentId == null || !nodeMap.containsKey(parentId)) {
-                    if (CollUtil.isEmpty(parentIdSet) || parentIdSet.contains(id)) {
+                    if (CollectionUtils.isEmpty(parentIdSet) || parentIdSet.contains(id)) {
                         roots.add(node);
                     }
                 } else {

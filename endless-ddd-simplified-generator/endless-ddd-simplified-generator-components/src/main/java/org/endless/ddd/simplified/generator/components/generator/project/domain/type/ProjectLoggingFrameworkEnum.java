@@ -23,7 +23,7 @@ import org.endless.ddd.simplified.starter.common.exception.model.domain.type.Enu
 @ToString
 public enum ProjectLoggingFrameworkEnum implements DDDSimplifiedGeneratorEnum {
 
-    LOG4J("LOG4J", "log4j框架");
+    LOG4J2("LOG4J2", "log4j2框架");
 
     private final String code;
 

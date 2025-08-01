@@ -51,8 +51,7 @@ public class ProjectRestController implements DDDSimplifiedGeneratorRestControll
                 .map(ProjectCreateReqCTransfer::validate)
                 .orElseThrow(() -> new CommandReqTransferNullException("项目创建参数不能为空"));
         try {
-            projectDrivingAdapter.create(command);
-            return response().success("项目创建成功");
+            return response().success("项目创建成功", projectDrivingAdapter.create(command));
         } catch (JSONException | NullPointerException e) {
             throw new RestErrorException("项目创建失败", e);
         }

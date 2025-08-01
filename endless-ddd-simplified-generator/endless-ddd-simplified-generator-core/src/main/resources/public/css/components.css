@@ -101,7 +101,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .module-card:hover {
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .module-card h5 {
@@ -142,12 +142,12 @@ h1, h2, h3, h4, h5, h6 {
         flex-wrap: wrap;
         justify-content: center;
     }
-    
+
     .navbar .badge {
         font-size: 0.625rem;
         padding: 0.25rem 0.375rem;
     }
-    
+
     .navbar .bi-chevron-right {
         font-size: 0.625rem;
     }
@@ -245,7 +245,7 @@ h1, h2, h3, h4, h5, h6 {
     .navbar .d-flex.align-items-center {
         flex-wrap: wrap;
     }
-    
+
     .navbar .nav-item {
         margin-bottom: 0.5rem;
     }
@@ -256,11 +256,11 @@ h1, h2, h3, h4, h5, h6 {
         flex-direction: column;
         align-items: stretch !important;
     }
-    
+
     .navbar .nav-item {
         margin-bottom: 0.25rem;
     }
-    
+
     .navbar .form-select-sm {
         width: 100% !important;
     }
@@ -297,7 +297,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .d-grid.gap-2 .btn:hover {
     transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 /* 配置区域样式 */
@@ -315,15 +315,15 @@ h1, h2, h3, h4, h5, h6 {
         height: 30px;
         margin: 0 5px;
     }
-    
+
     .step-indicator .step::after {
         width: 10px;
     }
-    
+
     .module-card {
         padding: 15px;
     }
-    
+
     .config-section {
         padding: 15px;
     }
@@ -342,20 +342,22 @@ h1, h2, h3, h4, h5, h6 {
 .alert-container {
     position: fixed;
     top: 80px;
-    left: 20px;
-    z-index: 9999;
+    right: 20px;
+    z-index: 999;
     width: 350px;
     pointer-events: none;
+    max-width: 350px;
 }
 
 .alert-container .alert-item {
     pointer-events: auto;
-    margin-bottom: 10px;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     transition: all 0.3s ease;
-    animation: slideInLeft 0.3s ease-out;
+    animation: slideInRight 0.3s ease-out;
     position: relative;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .alert-container .alert-item:hover {
@@ -364,23 +366,35 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .alert-container .alert-item.fade-out {
-    animation: slideOutLeft 0.3s ease-in forwards;
+    animation: slideOutRight 0.3s ease-in forwards;
 }
 
 .alert-container .alert {
-    margin: 0;
+    margin: 8px;
     border: none;
     border-radius: 8px;
-    padding: 12px 16px;
+    padding: 8px;
     font-size: 0.9rem;
     line-height: 1.4;
+    position: relative;
+}
+
+.alert-container .alert.alert-dismissible {
+    margin: 0;
+    padding: 10px;
 }
 
 .alert-container .alert .alert-message {
     word-wrap: break-word;
     overflow-wrap: break-word;
-    margin-left: 30px;
-    padding-top: 2px;
+    word-break: break-word;
+    white-space: normal;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    display: block;
+    box-sizing: border-box;
 }
 
 .alert-container .btn-close {
@@ -389,16 +403,17 @@ h1, h2, h3, h4, h5, h6 {
     opacity: 0.6;
     transition: all 0.2s ease;
     border-radius: 50%;
-    width: 18px;
-    height: 18px;
+    width: 14px;
+    height: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: rgba(0, 0, 0, 0.1);
     border: none;
     position: absolute;
-    top: 8px;
-    left: 8px;
+    top: 2px;
+    right: 2px;
+    z-index: 10;
 }
 
 .alert-container .btn-close:hover {
@@ -411,8 +426,8 @@ h1, h2, h3, h4, h5, h6 {
 .alert-container .btn-close::after {
     content: '';
     position: absolute;
-    width: 8px;
-    height: 1.2px;
+    width: 6px;
+    height: 1px;
     background-color: currentColor;
     border-radius: 1px;
 }
@@ -426,9 +441,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* 动画效果 */
-@keyframes slideInLeft {
+@keyframes slideInRight {
     from {
-        transform: translateX(-100%);
+        transform: translateX(100%);
         opacity: 0;
     }
     to {
@@ -437,32 +452,109 @@ h1, h2, h3, h4, h5, h6 {
     }
 }
 
-@keyframes slideOutLeft {
+@keyframes slideOutRight {
     from {
         transform: translateX(0);
         opacity: 1;
     }
     to {
-        transform: translateX(-100%);
+        transform: translateX(100%);
         opacity: 0;
     }
+}
+
+/* 文件处理器样式 */
+.upload-area {
+    border: 2px dashed var(--bs-border-color);
+    border-radius: 8px;
+    padding: 40px;
+    text-align: center;
+    transition: all 0.3s ease;
+    background: rgba(0, 0, 0, 0.02);
+    cursor: pointer;
+}
+
+.upload-area:hover,
+.upload-area.drag-over {
+    border-color: var(--bs-primary);
+    background: rgba(var(--bs-primary-rgb), 0.05);
+}
+
+.upload-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.upload-icon {
+    font-size: 3rem;
+    color: var(--bs-primary);
+    opacity: 0.7;
+}
+
+.file-item {
+    background: rgba(0, 0, 0, 0.02);
+    transition: all 0.2s ease;
+}
+
+.file-item:hover {
+    background: rgba(0, 0, 0, 0.05);
+    transform: translateY(-1px);
+}
+
+.file-name {
+    font-weight: 500;
+}
+
+/* 暗黑模式适配 */
+.dark-mode .upload-area {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--dark-border-color);
+}
+
+.dark-mode .upload-area:hover,
+.dark-mode .upload-area.drag-over {
+    border-color: var(--bs-primary);
+    background: rgba(var(--bs-primary-rgb), 0.1);
+}
+
+.dark-mode .file-item {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--dark-border-color);
+}
+
+.dark-mode .file-item:hover {
+    background: rgba(255, 255, 255, 0.1);
 }
 
 /* 响应式设计 */
 @media (max-width: 768px) {
     .alert-container {
-        left: 10px;
         right: 10px;
+        left: 10px;
         width: auto;
     }
-    
+
     .alert-container .alert-item {
         margin-bottom: 8px;
     }
-    
+
     .alert-container .alert {
-        padding: 10px 14px;
+        padding: 8px;
         font-size: 0.85rem;
+    }
+
+    .alert-container .alert .alert-message {
+        padding: 0;
+    }
+
+    .upload-area {
+        padding: 20px;
+    }
+
+    .upload-icon {
+        font-size: 2rem;
     }
 }
 
@@ -505,7 +597,7 @@ h1, h2, h3, h4, h5, h6 {
     align-items: center;
     justify-content: space-between;
     height: 100%;
-    padding: 0 20px;
+    padding: 0 10px;
     max-width: 1400px;
     margin: 0 auto;
 }
@@ -633,15 +725,15 @@ body {
     .app-bar-container {
         padding: 0 15px;
     }
-    
+
     .app-bar-title {
         font-size: 1.1rem;
     }
-    
+
     .app-bar-subtitle {
         display: none;
     }
-    
+
     .app-bar-center {
         display: none;
     }
@@ -651,20 +743,20 @@ body {
     .app-bar {
         height: 50px;
     }
-    
+
     body {
         padding-top: 50px;
     }
-    
+
     .app-bar-container {
         padding: 0 10px;
     }
-    
+
     .app-bar-logo {
         width: 28px;
         height: 28px;
     }
-    
+
     .app-bar-title {
         font-size: 1rem;
     }

@@ -15,16 +15,8 @@ class ContentManager {
      * 显示项目配置页面
      */
     static showProjectConfig() {
-        // 隐藏聚合设计内容
-        $('#domain-design-content').hide();
-        
-        // 显示项目配置内容
-        $('#project-config-content').show();
-        
-        // 更新按钮状态
-        this.updateButtonStates('project-config');
-        
-        console.log('切换到项目配置页面');
+        // 跳转到项目创建页面
+        window.location.href = 'components/ProjectWizard.html';
     }
 
     /**

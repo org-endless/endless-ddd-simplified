@@ -17,7 +17,7 @@ RUN chmod -R 755 ${HOME}
 WORKDIR ${HOME}
 
 # 暴露端口
-EXPOSE 80
+EXPOSE 60001
 
 # 启动应用
 CMD [ "/bin/sh", "-c", "ulimit -n 65536 && ulimit -s 16384 && ${STARTER}" ]

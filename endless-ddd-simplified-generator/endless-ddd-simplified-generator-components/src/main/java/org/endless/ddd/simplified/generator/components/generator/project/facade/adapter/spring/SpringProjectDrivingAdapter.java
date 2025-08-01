@@ -2,6 +2,7 @@ package org.endless.ddd.simplified.generator.components.generator.project.facade
 
 import org.endless.ddd.simplified.generator.components.generator.project.application.command.handler.ProjectCommandHandler;
 import org.endless.ddd.simplified.generator.components.generator.project.application.command.transfer.ProjectCreateReqCTransfer;
+import org.endless.ddd.simplified.generator.components.generator.project.application.command.transfer.ProjectCreateRespCTransfer;
 import org.endless.ddd.simplified.generator.components.generator.project.application.query.handler.ProjectQueryHandler;
 import org.endless.ddd.simplified.generator.components.generator.project.facade.adapter.ProjectDrivingAdapter;
 
@@ -35,7 +36,7 @@ public class SpringProjectDrivingAdapter implements ProjectDrivingAdapter {
     }
 
     @Override
-    public void create(ProjectCreateReqCTransfer command) {
-        projectCommandHandler.create(command);
+    public ProjectCreateRespCTransfer create(ProjectCreateReqCTransfer command) {
+        return projectCommandHandler.create(command);
     }
 }

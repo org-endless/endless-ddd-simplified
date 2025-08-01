@@ -2,6 +2,7 @@ package org.endless.ddd.simplified.generator.components.generator.service.applic
 
 import org.endless.ddd.simplified.generator.common.model.application.command.handler.DDDSimplifiedGeneratorCommandHandler;
 import org.endless.ddd.simplified.generator.components.generator.service.application.command.transfer.ServiceCreateReqCTransfer;
+import org.endless.ddd.simplified.generator.components.generator.service.application.command.transfer.ServiceCreateRespCTransfer;
 import org.endless.ddd.simplified.generator.components.generator.service.domain.entity.ServiceAggregate;
 
 /**
@@ -19,6 +20,6 @@ import org.endless.ddd.simplified.generator.components.generator.service.domain.
  */
 public interface ServiceCommandHandler extends DDDSimplifiedGeneratorCommandHandler<ServiceAggregate> {
 
-    void create(ServiceCreateReqCTransfer command);
+    ServiceCreateRespCTransfer create(ServiceCreateReqCTransfer command);
 
 }

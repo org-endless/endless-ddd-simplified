@@ -23,7 +23,7 @@ import org.endless.ddd.simplified.starter.common.exception.model.domain.type.Enu
 @ToString
 public enum ProjectPersistenceFrameworkEnum implements DDDSimplifiedGeneratorEnum {
 
-    JPA("JPA", "JPA框架"),
+    // JPA("JPA", "JPA框架"),
     MYBATIS_PLUS("MYBATIS_PLUS", "Mybatis-Plus框架");
 
     private final String code;

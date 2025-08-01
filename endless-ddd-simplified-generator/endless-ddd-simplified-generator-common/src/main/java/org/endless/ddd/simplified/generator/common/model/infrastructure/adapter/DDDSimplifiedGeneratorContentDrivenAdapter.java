@@ -4,7 +4,6 @@ import com.alibaba.fastjson2.JSON;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import org.endless.ddd.simplified.generator.common.model.domain.anticorruption.DDDSimplifiedGeneratorDrivenAdapter;
-import org.endless.ddd.simplified.starter.common.model.sidecar.rest.RestResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.DumperOptions;
@@ -26,7 +25,7 @@ import java.util.LinkedHashMap;
  */
 public interface DDDSimplifiedGeneratorContentDrivenAdapter extends DDDSimplifiedGeneratorDrivenAdapter {
 
-    Logger log = LoggerFactory.getLogger(RestResponse.class);
+    Logger log = LoggerFactory.getLogger(DDDSimplifiedGeneratorContentDrivenAdapter.class);
 
     default <T> String yaml(T object) {
         if (object == null) {

@@ -1,219 +1,254 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Endless DDD 代码生成器</title>
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/bootstrap-icons.css" rel="stylesheet">
-    <link href="css/components.css" rel="stylesheet">
-    <link rel="icon" href="favicon.ico">
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/bootstrap-icons.css" rel="stylesheet" />
+    <link href="css/components.css" rel="stylesheet" />
+    <link href="favicon.ico" rel="icon" />
     <style>
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-        }
-        
-        .hero-section {
-            text-align: center;
-            padding: 4rem 0;
-            color: white;
-        }
-        
-        .hero-section h1 {
-            font-size: 3.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-        
-        .hero-section p {
-            font-size: 1.25rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-        }
-        
-        .feature-card {
-            background: white;
-            border-radius: 15px;
-            padding: 2rem;
-            margin: 1rem 0;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-        }
-        
-        .feature-icon {
-            font-size: 3rem;
-            color: #3B82F6;
-            margin-bottom: 1rem;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #3B82F6 0%, #1E3A8A 100%);
-            border: none;
-            padding: 1rem 2rem;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 1.1rem;
-            transition: transform 0.3s ease;
-        }
-        
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #2563EB 0%, #1E40AF 100%);
-            transform: translateY(-2px);
-        }
-        
-        .stats-section {
-            background: rgba(255,255,255,0.1);
-            border-radius: 15px;
-            padding: 2rem;
-            margin: 2rem 0;
-            backdrop-filter: blur(10px);
-        }
-        
-        .stat-item {
-            text-align: center;
-            color: white;
-        }
-        
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            display: block;
-        }
-        
-        .stat-label {
-            font-size: 1rem;
-            opacity: 0.8;
-        }
-        
-        .footer {
-            background: rgba(0,0,0,0.1);
-            color: white;
-            text-align: center;
-            padding: 2rem 0;
-            margin-top: 4rem;
-        }
+      body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+      }
+
+      .hero-section {
+        text-align: center;
+        padding: 4rem 0;
+        color: white;
+      }
+
+      .hero-section h1 {
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .hero-section p {
+        font-size: 1.25rem;
+        margin-bottom: 2rem;
+        opacity: 0.9;
+      }
+
+      .feature-card {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        margin: 1rem 0;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      }
+
+      .feature-icon {
+        font-size: 3rem;
+        color: #3b82f6;
+        margin-bottom: 1rem;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: transform 0.3s ease;
+      }
+
+      .btn-primary:hover {
+        background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+        transform: translateY(-2px);
+      }
+
+      .stats-section {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        padding: 2rem;
+        margin: 2rem 0;
+        backdrop-filter: blur(10px);
+      }
+
+      .stat-item {
+        text-align: center;
+        color: white;
+      }
+
+      .stat-number {
+        font-size: 2.5rem;
+        font-weight: 700;
+        display: block;
+      }
+
+      .stat-label {
+        font-size: 1rem;
+        opacity: 0.8;
+      }
+
+      .footer {
+        background: rgba(0, 0, 0, 0.1);
+        color: white;
+        text-align: center;
+        padding: 2rem 0;
+        margin-top: 4rem;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <div class="hero-section">
-            <h1><i class="bi bi-gear-wide-connected"></i> Endless DDD</h1>
-            <p>基于领域驱动设计的代码生成器</p>
-            <a href="components/ProjectWizard.html" class="btn btn-primary btn-lg">
-                <i class="bi bi-plus-circle"></i> 创建新项目
-            </a>
+      <div class="hero-section">
+        <h1><i class="bi bi-gear-wide-connected"></i> Endless DDD</h1>
+        <p>基于领域驱动设计的代码生成器</p>
+        <div class="btn-group" role="group">
+          <a
+            class="btn btn-primary btn-lg"
+            href="components/ProjectWizard.html">
+            <i class="bi bi-plus-circle"></i> 创建新项目
+          </a>
+          <a
+            class="btn btn-outline-light btn-lg"
+            href="components/FileExplorer.html">
+            <i class="bi bi-folder2-open"></i> 文件浏览器
+          </a>
+          <a class="btn btn-outline-light btn-lg" href="test-file-writer.html">
+            <i class="bi bi-file-earmark-arrow-down"></i> 文件写入测试
+          </a>
         </div>
-        
+      </div>
+
+      <div class="row">
+        <div class="col-md-4">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="bi bi-layers"></i>
+            </div>
+            <h4>分层架构</h4>
+            <p>
+              严格按照DDD分层架构生成代码，包括Application、Domain、Facade、Infrastructure等层。
+            </p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="bi bi-diagram-3"></i>
+            </div>
+            <h4>聚合设计</h4>
+            <p>自动生成聚合根、实体、值对象，支持完整的DDD聚合设计模式。</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="bi bi-code-slash"></i>
+            </div>
+            <h4>代码规范</h4>
+            <p>遵循最佳实践，生成高质量、可维护的代码，支持自定义代码模板。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-section">
         <div class="row">
-            <div class="col-md-4">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="bi bi-layers"></i>
-                    </div>
-                    <h4>分层架构</h4>
-                    <p>严格按照DDD分层架构生成代码，包括Application、Domain、Facade、Infrastructure等层。</p>
-                </div>
+          <div class="col-md-3">
+            <div class="stat-item">
+              <span class="stat-number">4</span>
+              <span class="stat-label">架构分层</span>
             </div>
-            <div class="col-md-4">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="bi bi-diagram-3"></i>
-                    </div>
-                    <h4>聚合设计</h4>
-                    <p>自动生成聚合根、实体、值对象，支持完整的DDD聚合设计模式。</p>
-                </div>
+          </div>
+          <div class="col-md-3">
+            <div class="stat-item">
+              <span class="stat-number">∞</span>
+              <span class="stat-label">无限可能</span>
             </div>
-            <div class="col-md-4">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="bi bi-code-slash"></i>
-                    </div>
-                    <h4>代码规范</h4>
-                    <p>遵循最佳实践，生成高质量、可维护的代码，支持自定义代码模板。</p>
-                </div>
+          </div>
+          <div class="col-md-3">
+            <div class="stat-item">
+              <span class="stat-number">100%</span>
+              <span class="stat-label">DDD规范</span>
             </div>
+          </div>
+          <div class="col-md-3">
+            <div class="stat-item">
+              <span class="stat-number">⚡</span>
+              <span class="stat-label">快速生成</span>
+            </div>
+          </div>
         </div>
-        
-        <div class="stats-section">
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="stat-item">
-                        <span class="stat-number">4</span>
-                        <span class="stat-label">架构分层</span>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="stat-item">
-                        <span class="stat-number">∞</span>
-                        <span class="stat-label">无限可能</span>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="stat-item">
-                        <span class="stat-number">100%</span>
-                        <span class="stat-label">DDD规范</span>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="stat-item">
-                        <span class="stat-number">⚡</span>
-                        <span class="stat-label">快速生成</span>
-                    </div>
-                </div>
-            </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="feature-card">
+            <h5><i class="bi bi-list-check"></i> 支持的功能</h5>
+            <ul class="list-unstyled">
+              <li>
+                <i class="bi bi-check-circle text-success"></i> 项目基础结构生成
+              </li>
+              <li>
+                <i class="bi bi-check-circle text-success"></i> 聚合根和实体生成
+              </li>
+              <li>
+                <i class="bi bi-check-circle text-success"></i>
+                命令查询分离(CQRS)
+              </li>
+              <li>
+                <i class="bi bi-check-circle text-success"></i> 领域事件支持
+              </li>
+              <li>
+                <i class="bi bi-check-circle text-success"></i> 仓储模式实现
+              </li>
+              <li>
+                <i class="bi bi-check-circle text-success"></i> 适配器模式
+              </li>
+            </ul>
+          </div>
         </div>
-        
-        <div class="row">
-            <div class="col-md-6">
-                <div class="feature-card">
-                    <h5><i class="bi bi-list-check"></i> 支持的功能</h5>
-                    <ul class="list-unstyled">
-                        <li><i class="bi bi-check-circle text-success"></i> 项目基础结构生成</li>
-                        <li><i class="bi bi-check-circle text-success"></i> 聚合根和实体生成</li>
-                        <li><i class="bi bi-check-circle text-success"></i> 命令查询分离(CQRS)</li>
-                        <li><i class="bi bi-check-circle text-success"></i> 领域事件支持</li>
-                        <li><i class="bi bi-check-circle text-success"></i> 仓储模式实现</li>
-                        <li><i class="bi bi-check-circle text-success"></i> 适配器模式</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="feature-card">
-                    <h5><i class="bi bi-gear"></i> 技术栈</h5>
-                    <ul class="list-unstyled">
-                        <li><i class="bi bi-check-circle text-success"></i> Spring Boot 3.x</li>
-                        <li><i class="bi bi-check-circle text-success"></i> Java 8/11/17/21</li>
-                        <li><i class="bi bi-check-circle text-success"></i> MyBatis Plus</li>
-                        <li><i class="bi bi-check-circle text-success"></i> Logback/Log4j2</li>
-                        <li><i class="bi bi-check-circle text-success"></i> Spring Doc</li>
-                        <li><i class="bi bi-check-circle text-success"></i> Lombok</li>
-                    </ul>
-                </div>
-            </div>
+        <div class="col-md-6">
+          <div class="feature-card">
+            <h5><i class="bi bi-gear"></i> 技术栈</h5>
+            <ul class="list-unstyled">
+              <li>
+                <i class="bi bi-check-circle text-success"></i> Spring Boot 3.x
+              </li>
+              <li>
+                <i class="bi bi-check-circle text-success"></i> Java 8/11/17/21
+              </li>
+              <li>
+                <i class="bi bi-check-circle text-success"></i> MyBatis Plus
+              </li>
+              <li><i class="bi bi-check-circle text-success"></i> Log4j2</li>
+              <li>
+                <i class="bi bi-check-circle text-success"></i> Spring Doc
+              </li>
+              <li><i class="bi bi-check-circle text-success"></i> Lombok</li>
+            </ul>
+          </div>
         </div>
+      </div>
     </div>
-    
+
     <footer class="footer">
-        <div class="container">
-            <p>&copy; 2024 Endless DDD. 基于领域驱动设计的代码生成器</p>
-            <p><small>让DDD开发变得简单高效</small></p>
-        </div>
+      <div class="container">
+        <p>&copy; 2024 Endless DDD. 基于领域驱动设计的代码生成器</p>
+        <p><small>让DDD开发变得简单高效</small></p>
+      </div>
     </footer>
 
-    <script src="js/bootstrap.bundle.min.js"></script>
-    <script src="js/AppBar.js"></script>
+    <script src="js/lib/bootstrap.bundle.min.js"></script>
+    <script src="js/core/AppBar.js"></script>
     <script>
-        // 初始化AppBar
-        document.addEventListener('DOMContentLoaded', function() {
-            new AppBar();
-        });
+      // 初始化AppBar
+      document.addEventListener("DOMContentLoaded", function () {
+        new AppBar();
+      });
     </script>
-</body>
-</html> 
+  </body>
+</html>

@@ -18,6 +18,6 @@ import org.endless.ddd.simplified.generator.components.generator.service.domain.
  */
 public interface ServiceDrivenAdapter extends DDDSimplifiedGeneratorDrivenAdapter {
 
-    void save(ServiceAggregate aggregate);
+    String yaml(ServiceAggregate aggregate);
 
 }

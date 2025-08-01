@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>文件写入功能测试</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/bootstrap-icons.css" rel="stylesheet" />
+    <style>
+      body {
+        padding: 2rem;
+        background: #f8f9fa;
+      }
+      .test-container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 10px;
+        padding: 2rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      .test-section {
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 1rem;
+        margin: 1rem 0;
+      }
+      .file-content {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        padding: 1rem;
+        font-family: monospace;
+        font-size: 0.875rem;
+        max-height: 200px;
+        overflow-y: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="test-container">
+      <h2><i class="bi bi-file-earmark-arrow-down"></i> 文件写入功能测试</h2>
+
+      <div class="alert alert-info">
+        <h5>功能说明：</h5>
+        <ul>
+          <li>测试现代浏览器的 File System Access API</li>
+          <li>降级支持传统文件下载方式</li>
+          <li>模拟项目创建响应数据</li>
+          <li>验证文件写入和下载功能</li>
+        </ul>
+      </div>
+
+      <div class="test-section">
+        <h5>浏览器支持检测</h5>
+        <div id="browserSupport"></div>
+      </div>
+
+      <div class="test-section">
+        <h5>模拟项目数据</h5>
+        <div class="mb-3">
+          <button class="btn btn-primary" onclick="generateTestData()">
+            生成测试数据
+          </button>
+          <button class="btn btn-secondary" onclick="clearTestData()">
+            清空数据
+          </button>
+        </div>
+        <div id="testData"></div>
+      </div>
+
+      <div class="test-section">
+        <h5>文件写入测试</h5>
+        <div class="mb-3">
+          <button class="btn btn-success" onclick="testFileSystemWrite()">
+            测试文件系统写入
+          </button>
+          <button class="btn btn-info" onclick="testFileDownload()">
+            测试文件下载
+          </button>
+        </div>
+        <div id="writeResults"></div>
+      </div>
+
+      <div class="mt-4">
+        <a href="index.html" class="btn btn-outline-primary">
+          <i class="bi bi-house"></i> 返回首页
+        </a>
+      </div>
+    </div>
+
+    <script src="js/core/FileWriter.js"></script>
+    <script src="js/core/AlertManager.js"></script>
+    <script>
+      let fileWriter;
+      let alertManager;
+      let testProjectData;
+
+      // 页面加载完成后初始化
+      document.addEventListener("DOMContentLoaded", function () {
+        fileWriter = new FileWriter();
+        alertManager = new AlertManager();
+
+        // 显示浏览器支持信息
+        showBrowserSupport();
+
+        // 生成默认测试数据
+        generateTestData();
+      });
+
+      function showBrowserSupport() {
+        const features = fileWriter.getSupportedFeatures();
+        const supportDiv = document.getElementById("browserSupport");
+
+        supportDiv.innerHTML = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>API支持情况：</h6>
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                File System Access API
+                                <span class="badge ${
+                                  features.fileSystemAccess
+                                    ? "bg-success"
+                                    : "bg-danger"
+                                } rounded-pill">
+                                    ${
+                                      features.fileSystemAccess
+                                        ? "支持"
+                                        : "不支持"
+                                    }
+                                </span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                File System Writable Stream
+                                <span class="badge ${
+                                  features.fileSystem
+                                    ? "bg-success"
+                                    : "bg-danger"
+                                } rounded-pill">
+                                    ${features.fileSystem ? "支持" : "不支持"}
+                                </span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                文件下载
+                                <span class="badge ${
+                                  features.download ? "bg-success" : "bg-danger"
+                                } rounded-pill">
+                                    ${features.download ? "支持" : "不支持"}
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>功能描述：</h6>
+                        <div class="alert alert-info">
+                            ${features.description}
+                        </div>
+                    </div>
+                </div>
+            `;
+      }
+
+      function generateTestData() {
+        testProjectData = {
+          rootPath: "D:\\projects\\test-project",
+          packageName: "com.example.testproject",
+          files: [
+            {
+              rootPath: "D:\\projects\\test-project\\design",
+              packageName: "com.example.testproject",
+              fileName: "test-project.yaml",
+              content: `project:
+  artifactId: test-project
+  groupId: com.example
+  name: 测试项目
+  version: 1.0.0
+  author: 测试用户
+  description: 这是一个测试项目
+  rootPath: D:\\projects\\test-project
+  basePackage: com.example.testproject
+  javaVersion: 8
+  loggingFramework: LOG4J2
+  persistenceFramework: MYBATIS_PLUS
+  enableSpringDoc: true
+  serviceArtifactIds:
+    - user-service
+    - order-service`,
+            },
+            {
+              rootPath: "D:\\projects\\test-project",
+              packageName: "com.example.testproject",
+              fileName: "pom.xml",
+              content: `<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <groupId>com.example</groupId>
+    <artifactId>test-project</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+    
+    <name>测试项目</name>
+    <description>这是一个测试项目</description>
+    
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+</project>`,
+            },
+            {
+              rootPath:
+                "D:\\projects\\test-project\\src\\main\\java\\com\\example\\testproject",
+              packageName: "com.example.testproject",
+              fileName: "Application.java",
+              content: `package com.example.testproject;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class Application {
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
+}`,
+            },
+          ],
+        };
+
+        displayTestData();
+      }
+
+      function displayTestData() {
+        const dataDiv = document.getElementById("testData");
+
+        let html = '<div class="row">';
+        html += '<div class="col-md-6">';
+        html += "<h6>项目信息：</h6>";
+        html += `<p><strong>根路径：</strong> ${testProjectData.rootPath}</p>`;
+        html += `<p><strong>包名：</strong> ${testProjectData.packageName}</p>`;
+        html += `<p><strong>文件数量：</strong> ${testProjectData.files.length}</p>`;
+        html += "</div>";
+
+        html += '<div class="col-md-6">';
+        html += "<h6>文件列表：</h6>";
+        html += '<ul class="list-group">';
+        testProjectData.files.forEach((file, index) => {
+          html += `<li class="list-group-item">
+                    <strong>${file.fileName}</strong><br>
+                    <small class="text-muted">${file.rootPath}</small>
+                </li>`;
+        });
+        html += "</ul>";
+        html += "</div>";
+        html += "</div>";
+
+        dataDiv.innerHTML = html;
+      }
+
+      function clearTestData() {
+        testProjectData = null;
+        document.getElementById("testData").innerHTML =
+          '<div class="alert alert-warning">测试数据已清空</div>';
+      }
+
+      async function testFileSystemWrite() {
+        const resultsDiv = document.getElementById("writeResults");
+        resultsDiv.innerHTML =
+          '<div class="alert alert-info">正在测试文件系统写入...</div>';
+
+        try {
+          await fileWriter.writeProjectFiles(testProjectData);
+          resultsDiv.innerHTML =
+            '<div class="alert alert-success">文件系统写入测试成功！</div>';
+          alertManager.showSuccess("文件系统写入测试成功！");
+        } catch (error) {
+          console.error("文件系统写入测试失败:", error);
+          resultsDiv.innerHTML = `<div class="alert alert-danger">文件系统写入测试失败：${error.message}</div>`;
+          alertManager.showError("文件系统写入测试失败：" + error.message);
+        }
+      }
+
+      async function testFileDownload() {
+        const resultsDiv = document.getElementById("writeResults");
+        resultsDiv.innerHTML =
+          '<div class="alert alert-info">正在测试文件下载...</div>';
+
+        try {
+          await fileWriter.downloadProjectFiles(testProjectData);
+          resultsDiv.innerHTML =
+            '<div class="alert alert-success">文件下载测试成功！</div>';
+          alertManager.showSuccess("文件下载测试成功！");
+        } catch (error) {
+          console.error("文件下载测试失败:", error);
+          resultsDiv.innerHTML = `<div class="alert alert-danger">文件下载测试失败：${error.message}</div>`;
+          alertManager.showError("文件下载测试失败：" + error.message);
+        }
+      }
+    </script>
+  </body>
+</html>

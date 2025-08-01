@@ -1,5 +1,6 @@
 package org.endless.ddd.simplified.generator.components.generator.project.domain.entity;
 
+import com.alibaba.fastjson2.annotation.JSONType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -29,6 +30,7 @@ import java.util.List;
 @Getter
 @ToString
 @Builder(buildMethodName = "innerBuild")
+@JSONType(orders = {"projectArtifactId", "groupId", "name", "description", "version", "author", "rootPath", "basePackage", "enableSpringDoc", "javaVersion", "loggingFramework", "persistenceFramework", "serviceArtifactIds", "createAt", "updateAt"})
 public class ProjectAggregate implements DDDSimplifiedGeneratorAggregate {
 
     /**

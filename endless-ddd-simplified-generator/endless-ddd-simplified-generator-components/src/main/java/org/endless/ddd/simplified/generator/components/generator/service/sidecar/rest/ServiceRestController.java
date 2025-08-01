@@ -51,8 +51,7 @@ public class ServiceRestController implements DDDSimplifiedGeneratorRestControll
                 .map(ServiceCreateReqCTransfer::validate)
                 .orElseThrow(() -> new CommandReqTransferNullException("服务创建参数不能为空"));
         try {
-            serviceDrivingAdapter.create(command);
-            return response().success("服务创建成功");
+            return response().success("服务创建成功", serviceDrivingAdapter.create(command));
         } catch (JSONException | NullPointerException e) {
             throw new RestErrorException("服务创建失败", e);
         }
