@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="ERROR" monitorInterval="300">
+    <Properties>
+        <property name="APP_NAME" value="endless-ddd-simplified-generator"/>
+        <property name="LOG_HOME" value="logs/${APP_NAME}"/>
+        <property name="LOG_NAME" value="${APP_NAME}"/>
+        <property name="LOG_PATTERN_ASPECT">[%d{yyyy-MM-dd HH:mm:ss.SSS}][%-5p][%T][%c.%M:%L]%msg%xEx%n</property>
+        <property name="LOG_PATTERN">[%d{yyyy-MM-dd HH:mm:ss.SSS}][%-5p][%T][%c.%M:%L]%msg%xEx%n</property>
+        <property name="FILE_SIZE">20MB</property>
+    </Properties>
+
+    <Appenders>
+        <Console name="Console_aspect" target="SYSTEM_OUT">
+            <PatternLayout pattern="${LOG_PATTERN_ASPECT}" charset="UTF-8"/>
+        </Console>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${LOG_PATTERN}" charset="UTF-8"/>
+        </Console>
+        <RollingRandomAccessFile name="RollingRandomAccessFile"
+                                 fileName="${LOG_HOME}/${LOG_NAME}.log"
+                                 filePattern="${LOG_HOME}/%d{yyyyMMdd}/${LOG_NAME}-%d{yyyyMMdd}-%i.log">
+            <PatternLayout pattern="${LOG_PATTERN}" charset="UTF-8"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="${FILE_SIZE}"/>
+            </Policies>
+            <DefaultRolloverStrategy max="20"/>
+        </RollingRandomAccessFile>
+    </Appenders>
+    <Loggers>
+        <Logger name="org.endless.ddd.simplified.starter.common.config.log.aspect.LogAspect" level="ERROR"
+                additivity="false">
+            <AppenderRef ref="Console_aspect"/>
+        </Logger>
+        <Root level="ERROR">
+            <AppenderRef ref="RollingRandomAccessFile"/>
+        </Root>
+    </Loggers>
+</Configuration>
