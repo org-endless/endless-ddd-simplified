@@ -1,0 +1,40 @@
+{
+  productName: "EndlessDDD",
+  version: "1.0.0",
+  identifier: "org.endless.ddd.generator",
+  build: {
+    beforeBuildCommand: "",
+    beforeDevCommand: "",
+    frontendDist: "public",
+  },
+  bundle: {
+    active: true,
+    icon: [
+      "public/favicon.ico"
+    ],
+    resources: [
+      "lib",
+      "config",
+      "public",
+      "data"
+    ],
+    targets: [
+      "msi",
+      "deb",
+      "dmg"
+    ],
+  },
+  app: {
+    windows: [
+      {
+        label: "main",
+        title: "EndlessDDD",
+        width: 1024,
+        height: 768,
+        resizable: true,
+        decorations: true,
+        center: true,
+      },
+    ],
+  },
+}

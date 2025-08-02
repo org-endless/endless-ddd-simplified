@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tauri环境测试</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background: #f8f9fa;
+            padding: 20px;
+        }
+        .test-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .status {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .warning { background: #fff3cd; color: #856404; }
+        .info { background: #d1ecf1; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="test-card">
+                    <div class="card-body">
+                        <h2 class="card-title">
+                            <i class="bi bi-gear"></i> Tauri环境测试
+                        </h2>
+                        
+                        <div id="environment-status"></div>
+                        
+                        <div class="mt-3">
+                            <button class="btn btn-primary" onclick="testEnvironment()">
+                                <i class="bi bi-play"></i> 测试环境
+                            </button>
+                            <button class="btn btn-success" onclick="testInvoke()">
+                                <i class="bi bi-gear"></i> 测试invoke
+                            </button>
+                            <button class="btn btn-info" onclick="testFolderSelect()">
+                                <i class="bi bi-folder"></i> 测试文件夹选择
+                            </button>
+                        </div>
+                        
+                        <div id="test-result" class="mt-3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/lib/bootstrap.bundle.min.js"></script>
+    <script>
+        function updateEnvironment() {
+            const status = document.getElementById('environment-status');
+            
+            // Tauri 2.x API检查
+            const hasInternals = !!window.__TAURI_INTERNALS__;
+            const hasInvoke = !!(window.__TAURI_INTERNALS__?.invoke);
+            const hasTauri = !!window.__TAURI__;
+            const hasTauriInvoke = !!(window.__TAURI__?.tauri?.invoke);
+            
+            status.innerHTML = `
+                <div class="status ${hasInternals ? 'success' : 'error'}">
+                    <strong>Tauri 2.x API:</strong><br>
+                    window.__TAURI_INTERNALS__: ${hasInternals ? '✅ 存在' : '❌ 不存在'}<br>
+                    window.__TAURI_INTERNALS__.invoke: ${hasInvoke ? '✅ 存在' : '❌ 不存在'}
+                </div>
+                <div class="status ${hasTauri ? 'success' : 'error'}">
+                    <strong>Tauri 1.x API:</strong><br>
+                    window.__TAURI__: ${hasTauri ? '✅ 存在' : '❌ 不存在'}<br>
+                    window.__TAURI__.tauri.invoke: ${hasTauriInvoke ? '✅ 存在' : '❌ 不存在'}
+                </div>
+            `;
+        }
+
+        function testEnvironment() {
+            const result = document.getElementById('test-result');
+            result.innerHTML = '<div class="status info">测试中...</div>';
+            
+            const hasInternals = !!window.__TAURI_INTERNALS__;
+            const hasInvoke = !!(window.__TAURI_INTERNALS__?.invoke);
+            
+            if (hasInternals && hasInvoke) {
+                result.innerHTML = '<div class="status success">✅ Tauri环境正常 (使用2.x API)</div>';
+            } else if (window.__TAURI__?.tauri?.invoke) {
+                result.innerHTML = '<div class="status success">✅ Tauri环境正常 (使用1.x API)</div>';
+            } else {
+                result.innerHTML = '<div class="status error">❌ Tauri环境不可用</div>';
+            }
+        }
+
+        async function testInvoke() {
+            const result = document.getElementById('test-result');
+            result.innerHTML = '<div class="status info">测试invoke中...</div>';
+            
+            try {
+                let invokeFunction = null;
+                let apiVersion = '';
+                
+                if (window.__TAURI_INTERNALS__?.invoke) {
+                    invokeFunction = window.__TAURI_INTERNALS__.invoke;
+                    apiVersion = '2.x';
+                } else if (window.__TAURI__?.tauri?.invoke) {
+                    invokeFunction = window.__TAURI__.tauri.invoke;
+                    apiVersion = '1.x';
+                }
+                
+                if (invokeFunction) {
+                    const response = await invokeFunction('get_default_install_path');
+                    result.innerHTML = `<div class="status success">✅ invoke测试成功 (${apiVersion} API): ${response}</div>`;
+                } else {
+                    result.innerHTML = '<div class="status error">❌ 没有找到可用的invoke函数</div>';
+                }
+            } catch (error) {
+                result.innerHTML = `<div class="status error">❌ invoke测试失败: ${error.message}</div>`;
+            }
+        }
+
+        async function testFolderSelect() {
+            const result = document.getElementById('test-result');
+            result.innerHTML = '<div class="status info">测试文件夹选择中...</div>';
+            
+            try {
+                let invokeFunction = null;
+                let apiVersion = '';
+                
+                if (window.__TAURI_INTERNALS__?.invoke) {
+                    invokeFunction = window.__TAURI_INTERNALS__.invoke;
+                    apiVersion = '2.x';
+                } else if (window.__TAURI__?.tauri?.invoke) {
+                    invokeFunction = window.__TAURI__.tauri.invoke;
+                    apiVersion = '1.x';
+                }
+                
+                if (invokeFunction) {
+                    const response = await invokeFunction('select_folder');
+                    if (response && response.success === 'true') {
+                        result.innerHTML = `<div class="status success">✅ 文件夹选择成功 (${apiVersion} API): ${response.full_path}</div>`;
+                    } else {
+                        result.innerHTML = `<div class="status error">❌ 文件夹选择失败: ${response.error_message || '未知错误'}</div>`;
+                    }
+                } else {
+                    result.innerHTML = '<div class="status error">❌ 没有找到可用的invoke函数</div>';
+                }
+            } catch (error) {
+                result.innerHTML = `<div class="status error">❌ 文件夹选择测试失败: ${error.message}</div>`;
+            }
+        }
+
+        // 页面加载时自动检测
+        document.addEventListener('DOMContentLoaded', function() {
+            updateEnvironment();
+            testEnvironment();
+        });
+    </script>
+</body>
+</html>

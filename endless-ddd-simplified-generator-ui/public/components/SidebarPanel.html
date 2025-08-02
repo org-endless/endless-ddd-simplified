@@ -1,0 +1,179 @@
+<!-- 左侧边栏组件 -->
+<div class="col-md-4">
+    <!-- 新建功能 -->
+    <div class="module-card mb-3">
+        <h5><i class="bi bi-plus-circle"></i> 新建功能</h5>
+        <div class="d-grid gap-2">
+            <button class="btn btn-success" onclick="NewItemManager.showNewProjectModal()">
+                <i class="bi bi-folder-plus"></i> 新建项目
+            </button>
+            <button class="btn btn-info" onclick="NewItemManager.showNewServiceModal()">
+                <i class="bi bi-gear-plus"></i> 新建服务
+            </button>
+            <button class="btn btn-warning" onclick="NewItemManager.showNewContextModal()">
+                <i class="bi bi-diagram-3"></i> 新建上下文
+            </button>
+            <button class="btn btn-primary" onclick="NewItemManager.showNewAggregateModal()">
+                <i class="bi bi-box"></i> 新建聚合
+            </button>
+        </div>
+    </div>
+
+    <!-- 项目配置 -->
+    <div class="module-card mb-3">
+        <h5><i class="bi bi-gear"></i> 项目配置</h5>
+        <div class="d-grid gap-2">
+            <button class="btn btn-outline-primary" onclick="ContentManager.showProjectConfig()">
+                <i class="bi bi-gear"></i> 配置项目
+            </button>
+        </div>
+    </div>
+
+    <!-- 聚合选择 -->
+    <div class="module-card mb-3">
+        <h5><i class="bi bi-funnel"></i> 选择聚合</h5>
+        <div class="row g-2">
+            <div class="col-12">
+                <label for="serviceNameSelect" class="form-label">服务</label>
+                <select class="form-select" id="serviceNameSelect">
+                    <option value="">选择服务</option>
+                </select>
+            </div>
+            <div class="col-12">
+                <label for="contextNameSelect" class="form-label">限界上下文</label>
+                <select class="form-select" id="contextNameSelect">
+                    <option value="">选择限界上下文</option>
+                </select>
+            </div>
+            <div class="col-12">
+                <label for="domainNameSelect" class="form-label">领域</label>
+                <select class="form-select" id="domainNameSelect">
+                    <option value="">选择领域</option>
+                </select>
+            </div>
+            <div class="col-12">
+                <label for="aggregateNameSelect" class="form-label">聚合</label>
+                <select class="form-select" id="aggregateNameSelect">
+                    <option value="">选择聚合</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- 代码生成模块 -->
+    <div class="module-card mb-3">
+        <h5><i class="bi bi-list-check"></i> 代码生成模块</h5>
+        <div class="form-check mb-2">
+            <input class="form-check-input" id="selectAllCheckbox" onclick="CodeGenerationPanel.selectAll()" type="checkbox">
+            <label class="form-check-label" for="selectAllCheckbox">全选</label>
+        </div>
+        <div id="codeGenerationOptions" onchange="CodeGenerationPanel.handleSelectionChange()">
+            <!-- 领域层 -->
+            <div class="mb-3">
+                <h6 class="text-primary"><i class="bi bi-diagram-3"></i> 领域层</h6>
+                <div class="row g-1">
+                    <div class="col-6">
+                <div class="form-check">
+                    <input checked class="form-check-input" id="enableEntityCheckbox" name="enableEntity" type="checkbox">
+                            <label class="form-check-label small" for="enableEntityCheckbox">实体</label>
+                        </div>
+                </div>
+                    <div class="col-6">
+                <div class="form-check">
+                    <input checked class="form-check-input" id="enableRecordCheckbox" name="enableRecord" type="checkbox">
+                            <label class="form-check-label small" for="enableRecordCheckbox">数据记录</label>
+                        </div>
+                </div>
+                    <div class="col-6">
+                <div class="form-check">
+                    <input checked class="form-check-input" id="enableValueCheckbox" name="enableValue" type="checkbox">
+                            <label class="form-check-label small" for="enableValueCheckbox">值对象</label>
+                        </div>
+                </div>
+                    <div class="col-6">
+                <div class="form-check">
+                    <input checked class="form-check-input" id="enableEnumCheckbox" name="enableEnum" type="checkbox">
+                            <label class="form-check-label small" for="enableEnumCheckbox">枚举</label>
+                        </div>
+                </div>
+                    <div class="col-6">
+                <div class="form-check">
+                    <input checked class="form-check-input" id="enableRepositoryCheckbox" name="enableRepository" type="checkbox">
+                            <label class="form-check-label small" for="enableRepositoryCheckbox">仓储</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 应用层 -->
+            <div class="mb-3">
+                <h6 class="text-success"><i class="bi bi-gear"></i> 应用层</h6>
+                <div class="row g-1">
+                    <div class="col-6">
+                <div class="form-check">
+                    <input checked class="form-check-input" id="enableCommandHandlerCheckbox" name="enableCommandHandler" type="checkbox">
+                            <label class="form-check-label small" for="enableCommandHandlerCheckbox">命令处理器</label>
+                        </div>
+                </div>
+                    <div class="col-6">
+                <div class="form-check">
+                    <input checked class="form-check-input" id="enableQueryHandlerCheckbox" name="enableQueryHandler" type="checkbox">
+                            <label class="form-check-label small" for="enableQueryHandlerCheckbox">查询处理器</label>
+                        </div>
+                </div>
+                    <div class="col-6">
+                <div class="form-check">
+                    <input checked class="form-check-input" id="enableTransferCheckbox" name="enableTransfer" type="checkbox">
+                            <label class="form-check-label small" for="enableTransferCheckbox">传输对象</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 基础设施层 -->
+            <div class="mb-3">
+                <h6 class="text-info"><i class="bi bi-database"></i> 基础设施层</h6>
+                <div class="row g-1">
+                    <div class="col-6">
+                <div class="form-check">
+                    <input checked class="form-check-input" id="enableDataManagerCheckbox" name="enableDataManager" type="checkbox">
+                            <label class="form-check-label small" for="enableDataManagerCheckbox">数据管理类</label>
+                        </div>
+                </div>
+                    <div class="col-6">
+                <div class="form-check">
+                    <input checked class="form-check-input" id="enableMapperCheckbox" name="enableMapper" type="checkbox">
+                            <label class="form-check-label small" for="enableMapperCheckbox">Mybatis映射器</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 界面层 -->
+            <div class="mb-3">
+                <h6 class="text-warning"><i class="bi bi-window"></i> 界面层</h6>
+                <div class="row g-1">
+                    <div class="col-6">
+                <div class="form-check">
+                    <input checked class="form-check-input" id="enableControllerCheckbox" name="enableController" type="checkbox">
+                            <label class="form-check-label small" for="enableControllerCheckbox">Web控制器</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 生成代码 -->
+    <div class="module-card">
+        <h5><i class="bi bi-play-circle"></i> 生成代码</h5>
+        <div class="d-grid gap-2">
+            <button class="btn btn-success" id="generateCodeButton" onclick="CodeGenerator.generateCode()">
+            <i class="bi bi-code-square"></i> 生成代码
+        </button>
+            <button class="btn btn-primary" id="updateAggregateButton" onclick="AggregateManager.updateAggregate()" type="submit">
+            <i class="bi bi-arrow-clockwise"></i> 更新聚合信息
+        </button>
+        </div>
+    </div>
+</div> 

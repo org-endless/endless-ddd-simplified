@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Endless DDD Simplified Generator - Installer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            overflow: hidden;
+        }
+
+        .installer-container {
+            display: flex;
+            height: 100vh;
+            background: white;
+        }
+
+        /* 左侧导航栏 */
+        .sidebar {
+            width: 250px;
+            background: #2c3e50;
+            color: white;
+            padding: 20px 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            text-align: center;
+            padding: 20px;
+            border-bottom: 1px solid #34495e;
+        }
+
+        .logo h1 {
+            font-size: 18px;
+            font-weight: 300;
+            margin-bottom: 5px;
+        }
+
+        .logo p {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        .steps {
+            flex: 1;
+            padding: 20px 0;
+        }
+
+        .step-item {
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .step-item:hover {
+            background: #34495e;
+        }
+
+        .step-item.active {
+            background: #3498db;
+        }
+
+        .step-item.completed {
+            background: #27ae60;
+        }
+
+        .step-number {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .step-item.active .step-number {
+            background: white;
+            color: #3498db;
+        }
+
+        .step-item.completed .step-number {
+            background: white;
+            color: #27ae60;
+        }
+
+        /* 主内容区域 */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: white;
+        }
+
+        .header {
+            background: #ecf0f1;
+            padding: 20px 30px;
+            border-bottom: 1px solid #bdc3c7;
+        }
+
+        .header h2 {
+            font-size: 24px;
+            font-weight: 300;
+            color: #2c3e50;
+        }
+
+        .content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .step-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .step-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .description {
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ecf0f1;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .path-input-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .path-input-group input {
+            flex: 1;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+        }
+
+        .system-info {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .system-info h3 {
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .info-item .label {
+            color: #7f8c8d;
+        }
+
+        .info-item .value {
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .progress-container {
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #ecf0f1;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #3498db;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+
+        .status-message {
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .status-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        /* 底部按钮区域 */
+        .footer {
+            background: #ecf0f1;
+            padding: 20px 30px;
+            border-top: 1px solid #bdc3c7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .language-selector {
+            display: flex;
+            gap: 10px;
+        }
+
+        .language-btn {
+            padding: 6px 12px;
+            border: 1px solid #bdc3c7;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .language-btn.active {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="installer-container">
+        <!-- 左侧导航栏 -->
+        <div class="sidebar">
+            <div class="logo">
+                <h1>Endless DDD</h1>
+                <p>Simplified Generator</p>
+            </div>
+            <div class="steps">
+                <div class="step-item active" data-step="1">
+                    <div class="step-number">1</div>
+                    <span>欢迎</span>
+                </div>
+                <div class="step-item" data-step="2">
+                    <div class="step-number">2</div>
+                    <span>系统检查</span>
+                </div>
+                <div class="step-item" data-step="3">
+                    <div class="step-number">3</div>
+                    <span>安装路径</span>
+                </div>
+                <div class="step-item" data-step="4">
+                    <div class="step-number">4</div>
+                    <span>安装选项</span>
+                </div>
+                <div class="step-item" data-step="5">
+                    <div class="step-number">5</div>
+                    <span>安装进度</span>
+                </div>
+                <div class="step-item" data-step="6">
+                    <div class="step-number">6</div>
+                    <span>安装完成</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主内容区域 -->
+        <div class="main-content">
+            <div class="header">
+                <h2 id="stepTitle">欢迎使用</h2>
+            </div>
+
+            <div class="content">
+                <!-- 步骤1: 欢迎 -->
+                <div class="step-content active" id="step1">
+                    <p class="description">
+                        欢迎使用 Endless DDD Simplified Generator 安装向导。本向导将帮助您完成安装过程。
+                    </p>
+                    
+                    <div class="system-info">
+                        <h3>系统要求</h3>
+                        <div class="info-item">
+                            <span class="label">Java 版本:</span>
+                            <span class="value">21 或更高版本</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">内存要求:</span>
+                            <span class="value">至少 2GB RAM</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">磁盘空间:</span>
+                            <span class="value">500MB 可用空间</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">支持平台:</span>
+                            <span class="value">Windows 10+, macOS 10.15+, Linux (Ubuntu 18.04+)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 步骤2: 系统检查 -->
+                <div class="step-content" id="step2">
+                    <p class="description">
+                        正在检查您的系统是否满足安装要求...
+                    </p>
+                    
+                    <div class="system-info" id="systemInfo">
+                        <h3>系统信息</h3>
+                        <div class="info-item">
+                            <span class="label">操作系统:</span>
+                            <span class="value" id="osInfo">检查中...</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Java 版本:</span>
+                            <span class="value" id="javaInfo">检查中...</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Maven 版本:</span>
+                            <span class="value" id="mavenInfo">检查中...</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Rust 版本:</span>
+                            <span class="value" id="rustInfo">检查中...</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">可用磁盘空间:</span>
+                            <span class="value" id="diskInfo">检查中...</span>
+                        </div>
+                    </div>
+
+                    <div class="status-message status-info" id="checkStatus">
+                        <div class="spinner"></div>
+                        <span>正在检查系统环境...</span>
+                    </div>
+                </div>
+
+                <!-- 步骤3: 安装路径 -->
+                <div class="step-content" id="step3">
+                    <p class="description">
+                        请选择 Endless DDD Simplified Generator 的安装路径。
+                    </p>
+                    
+                    <div class="form-group">
+                        <label>安装路径</label>
+                        <div class="path-input-group">
+                            <input type="text" id="installPath" placeholder="请选择安装路径">
+                            <button class="btn btn-secondary" onclick="selectPath()">浏览...</button>
+                        </div>
+                    </div>
+
+                    <div class="status-message status-info" id="pathStatus">
+                        <span>请选择安装路径</span>
+                    </div>
+                </div>
+
+                <!-- 步骤4: 安装选项 -->
+                <div class="step-content" id="step4">
+                    <p class="description">
+                        请选择您需要的安装选项。
+                    </p>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="createDesktopShortcut" checked>
+                        <label for="createDesktopShortcut">创建桌面快捷方式</label>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="createStartMenuShortcut" checked>
+                        <label for="createStartMenuShortcut">创建开始菜单快捷方式</label>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="autoStart" checked>
+                        <label for="autoStart">开机自动启动</label>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="checkForUpdates" checked>
+                        <label for="checkForUpdates">自动检查更新</label>
+                    </div>
+                </div>
+
+                <!-- 步骤5: 安装进度 -->
+                <div class="step-content" id="step5">
+                    <p class="description">
+                        正在安装 Endless DDD Simplified Generator，请稍候...
+                    </p>
+                    
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <div class="progress-text" id="progressText">准备安装...</div>
+                    </div>
+
+                    <div class="status-message status-info" id="installStatus">
+                        <div class="spinner"></div>
+                        <span>正在准备安装...</span>
+                    </div>
+                </div>
+
+                <!-- 步骤6: 安装完成 -->
+                <div class="step-content" id="step6">
+                    <p class="description">
+                        Endless DDD Simplified Generator 已成功安装！
+                    </p>
+                    
+                    <div class="status-message status-success" id="completeStatus">
+                        <span>✓ 安装成功完成</span>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="launchApp" checked>
+                        <label for="launchApp">立即启动应用程序</label>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="openReadme" checked>
+                        <label for="openReadme">打开说明文档</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 底部按钮区域 -->
+            <div class="footer">
+                <div class="language-selector">
+                    <button class="language-btn active" onclick="setLanguage('zh')" data-lang="zh">中文</button>
+                    <button class="language-btn" onclick="setLanguage('en')" data-lang="en">English</button>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn btn-secondary" onclick="prevStep()" id="prevBtn">上一步</button>
+                    <button class="btn btn-primary" onclick="nextStep()" id="nextBtn">下一步</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        let currentLanguage = 'zh';
+        let systemInfo = null;
+        let installOptions = {
+            install_path: '',
+            create_desktop_shortcut: true,
+            create_start_menu_shortcut: true,
+            auto_start: true,
+            check_for_updates: true
+        };
+
+        // 语言设置
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            
+            // 更新语言按钮状态
+            document.querySelectorAll('.language-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-lang="${lang}"]`).classList.add('active');
+            
+            // 更新所有文本
+            updateTexts();
+        }
+
+        // 更新所有文本
+        function updateTexts() {
+            const texts = {
+                zh: {
+                    step1: { title: '欢迎使用', description: '欢迎使用 Endless DDD Simplified Generator 安装向导。本向导将帮助您完成安装过程。' },
+                    step2: { title: '系统检查', description: '正在检查您的系统是否满足安装要求...' },
+                    step3: { title: '安装路径', description: '请选择 Endless DDD Simplified Generator 的安装路径。' },
+                    step4: { title: '安装选项', description: '请选择您需要的安装选项。' },
+                    step5: { title: '安装进度', description: '正在安装 Endless DDD Simplified Generator，请稍候...' },
+                    step6: { title: '安装完成', description: 'Endless DDD Simplified Generator 已成功安装！' }
+                },
+                en: {
+                    step1: { title: 'Welcome', description: 'Welcome to the Endless DDD Simplified Generator installation wizard. This wizard will help you complete the installation process.' },
+                    step2: { title: 'System Check', description: 'Checking if your system meets the installation requirements...' },
+                    step3: { title: 'Installation Path', description: 'Please choose the installation path for Endless DDD Simplified Generator.' },
+                    step4: { title: 'Installation Options', description: 'Please select the installation options you need.' },
+                    step5: { title: 'Installation Progress', description: 'Installing Endless DDD Simplified Generator, please wait...' },
+                    step6: { title: 'Installation Complete', description: 'Endless DDD Simplified Generator has been successfully installed!' }
+                }
+            };
+
+            const currentTexts = texts[currentLanguage];
+            document.getElementById('stepTitle').textContent = currentTexts[`step${currentStep}`].title;
+            document.querySelector(`#step${currentStep} .description`).textContent = currentTexts[`step${currentStep}`].description;
+        }
+
+        // 下一步
+        async function nextStep() {
+            if (currentStep < 6) {
+                // 验证当前步骤
+                if (!await validateCurrentStep()) {
+                    return;
+                }
+
+                document.getElementById(`step${currentStep}`).classList.remove('active');
+                currentStep++;
+                document.getElementById(`step${currentStep}`).classList.add('active');
+                updateStepNavigation();
+                updateTexts();
+                
+                // 处理特定步骤的逻辑
+                await handleStepLogic();
+            }
+        }
+
+        // 上一步
+        function prevStep() {
+            if (currentStep > 1) {
+                document.getElementById(`step${currentStep}`).classList.remove('active');
+                currentStep--;
+                document.getElementById(`step${currentStep}`).classList.add('active');
+                updateStepNavigation();
+                updateTexts();
+            }
+        }
+
+        // 更新步骤导航
+        function updateStepNavigation() {
+            document.querySelectorAll('.step-item').forEach((item, index) => {
+                const stepNum = index + 1;
+                item.classList.remove('active', 'completed');
+                
+                if (stepNum === currentStep) {
+                    item.classList.add('active');
+                } else if (stepNum < currentStep) {
+                    item.classList.add('completed');
+                }
+            });
+        }
+
+        // 验证当前步骤
+        async function validateCurrentStep() {
+            switch (currentStep) {
+                case 3:
+                    const path = document.getElementById('installPath').value;
+                    if (!path) {
+                        showStatus('pathStatus', '请选择安装路径', 'error');
+                        return false;
+                    }
+                    try {
+                        const isValid = await window.__TAURI__.invoke('validate_install_path', { path });
+                        if (!isValid) {
+                            showStatus('pathStatus', '安装路径无效，请重新选择', 'error');
+                            return false;
+                        }
+                        showStatus('pathStatus', '安装路径有效', 'success');
+                        installOptions.install_path = path;
+                    } catch (error) {
+                        showStatus('pathStatus', '验证安装路径时出错', 'error');
+                        return false;
+                    }
+                    break;
+            }
+            return true;
+        }
+
+        // 处理特定步骤的逻辑
+        async function handleStepLogic() {
+            switch (currentStep) {
+                case 2:
+                    await checkSystemInfo();
+                    break;
+                case 3:
+                    await initializeInstallPath();
+                    break;
+                case 5:
+                    await startInstallation();
+                    break;
+            }
+        }
+
+        // 检查系统信息
+        async function checkSystemInfo() {
+            try {
+                showStatus('checkStatus', '正在检查系统环境...', 'info');
+                systemInfo = await window.__TAURI__.invoke('get_system_info');
+                
+                document.getElementById('osInfo').textContent = systemInfo.os;
+                document.getElementById('javaInfo').textContent = systemInfo.java_version || '未安装';
+                document.getElementById('mavenInfo').textContent = systemInfo.maven_version || '未安装';
+                document.getElementById('rustInfo').textContent = systemInfo.rust_version || '未安装';
+                document.getElementById('diskInfo').textContent = formatBytes(systemInfo.available_disk_space);
+                
+                showStatus('checkStatus', '系统检查完成', 'success');
+            } catch (error) {
+                showStatus('checkStatus', '系统检查失败: ' + error, 'error');
+            }
+        }
+
+        // 初始化安装路径
+        async function initializeInstallPath() {
+            try {
+                const defaultPath = await window.__TAURI__.invoke('get_default_install_path');
+                document.getElementById('installPath').value = defaultPath;
+                installOptions.install_path = defaultPath;
+            } catch (error) {
+                console.error('获取默认安装路径失败:', error);
+            }
+        }
+
+        // 选择安装路径
+        async function selectPath() {
+            try {
+                const result = await window.__TAURI__.invoke('select_install_path');
+                if (result) {
+                    document.getElementById('installPath').value = result;
+                    installOptions.install_path = result;
+                }
+            } catch (error) {
+                console.error('选择安装路径失败:', error);
+            }
+        }
+
+        // 开始安装
+        async function startInstallation() {
+            const installBtn = document.getElementById('nextBtn');
+            const installStatus = document.getElementById('installStatus');
+            
+            installBtn.disabled = true;
+            showStatus('installStatus', '正在准备安装...', 'info');
+            
+            // 收集安装选项
+            installOptions.create_desktop_shortcut = document.getElementById('createDesktopShortcut').checked;
+            installOptions.create_start_menu_shortcut = document.getElementById('createStartMenuShortcut').checked;
+            installOptions.auto_start = document.getElementById('autoStart').checked;
+            installOptions.check_for_updates = document.getElementById('checkForUpdates').checked;
+            
+            try {
+                await window.__TAURI__.invoke('install_application', { options: installOptions });
+                showStatus('installStatus', '安装完成', 'success');
+                setTimeout(() => {
+                    nextStep();
+                }, 1000);
+            } catch (error) {
+                showStatus('installStatus', '安装失败: ' + error, 'error');
+                installBtn.disabled = false;
+            }
+        }
+
+        // 显示状态信息
+        function showStatus(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            element.style.display = 'block';
+            element.className = `status-message status-${type}`;
+            
+            if (type === 'info') {
+                element.innerHTML = `<div class="spinner"></div><span>${message}</span>`;
+            } else {
+                element.innerHTML = `<span>${message}</span>`;
+            }
+        }
+
+        // 格式化字节数
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStepNavigation();
+            updateTexts();
+        });
+    </script>
+</body>
+</html> 

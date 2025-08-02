@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EndlessDDD - DDD简化生成器</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/bootstrap-icons.css" rel="stylesheet" />
+    <link href="css/base.css" rel="stylesheet" />
+    <style>
+      /* 桌面应用风格布局 */
+      html, body {
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      }
+
+      .app-container {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+
+      /* 顶部导航栏 */
+      .app-header {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 0.5rem 1rem;
+        flex-shrink: 0;
+      }
+
+      .navbar-brand {
+        font-weight: 600;
+        font-size: 1.25rem;
+      }
+
+      /* 主内容区域 */
+      .app-content {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        overflow: hidden;
+      }
+
+      .content-wrapper {
+        width: 100%;
+        max-width: 800px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      /* 卡片容器 */
+      .cards-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        height: 100%;
+        align-items: center;
+      }
+
+      .app-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        padding: 2rem;
+        text-align: center;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 200px;
+      }
+
+      .app-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+      }
+
+      .card-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        color: #3b82f6;
+      }
+
+      .card-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: #1f2937;
+      }
+
+      .card-description {
+        color: #6b7280;
+        margin-bottom: 1.5rem;
+        line-height: 1.5;
+      }
+
+      .app-button {
+        background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);
+        border: none;
+        color: white;
+        padding: 0.75rem 2rem;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .app-button:hover {
+        background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+      }
+
+      .app-button.secondary {
+        background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+      }
+
+      .app-button.secondary:hover {
+        background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
+      }
+
+      /* 响应式设计 */
+      @media (max-width: 768px) {
+        .cards-container {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
+        
+        .app-content {
+          padding: 1rem;
+        }
+        
+        .app-card {
+          padding: 1.5rem;
+        }
+      }
+
+      /* 项目向导页面样式 */
+      .wizard-page {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+
+      .wizard-header {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        padding: 1rem 2rem;
+        flex-shrink: 0;
+      }
+
+      .wizard-content {
+        flex: 1;
+        overflow: auto;
+        padding: 2rem;
+      }
+
+      .wizard-container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- 顶部导航栏 -->
+      <nav class="navbar navbar-expand-lg navbar-dark app-header">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">
+            <img
+              src="image/endless-favicon-16.svg"
+              alt="EndlessDDD"
+              width="24"
+              height="24"
+              class="d-inline-block align-text-top me-2" />
+            EndlessDDD
+          </a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="#" onclick="showProjectWizard()"
+                  >项目向导</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+      <!-- 主内容区域 -->
+      <div class="app-content">
+        <!-- 首页内容 -->
+        <div id="home-content" class="content-wrapper">
+          <div class="cards-container">
+            <div class="app-card">
+              <div class="card-icon">
+                <i class="bi bi-folder-plus"></i>
+              </div>
+              <h3 class="card-title">项目向导</h3>
+              <p class="card-description">使用图形化向导创建新的DDD项目</p>
+              <button class="app-button" onclick="showProjectWizard()">
+                <i class="bi bi-arrow-right"></i> 开始创建
+              </button>
+            </div>
+
+            <div class="app-card">
+              <div class="card-icon">
+                <i class="bi bi-gear"></i>
+              </div>
+              <h3 class="card-title">环境测试</h3>
+              <p class="card-description">测试Tauri环境和系统状态</p>
+              <button class="app-button secondary" onclick="runSystemTest()">
+                <i class="bi bi-play"></i> 运行测试
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 项目向导内容 -->
+        <div id="project-wizard-content" class="content-wrapper" style="display: none">
+          <div id="project-wizard-container"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/lib/bootstrap.bundle.min.js"></script>
+    <script src="js/lib/jquery.min.js"></script>
+    <script src="js/core/AppBar.js"></script>
+    <script src="js/core/DataManager.js"></script>
+    <script src="js/core/AlertManager.js"></script>
+    <script src="js/components/ProjectWizard.js"></script>
+    <script src="js/components/ContentManager.js"></script>
+    <script src="js/app.js"></script>
+
+    <script>
+      // 页面导航函数
+      function showProjectWizard() {
+        // 直接跳转到项目向导页面
+        window.location.href = "components/ProjectWizard.html";
+      }
+
+      // 系统测试函数
+      async function runSystemTest() {
+        console.log("=== EndlessDDD 系统测试开始 ===");
+        console.log("测试时间:", new Date().toLocaleString());
+
+        // 1. 测试Tauri环境
+        console.log("\n1. Tauri环境测试:");
+        const hasInternals = !!window.__TAURI_INTERNALS__;
+        const hasInvoke = !!window.__TAURI_INTERNALS__?.invoke;
+        const hasTauri = !!window.__TAURI__;
+        const hasTauriInvoke = !!window.__TAURI__?.tauri?.invoke;
+
+        console.log(
+          "  window.__TAURI_INTERNALS__:",
+          hasInternals ? "✅ 存在" : "❌ 不存在",
+        );
+        console.log(
+          "  window.__TAURI_INTERNALS__.invoke:",
+          hasInvoke ? "✅ 存在" : "❌ 不存在",
+        );
+        console.log("  window.__TAURI__:", hasTauri ? "✅ 存在" : "❌ 不存在");
+        console.log(
+          "  window.__TAURI__.tauri.invoke:",
+          hasTauriInvoke ? "✅ 存在" : "❌ 不存在",
+        );
+
+        // 2. 测试invoke函数
+        console.log("\n2. invoke函数测试:");
+        try {
+          let invokeFunction = null;
+          let apiVersion = "";
+
+          if (window.__TAURI_INTERNALS__?.invoke) {
+            invokeFunction = window.__TAURI_INTERNALS__.invoke;
+            apiVersion = "2.x";
+          } else if (window.__TAURI__?.tauri?.invoke) {
+            invokeFunction = window.__TAURI__.tauri.invoke;
+            apiVersion = "1.x";
+          }
+
+          if (invokeFunction) {
+            const response = await invokeFunction("get_default_install_path");
+            console.log("  ✅ invoke测试成功 (", apiVersion, "API):", response);
+          } else {
+            console.log("  ❌ 没有找到可用的invoke函数");
+          }
+        } catch (error) {
+          console.log("  ❌ invoke测试失败:", error.message);
+        }
+
+        // 3. 调用Rust后端测试
+        console.log("\n3. 调用Rust后端测试:");
+        try {
+          let invokeFunction = null;
+          if (window.__TAURI_INTERNALS__?.invoke) {
+            invokeFunction = window.__TAURI_INTERNALS__.invoke;
+          } else if (window.__TAURI__?.tauri?.invoke) {
+            invokeFunction = window.__TAURI__.tauri.invoke;
+          }
+
+          if (invokeFunction) {
+            const response = await invokeFunction("run_system_test");
+            console.log("  ✅ Rust测试调用成功:", response);
+          } else {
+            console.log("  ❌ 无法调用Rust测试函数");
+          }
+        } catch (error) {
+          console.log("  ❌ Rust测试调用失败:", error.message);
+        }
+
+        // 4. 系统信息
+        console.log("\n4. 系统信息:");
+        console.log("  URL:", window.location.href);
+        console.log("  User Agent:", navigator.userAgent);
+        console.log("  屏幕分辨率:", screen.width, "x", screen.height);
+        console.log("  窗口大小:", window.innerWidth, "x", window.innerHeight);
+
+        console.log("\n=== 系统测试完成 ===");
+
+        // 显示测试完成提示
+        alert("系统测试完成！请查看终端输出结果。");
+      }
+
+      // 页面加载完成后的初始化
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("EndlessDDD应用已加载");
+      });
+    </script>
+  </body>
+</html>

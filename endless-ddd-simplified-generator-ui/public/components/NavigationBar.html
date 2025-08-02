@@ -1,0 +1,38 @@
+<!-- 导航栏组件 -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+        <i class="bi bi-code-square"></i> DDD代码生成器
+    </a>
+        
+        <!-- 当前聚合路径 -->
+        <div class="navbar-nav mx-auto">
+            <div class="d-flex align-items-center">
+                <span class="text-light me-2">当前路径:</span>
+                <span class="badge bg-light text-dark me-1" id="currentProject">项目</span>
+                <i class="bi bi-chevron-right text-light me-1"></i>
+                <span class="badge bg-light text-dark me-1" id="currentService">服务</span>
+                <i class="bi bi-chevron-right text-light me-1"></i>
+                <span class="badge bg-light text-dark me-1" id="currentContext">上下文</span>
+                <i class="bi bi-chevron-right text-light me-1"></i>
+                <span class="badge bg-light text-dark me-1" id="currentDomain">领域</span>
+                <i class="bi bi-chevron-right text-light me-1"></i>
+                <span class="badge bg-light text-dark" id="currentAggregate">聚合</span>
+            </div>
+        </div>
+        
+        <div class="navbar-nav ms-auto">
+            <div class="btn-group" role="group">
+                <button aria-pressed="false" class="btn btn-outline-light btn-sm" data-bs-theme-value="light" type="button">
+                    <i class="bi bi-sun"></i>
+            </button>
+                <button aria-pressed="false" class="btn btn-outline-light btn-sm" data-bs-theme-value="dark" type="button">
+                    <i class="bi bi-moon"></i>
+            </button>
+                <button aria-pressed="false" class="btn btn-outline-light btn-sm" data-bs-theme-value="auto" type="button">
+                    <i class="bi bi-circle-half"></i>
+            </button>
+            </div>
+        </div>
+    </div>
+</nav> 
