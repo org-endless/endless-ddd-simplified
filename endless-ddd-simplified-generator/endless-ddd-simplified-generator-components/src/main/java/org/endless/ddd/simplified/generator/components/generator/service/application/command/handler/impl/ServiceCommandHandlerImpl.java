@@ -9,10 +9,12 @@ import org.endless.ddd.simplified.generator.components.generator.service.domain.
 import org.endless.ddd.simplified.generator.components.generator.service.domain.type.ServiceTypeEnum;
 import org.endless.ddd.simplified.starter.common.config.log.annotation.Log;
 import org.endless.ddd.simplified.starter.common.config.log.type.LogLevel;
+import org.endless.ddd.simplified.starter.common.exception.model.application.command.transfer.CommandReqTransferNullException;
 import org.endless.ddd.simplified.starter.common.utils.model.time.DateTime;
 import org.endless.ddd.simplified.starter.common.utils.model.time.TimeStamp;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * ServiceCommandHandlerImpl
@@ -36,24 +38,28 @@ public class ServiceCommandHandlerImpl implements ServiceCommandHandler {
     }
 
     @Override
-    @Log(message = "服务创建", value = "#command", level = LogLevel.TRACE)
+    @Log(message = "服务创建命令", value = "#command", level = LogLevel.TRACE)
     public ServiceCreateRespCTransfer create(ServiceCreateReqCTransfer command) {
+        Optional.ofNullable(command)
+                .map(ServiceCreateReqCTransfer::validate)
+                .orElseThrow(() -> new CommandReqTransferNullException("服务创建命令建参数不能为空"));
+
         ServiceAggregate aggregate = ServiceAggregate.create(ServiceAggregate.builder()
-                .serviceArtifactId(command.getServiceArtifactId())
-                .projectArtifactId(command.getServiceArtifactId())
-                .name(command.getName())
-                .description(command.getDescription())
-                .version(command.getVersion())
-                .author(command.getAuthor())
-                .rootPath(command.getRootPath())
-                .basePackage(command.getBasePackage())
-                .type(ServiceTypeEnum.fromCode(command.getType()))
-                .port(command.getPort())
-                .contextNames(command.getContextNames())
+                .serviceArtifactId(command.serviceArtifactId())
+                .projectArtifactId(command.serviceArtifactId())
+                .name(command.name())
+                .description(command.description())
+                .version(command.version())
+                .author(command.author())
+                .rootPath(command.rootPath())
+                .basePackage(command.basePackage())
+                .type(ServiceTypeEnum.fromCode(command.type()))
+                .port(command.port())
+                .contextNames(command.contextNames())
                 .createAt(DateTime.from(TimeStamp.now()))
                 .updateAt(DateTime.from(TimeStamp.now())));
 
-        //     创建聚合。生成存储文件内容
+        // 服务存储YAML文件
         String serviceYamlFilePath = aggregate.getRootPath();
         String serviceYamlFileName = aggregate.getServiceArtifactId() + ".yaml";
         String serviceYamlContent = serviceDrivenAdapter.yaml(aggregate);

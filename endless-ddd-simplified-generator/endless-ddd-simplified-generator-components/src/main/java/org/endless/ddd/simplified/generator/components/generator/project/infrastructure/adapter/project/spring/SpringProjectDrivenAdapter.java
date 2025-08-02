@@ -2,10 +2,15 @@ package org.endless.ddd.simplified.generator.components.generator.project.infras
 
 import freemarker.template.Configuration;
 import org.endless.ddd.simplified.generator.common.model.infrastructure.adapter.DDDSimplifiedGeneratorContentDrivenAdapter;
+import org.endless.ddd.simplified.generator.common.model.infrastructure.adapter.DDDSimplifiedGeneratorFileDrivenAdapter;
 import org.endless.ddd.simplified.generator.components.generator.project.domain.anticorruption.ProjectDrivenAdapter;
 import org.endless.ddd.simplified.generator.components.generator.project.domain.entity.ProjectAggregate;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * SpringProjectDrivenAdapter
@@ -20,8 +25,7 @@ import org.springframework.stereotype.Component;
  */
 @Lazy
 @Component
-public class SpringProjectDrivenAdapter implements ProjectDrivenAdapter, DDDSimplifiedGeneratorContentDrivenAdapter {
-
+public class SpringProjectDrivenAdapter implements ProjectDrivenAdapter, DDDSimplifiedGeneratorContentDrivenAdapter, DDDSimplifiedGeneratorFileDrivenAdapter {
 
     private final Configuration freemarkerConfig;
 
@@ -30,12 +34,12 @@ public class SpringProjectDrivenAdapter implements ProjectDrivenAdapter, DDDSimp
     }
 
     @Override
-    public String yaml(ProjectAggregate aggregate) {
-        return DDDSimplifiedGeneratorContentDrivenAdapter.super.yaml(aggregate);
-    }
-
-    @Override
-    public String freemarker(ProjectAggregate aggregate, String templateFileName) {
-        return DDDSimplifiedGeneratorContentDrivenAdapter.super.freemarker(freemarkerConfig, aggregate, templateFileName);
+    public void freemarker(ProjectAggregate aggregate, String fileName, String templateFileName) {
+        Map<String, Object> model = new HashMap<>();
+        model.put("projectAggregate", aggregate);
+        String content = DDDSimplifiedGeneratorContentDrivenAdapter.super.freemarker(freemarkerConfig, model, templateFileName);
+        if (StringUtils.hasText(content)) {
+            write(aggregate.getRootPath(), content, fileName);
+        }
     }
 }

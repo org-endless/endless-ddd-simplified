@@ -4,8 +4,8 @@
         <property name="APP_NAME" value="endless-ddd-simplified-generator"/>
         <property name="LOG_HOME" value="/logs/${APP_NAME}"/>
         <property name="LOG_NAME" value="${APP_NAME}"/>
-        <property name="LOG_PATTERN_ASPECT">[%d{HH:mm:ss.SSS}][%t][%-5level][%logger{36}.%M:%L]%msg%xEx%n</property>
-        <property name="LOG_PATTERN">[%d{HH:mm:ss.SSS}][%t][%-5level][%logger{36}.%M:%L]%msg%xEx%n</property>
+        <property name="LOG_PATTERN_ASPECT">[%d{yyyy-MM-dd HH:mm:ss.SSS}][%-5p][%T][%c.%M:%L]%msg%xEx%n</property>
+        <property name="LOG_PATTERN">[%d{yyyy-MM-dd HH:mm:ss.SSS}][%-5p][%T][%c.%M:%L]%msg%xEx%n</property>
         <property name="FILE_SIZE">20MB</property>
     </Properties>
 

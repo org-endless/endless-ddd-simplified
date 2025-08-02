@@ -3,6 +3,7 @@ package org.endless.ddd.simplified.generator.components.generator.project.sideca
 import com.alibaba.fastjson2.JSONException;
 import org.endless.ddd.simplified.generator.common.model.sidecar.rest.DDDSimplifiedGeneratorRestController;
 import org.endless.ddd.simplified.generator.components.generator.project.application.command.transfer.ProjectCreateReqCTransfer;
+import org.endless.ddd.simplified.generator.components.generator.project.application.command.transfer.ProjectModifyReqCTransfer;
 import org.endless.ddd.simplified.generator.components.generator.project.facade.adapter.ProjectDrivingAdapter;
 import org.endless.ddd.simplified.starter.common.config.log.annotation.Log;
 import org.endless.ddd.simplified.starter.common.exception.model.application.command.transfer.CommandReqTransferNullException;
@@ -51,9 +52,24 @@ public class ProjectRestController implements DDDSimplifiedGeneratorRestControll
                 .map(ProjectCreateReqCTransfer::validate)
                 .orElseThrow(() -> new CommandReqTransferNullException("项目创建参数不能为空"));
         try {
-            return response().success("项目创建成功", projectDrivingAdapter.create(command));
+            projectDrivingAdapter.create(command);
+            return response().success("项目创建成功");
         } catch (JSONException | NullPointerException e) {
             throw new RestErrorException("项目创建失败", e);
+        }
+    }
+
+    @PostMapping("/command/modify")
+    @Log(message = "项目修改", value = "#command")
+    public ResponseEntity<RestResponse> modify(@RequestBody ProjectModifyReqCTransfer command) {
+        Optional.ofNullable(command)
+                .map(ProjectModifyReqCTransfer::validate)
+                .orElseThrow(() -> new CommandReqTransferNullException("项目修改参数不能为空"));
+        try {
+            projectDrivingAdapter.modify(command);
+            return response().success("项目修改成功");
+        } catch (JSONException | NullPointerException e) {
+            throw new RestErrorException("项目修改失败", e);
         }
     }
 }

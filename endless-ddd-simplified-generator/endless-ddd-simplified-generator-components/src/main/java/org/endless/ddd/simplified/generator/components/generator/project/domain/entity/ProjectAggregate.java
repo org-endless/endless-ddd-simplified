@@ -8,20 +8,18 @@ import org.endless.ddd.simplified.generator.common.model.domain.entity.DDDSimpli
 import org.endless.ddd.simplified.generator.components.generator.project.domain.type.ProjectJavaVersionEnum;
 import org.endless.ddd.simplified.generator.components.generator.project.domain.type.ProjectLoggingFrameworkEnum;
 import org.endless.ddd.simplified.generator.components.generator.project.domain.type.ProjectPersistenceFrameworkEnum;
+import org.endless.ddd.simplified.starter.common.config.utils.id.IdGenerator;
 import org.endless.ddd.simplified.starter.common.exception.model.domain.entity.AggregateRemoveException;
 import org.endless.ddd.simplified.starter.common.exception.model.domain.entity.AggregateValidateException;
 import org.springframework.util.StringUtils;
 
-import java.util.List;
-
 /**
  * ProjectAggregate
+ * <p>项目聚合根
  * <p>
- * 项目聚合根
+ * create 2025/08/02 20:02
  * <p>
- * create 2025/07/29 16:16
- * <p>
- * update 2025/07/29 16:16
+ * update 2025/08/02 20:02
  *
  * @author Deng Haozhi
  * @see DDDSimplifiedGeneratorAggregate
@@ -30,8 +28,13 @@ import java.util.List;
 @Getter
 @ToString
 @Builder(buildMethodName = "innerBuild")
-@JSONType(orders = {"projectArtifactId", "groupId", "name", "description", "version", "author", "rootPath", "basePackage", "enableSpringDoc", "javaVersion", "loggingFramework", "persistenceFramework", "serviceArtifactIds", "createAt", "updateAt"})
+@JSONType(orders = {"projectId", "projectArtifactId", "groupId", "name", "description", "version", "author", "rootPath", "basePackage", "enableSpringDoc", "javaVersion", "loggingFramework", "persistenceFramework", "createUserId", "modifyUserId", "isRemoved"})
 public class ProjectAggregate implements DDDSimplifiedGeneratorAggregate {
+
+    /**
+     * 项目ID
+     */
+    private final String projectId;
 
     /**
      * 项目构件ID
@@ -39,7 +42,7 @@ public class ProjectAggregate implements DDDSimplifiedGeneratorAggregate {
     private String projectArtifactId;
 
     /**
-     * 组织ID
+     * 项目组织ID
      */
     private String groupId;
 
@@ -74,9 +77,9 @@ public class ProjectAggregate implements DDDSimplifiedGeneratorAggregate {
     private String basePackage;
 
     /**
-     * 项目是否启用Spring Doc
+     * 是否启用Spring Doc
      */
-    private String enableSpringDoc;
+    private Boolean enableSpringDoc;
 
     /**
      * 项目Java版本
@@ -94,30 +97,38 @@ public class ProjectAggregate implements DDDSimplifiedGeneratorAggregate {
     private ProjectPersistenceFrameworkEnum persistenceFramework;
 
     /**
-     * 服务构件ID列表
+     * 创建者ID
      */
-    private List<String> serviceArtifactIds;
+    private final String createUserId;
 
     /**
-     * 项目创建时间
+     * 修改者ID
      */
-    private String createAt;
+    private String modifyUserId;
 
     /**
-     * 项目更新时间
+     * 是否已删除
      */
-    private String updateAt;
+    private Boolean isRemoved;
 
     public static ProjectAggregate create(ProjectAggregateBuilder builder) {
         return builder
+                .projectId(IdGenerator.of())
+                .modifyUserId(builder.createUserId)
+                .isRemoved(false)
                 .innerBuild()
                 .validate();
     }
 
     public ProjectAggregate remove(String modifyUserId) {
-        if (!canRemove()) {
-            throw new AggregateRemoveException("聚合根<项目聚合根>处于不可删除状态");
+        if (this.isRemoved) {
+            throw new AggregateRemoveException("已经被删除的聚合根<项目聚合根>不能再次删除, ID: " + projectId);
         }
+        if (!canRemove()) {
+            throw new AggregateRemoveException("聚合根<项目聚合根>处于不可删除状态, ID: " + projectId);
+        }
+        this.isRemoved = true;
+        this.modifyUserId = modifyUserId;
         return this;
     }
 
@@ -127,6 +138,7 @@ public class ProjectAggregate implements DDDSimplifiedGeneratorAggregate {
 
     @Override
     public ProjectAggregate validate() {
+        validateProjectId();
         validateProjectArtifactId();
         validateGroupId();
         validateName();
@@ -139,9 +151,16 @@ public class ProjectAggregate implements DDDSimplifiedGeneratorAggregate {
         validateJavaVersion();
         validateLoggingFramework();
         validatePersistenceFramework();
-        validateCreateAt();
-        validateUpdateAt();
+        validateCreateUserId();
+        validateModifyUserId();
+        validateIsRemoved();
         return this;
+    }
+
+    private void validateProjectId() {
+        if (!StringUtils.hasText(projectId)) {
+            throw new AggregateValidateException("项目ID不能为空");
+        }
     }
 
     private void validateProjectArtifactId() {
@@ -152,7 +171,7 @@ public class ProjectAggregate implements DDDSimplifiedGeneratorAggregate {
 
     private void validateGroupId() {
         if (!StringUtils.hasText(groupId)) {
-            throw new AggregateValidateException("组织ID不能为空");
+            throw new AggregateValidateException("项目组织ID不能为空");
         }
     }
 
@@ -193,8 +212,8 @@ public class ProjectAggregate implements DDDSimplifiedGeneratorAggregate {
     }
 
     private void validateEnableSpringDoc() {
-        if (!StringUtils.hasText(enableSpringDoc)) {
-            throw new AggregateValidateException("项目是否启用Spring Doc不能为空");
+        if (enableSpringDoc == null) {
+            throw new AggregateValidateException("是否启用Spring Doc不能为 null ");
         }
     }
 
@@ -216,15 +235,21 @@ public class ProjectAggregate implements DDDSimplifiedGeneratorAggregate {
         }
     }
 
-    private void validateCreateAt() {
-        if (!StringUtils.hasText(createAt)) {
-            throw new AggregateValidateException("项目创建时间不能为空");
+    private void validateCreateUserId() {
+        if (!StringUtils.hasText(createUserId)) {
+            throw new AggregateValidateException("创建者ID不能为空");
         }
     }
 
-    private void validateUpdateAt() {
-        if (!StringUtils.hasText(updateAt)) {
-            throw new AggregateValidateException("项目更新时间不能为空");
+    private void validateModifyUserId() {
+        if (!StringUtils.hasText(modifyUserId)) {
+            throw new AggregateValidateException("修改者ID不能为空");
+        }
+    }
+
+    private void validateIsRemoved() {
+        if (isRemoved == null) {
+            throw new AggregateValidateException("是否已删除不能为 null ");
         }
     }
 }

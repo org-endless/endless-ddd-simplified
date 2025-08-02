@@ -2,8 +2,6 @@ package org.endless.ddd.simplified.generator.components.generator.service.applic
 
 import com.alibaba.fastjson2.annotation.JSONType;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
 import org.endless.ddd.simplified.generator.common.model.application.command.transfer.DDDSimplifiedGeneratorCommandTransfer;
 import org.endless.ddd.simplified.starter.common.exception.model.application.command.transfer.CommandTransferValidateException;
 import org.springframework.util.CollectionUtils;
@@ -19,30 +17,19 @@ import java.util.List;
  * <p>
  * update 2025/07/31 22:59
  *
+ * @param rootPath    服务根路径
+ * @param packageName 服务包名
+ * @param files       服务文件列表
  * @author Deng Haozhi
  * @see DDDSimplifiedGeneratorCommandTransfer
  * @since 1.0.0
  */
-@Getter
-@ToString
 @Builder
 @JSONType(orders = {"rootPath", "packageName", "files"})
-public class ServiceCreateRespCTransfer implements DDDSimplifiedGeneratorCommandTransfer {
-
-    /**
-     * 服务根路径
-     */
-    private final String rootPath;
-
-    /**
-     * 服务包名
-     */
-    private final String packageName;
-
-    /**
-     * 服务文件列表
-     */
-    private final List<ServiceFileCreateRespCTransfer> files;
+public record ServiceCreateRespCTransfer(
+        String rootPath, String packageName,
+        List<ServiceFileCreateRespCTransfer> files)
+        implements DDDSimplifiedGeneratorCommandTransfer {
 
     @Override
     public ServiceCreateRespCTransfer validate() {

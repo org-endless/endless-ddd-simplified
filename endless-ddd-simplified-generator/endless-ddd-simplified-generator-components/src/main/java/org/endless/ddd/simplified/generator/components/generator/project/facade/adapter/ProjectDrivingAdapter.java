@@ -2,7 +2,7 @@ package org.endless.ddd.simplified.generator.components.generator.project.facade
 
 import org.endless.ddd.simplified.generator.common.model.facade.adapter.DDDSimplifiedGeneratorDrivingAdapter;
 import org.endless.ddd.simplified.generator.components.generator.project.application.command.transfer.ProjectCreateReqCTransfer;
-import org.endless.ddd.simplified.generator.components.generator.project.application.command.transfer.ProjectCreateRespCTransfer;
+import org.endless.ddd.simplified.generator.components.generator.project.application.command.transfer.ProjectModifyReqCTransfer;
 
 /**
  * ProjectDrivingAdapter
@@ -18,5 +18,8 @@ import org.endless.ddd.simplified.generator.components.generator.project.applica
  */
 public interface ProjectDrivingAdapter extends DDDSimplifiedGeneratorDrivingAdapter {
 
-    ProjectCreateRespCTransfer create(ProjectCreateReqCTransfer command);
+    void create(ProjectCreateReqCTransfer command);
+
+    void modify(ProjectModifyReqCTransfer command);
+
 }

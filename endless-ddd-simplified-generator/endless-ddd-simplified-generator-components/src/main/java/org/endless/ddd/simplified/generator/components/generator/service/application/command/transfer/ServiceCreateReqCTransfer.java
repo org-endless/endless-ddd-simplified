@@ -2,8 +2,6 @@ package org.endless.ddd.simplified.generator.components.generator.service.applic
 
 import com.alibaba.fastjson2.annotation.JSONType;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
 import org.endless.ddd.simplified.generator.common.model.application.command.transfer.DDDSimplifiedGeneratorCommandTransfer;
 import org.endless.ddd.simplified.starter.common.exception.model.application.command.transfer.CommandTransferValidateException;
 import org.springframework.util.StringUtils;
@@ -19,81 +17,32 @@ import java.util.List;
  * <p>
  * update 2025/07/29 21:06
  *
+ * @param serviceArtifactId 服务构件ID
+ * @param projectArtifactId 项目构件ID
+ * @param name              服务名称
+ * @param description       服务描述
+ * @param version           服务版本
+ * @param author            服务作者
+ * @param rootPath          服务根路径
+ * @param basePackage       服务基础包名
+ * @param type              服务类型
+ * @param port              服务端口
+ * @param contextNames      限界上下文名称列表
+ * @param createAt          服务创建时间
+ * @param updateAt          服务更新时间
  * @author Deng Haozhi
  * @see DDDSimplifiedGeneratorCommandTransfer
  * @since 0.0.1
  */
-@Getter
-@ToString
 @Builder
 @JSONType(orders = {"serviceArtifactId", "projectArtifactId", "name", "description", "version", "author",
         "rootPath", "basePackage", "type", "port", "contextNames"})
-public class ServiceCreateReqCTransfer implements DDDSimplifiedGeneratorCommandTransfer {
-
-    /**
-     * 服务构件ID
-     */
-    private final String serviceArtifactId;
-
-    /**
-     * 项目构件ID
-     */
-    private final String projectArtifactId;
-
-    /**
-     * 服务名称
-     */
-    private final String name;
-
-    /**
-     * 服务描述
-     */
-    private final String description;
-
-    /**
-     * 服务版本
-     */
-    private final String version;
-
-    /**
-     * 服务作者
-     */
-    private final String author;
-
-    /**
-     * 服务根路径
-     */
-    private final String rootPath;
-
-    /**
-     * 服务基础包名
-     */
-    private final String basePackage;
-
-    /**
-     * 服务类型
-     */
-    private final String type;
-
-    /**
-     * 服务端口
-     */
-    private final Integer port;
-
-    /**
-     * 限界上下文名称列表
-     */
-    private final List<String> contextNames;
-
-    /**
-     * 服务创建时间
-     */
-    private final String createAt;
-
-    /**
-     * 服务更新时间
-     */
-    private final String updateAt;
+public record ServiceCreateReqCTransfer(
+        String serviceArtifactId, String projectArtifactId, String name,
+        String description, String version, String author, String rootPath,
+        String basePackage, String type, Integer port, List<String> contextNames,
+        String createAt, String updateAt)
+        implements DDDSimplifiedGeneratorCommandTransfer {
 
     @Override
     public ServiceCreateReqCTransfer validate() {

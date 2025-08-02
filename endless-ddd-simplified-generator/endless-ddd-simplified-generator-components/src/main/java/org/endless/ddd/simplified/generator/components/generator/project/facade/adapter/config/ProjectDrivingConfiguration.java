@@ -5,6 +5,7 @@ import org.endless.ddd.simplified.generator.components.generator.project.applica
 import org.endless.ddd.simplified.generator.components.generator.project.application.query.handler.ProjectQueryHandler;
 import org.endless.ddd.simplified.generator.components.generator.project.application.query.handler.impl.ProjectQueryHandlerImpl;
 import org.endless.ddd.simplified.generator.components.generator.project.domain.anticorruption.ProjectDrivenAdapter;
+import org.endless.ddd.simplified.generator.components.generator.project.domain.anticorruption.ProjectRepository;
 import org.endless.ddd.simplified.generator.components.generator.project.facade.adapter.ProjectDrivingAdapter;
 import org.endless.ddd.simplified.generator.components.generator.project.facade.adapter.spring.SpringProjectDrivingAdapter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -37,8 +38,8 @@ public class ProjectDrivingConfiguration {
 
     @Lazy
     @ConditionalOnMissingBean
-    protected @Bean ProjectCommandHandler projectCommandHandler(ProjectDrivenAdapter projectDrivenAdapter) {
-        return new ProjectCommandHandlerImpl(projectDrivenAdapter);
+    protected @Bean ProjectCommandHandler projectCommandHandler(ProjectRepository projectRepository, ProjectDrivenAdapter projectDrivenAdapter) {
+        return new ProjectCommandHandlerImpl(projectRepository, projectDrivenAdapter);
     }
 
     @Lazy

@@ -16,7 +16,5 @@ import org.endless.ddd.simplified.generator.components.generator.project.domain.
  */
 public interface ProjectDrivenAdapter extends DDDSimplifiedGeneratorDrivenAdapter {
 
-    String yaml(ProjectAggregate aggregate);
-
-    String freemarker(ProjectAggregate aggregate, String templateFileName);
+    void freemarker(ProjectAggregate aggregate, String fileName, String templateFileName);
 }

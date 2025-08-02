@@ -1,27 +1,34 @@
-<#-- @ftlvariable name="project" type="org.endless.ddd.simplified.generator.components.generator.project.domain.entity.ProjectAggregate" -->
-<#-- @ftlvariable name="javaVersionEnum" type="org.endless.ddd.simplified.generator.components.generator.project.domain.type.ProjectJavaVersionEnum" -->
-<#-- @ftlvariable name="persistenceFrameworkEnum" type="org.endless.ddd.simplified.generator.components.generator.project.domain.type.ProjectPersistenceFrameworkEnum" -->
+<#-- @ftlvariable name="projectAggregate" type="org.endless.ddd.simplified.generator.components.generator.project.domain.entity.ProjectAggregate" -->
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>${project.groupId}</groupId>
-    <artifactId>${project.projectArtifactId}</artifactId>
-    <version>${project.version}</version>
+    <groupId>${projectAggregate.getGroupId()}</groupId>
+    <artifactId>${projectAggregate.getProjectArtifactId()}</artifactId>
+    <version>${projectAggregate.getVersion()}</version>
     <packaging>pom</packaging>
 
-    <name>${project.name}</name>
-    <description>${project.description}</description>
+    <name>${projectAggregate.getName()}</name>
+    <description>${projectAggregate.getDescription()}</description>
+    <#-- 调试用，实际生成时可删除 -->
 
     <properties>
         <!-- Project -->
-        <#assign javaVersion = project.javaVersion.getDescription()>
-        <java.version>${javaVersion?substring(6, javaVersion.length())}</java.version>
+        <#if projectAggregate.getJavaVersion().getCode() == "JAVA8">
+            <#assign javaVersion = "1.8">
+            <#assign springBootVersion = "2.7.18">
+            <#assign springDocVersion = "1.8.0">
+        <#elseif projectAggregate.getJavaVersion().getCode() == "JAVA21">
+            <#assign javaVersion = "21">
+            <#assign springBootVersion = "3.5.4">
+            <#assign springDocVersion = "2.8.9">
+        </#if>
+        <java.version>${javaVersion}</java.version>
         <encoding>UTF-8</encoding>
-        <project.build.sourceEncoding>${r'${encoding}'}</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>${r'${encoding}'}</project.reporting.outputEncoding>
+        <projectAggregate.build.sourceEncoding>${r'${encoding}'}</projectAggregate.build.sourceEncoding>
+        <projectAggregate.reporting.outputEncoding>${r'${encoding}'}</projectAggregate.reporting.outputEncoding>
         <maven.compiler.encoding>${r'${encoding}'}</maven.compiler.encoding>
         <maven.compiler.source>${r'${java.version}'}</maven.compiler.source>
         <maven.compiler.target>>${r'${java.version}'}</maven.compiler.target>
@@ -30,16 +37,9 @@
         <!-- Endless -->
         <endless-ddd.version>1.0.0-SNAPSHOT</endless-ddd.version>
         <!-- Framework -->
-        <#if project.javaVersion.equals(javaVersionEnum.JAVA8)>
-            <#assign springBootVersion = "2.7.18">
-            <#assign springDocVersion = "1.8.0">
-        <#elseif project.javaVersion.equals(javaVersionEnum.JAVA21)>
-            <#assign springBootVersion = "3.5.4">
-            <#assign springDocVersion = "2.8.9">
-        </#if>
         <spring-boot.version>${springBootVersion}</spring-boot.version>
         <druid.version>1.2.27</druid.version>
-        <#if project.persistenceFramework.equals(persistenceFrameworkEnum.MYBATIS_PLUS)>
+        <#if projectAggregate.getPersistenceFramework().getCode() == "MYBATIS_PLUS">
             <mybatis-plus.version>3.5.12</mybatis-plus.version>
             <pagehelper.version>2.1.1</pagehelper.version>
         </#if>
@@ -62,7 +62,7 @@
 
     <!-- 服务声明 -->
     <modules>
-        <#list project.serviceArtifactIds as serviceArtifactId>
+        <#list projectAggregate.getServiceArtifactIds() as serviceArtifactId>
             <module>${serviceArtifactId}</module>
         </#list>
     </modules>
@@ -91,7 +91,7 @@
                 <artifactId>druid-spring-boot-starter</artifactId>
                 <version>${r'${druid.version}'}</version>
             </dependency>
-            <#if project.persistenceFramework.equals(persistenceFrameworkEnum.MYBATIS_PLUS)>
+            <#if projectAggregate.getPersistenceFramework().getCode() == "MYBATIS_PLUS">
                 <!-- Mybatis Plus -->
                 <dependency>
                     <groupId>com.baomidou</groupId>
@@ -154,7 +154,7 @@
                 <version>${r'${lombok.version}'}</version>
             </dependency>
             <!-- Springdoc -->
-            <#if project.javaVersion.equals(javaVersionEnum.JAVA8)>
+            <#if projectAggregate.getJavaVersion().getCode() == "JAVA8">
                 <dependency>
                     <groupId>org.springdoc</groupId>
                     <artifactId>springdoc-openapi-ui</artifactId>
@@ -175,7 +175,7 @@
                     <artifactId>springdoc-openapi-javadoc</artifactId>
                     <version>${r'${springdoc.version}'}</version>
                 </dependency>
-            <#elseif project.javaVersion.equals(javaVersionEnum.JAVA21)>
+            <#elseif projectAggregate.getJavaVersion().getCode() == "JAVA21">
                 <dependency>
                     <groupId>org.springdoc</groupId>
                     <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
@@ -206,7 +206,7 @@
                                 <version>${r'${therapi-javadoc.version}'}</version>
                             </path>
                             <path>
-                                <groupId>org.projectlombok</groupId>
+                                <groupId>org.projectAggregatelombok</groupId>
                                 <artifactId>lombok</artifactId>
                                 <version>${r'${lombok.version}'}</version>
                             </path>

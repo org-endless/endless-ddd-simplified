@@ -49,7 +49,7 @@ public class ServiceRestController implements DDDSimplifiedGeneratorRestControll
     public ResponseEntity<RestResponse> create(@RequestBody ServiceCreateReqCTransfer command) {
         Optional.ofNullable(command)
                 .map(ServiceCreateReqCTransfer::validate)
-                .orElseThrow(() -> new CommandReqTransferNullException("服务创建参数不能为空"));
+                .orElseThrow(() -> new CommandReqTransferNullException("服务创建建参数不能为空"));
         try {
             return response().success("服务创建成功", serviceDrivingAdapter.create(command));
         } catch (JSONException | NullPointerException e) {

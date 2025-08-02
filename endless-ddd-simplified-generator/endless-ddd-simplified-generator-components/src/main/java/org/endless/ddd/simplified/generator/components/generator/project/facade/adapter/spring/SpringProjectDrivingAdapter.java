@@ -2,7 +2,7 @@ package org.endless.ddd.simplified.generator.components.generator.project.facade
 
 import org.endless.ddd.simplified.generator.components.generator.project.application.command.handler.ProjectCommandHandler;
 import org.endless.ddd.simplified.generator.components.generator.project.application.command.transfer.ProjectCreateReqCTransfer;
-import org.endless.ddd.simplified.generator.components.generator.project.application.command.transfer.ProjectCreateRespCTransfer;
+import org.endless.ddd.simplified.generator.components.generator.project.application.command.transfer.ProjectModifyReqCTransfer;
 import org.endless.ddd.simplified.generator.components.generator.project.application.query.handler.ProjectQueryHandler;
 import org.endless.ddd.simplified.generator.components.generator.project.facade.adapter.ProjectDrivingAdapter;
 
@@ -14,6 +14,8 @@ import org.endless.ddd.simplified.generator.components.generator.project.facade.
  * <p>
  * update 2025/07/29 16:16
  *
+ * @param projectCommandHandler 项目领域命令处理器
+ * @param projectQueryHandler   项目领域查询处理器
  * @author Deng Haozhi
  * @see ProjectDrivingAdapter
  * @since 0.0.1
@@ -35,8 +37,14 @@ public class SpringProjectDrivingAdapter implements ProjectDrivingAdapter {
         this.projectQueryHandler = projectQueryHandler;
     }
 
+
     @Override
-    public ProjectCreateRespCTransfer create(ProjectCreateReqCTransfer command) {
-        return projectCommandHandler.create(command);
+    public void create(ProjectCreateReqCTransfer command) {
+        projectCommandHandler.create(command);
+    }
+
+    @Override
+    public void modify(ProjectModifyReqCTransfer command) {
+        projectCommandHandler.modify(command);
     }
 }

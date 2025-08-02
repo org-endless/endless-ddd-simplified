@@ -2,103 +2,41 @@ package org.endless.ddd.simplified.generator.components.generator.project.applic
 
 import com.alibaba.fastjson2.annotation.JSONType;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
 import org.endless.ddd.simplified.generator.common.model.application.command.transfer.DDDSimplifiedGeneratorCommandTransfer;
-import org.endless.ddd.simplified.generator.components.generator.project.domain.type.ProjectJavaVersionEnum;
-import org.endless.ddd.simplified.generator.components.generator.project.domain.type.ProjectLoggingFrameworkEnum;
-import org.endless.ddd.simplified.generator.components.generator.project.domain.type.ProjectPersistenceFrameworkEnum;
 import org.endless.ddd.simplified.starter.common.exception.model.application.command.transfer.CommandTransferValidateException;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-
-import java.util.List;
 
 /**
  * ProjectCreateReqCTransfer
+ * <p>项目创建命令请求传输对象
  * <p>
- * 项目创建命令请求传输对象
+ * create 2025/08/02 19:59
  * <p>
- * create 2025/07/29 21:06
- * <p>
- * update 2025/07/29 21:06
+ * update 2025/08/02 19:59
  *
+ * @param projectArtifactId    项目构件ID
+ * @param groupId              项目组织ID
+ * @param name                 项目名称
+ * @param description          项目描述
+ * @param version              项目版本号
+ * @param author               项目作者
+ * @param rootPath             项目根路径
+ * @param basePackage          项目基础包名
+ * @param enableSpringDoc      项目是否启用Spring Doc
+ * @param javaVersion          项目Java版本
+ * @param loggingFramework     项目日志框架
+ * @param persistenceFramework 项目持久化框架
  * @author Deng Haozhi
  * @see DDDSimplifiedGeneratorCommandTransfer
  * @since 0.0.1
  */
-@Getter
-@ToString
 @Builder
-@JSONType(orders = { "projectArtifactId", "groupId", "name", "description", "version", "author", "rootPath",
-        "basePackage", "enableSpringDoc", "javaVersion", "loggingFramework", "persistenceFramework",
-        "serviceArtifactIds" })
-public class ProjectCreateReqCTransfer implements DDDSimplifiedGeneratorCommandTransfer {
-
-    /**
-     * 项目构件ID
-     */
-    private final String projectArtifactId;
-
-    /**
-     * 组织ID
-     */
-    private final String groupId;
-
-    /**
-     * 项目名称
-     */
-    private final String name;
-
-    /**
-     * 项目描述
-     */
-    private final String description;
-
-    /**
-     * 项目版本号
-     */
-    private final String version;
-
-    /**
-     * 项目作者
-     */
-    private final String author;
-
-    /**
-     * 项目根路径
-     */
-    private final String rootPath;
-
-    /**
-     * 项目基础包名
-     */
-    private final String basePackage;
-
-    /**
-     * 项目是否启用Spring Doc
-     */
-    private final String enableSpringDoc;
-
-    /**
-     * 项目Java版本
-     */
-    private final ProjectJavaVersionEnum javaVersion;
-
-    /**
-     * 项目日志框架
-     */
-    private final ProjectLoggingFrameworkEnum loggingFramework;
-
-    /**
-     * 项目持久化框架
-     */
-    private final ProjectPersistenceFrameworkEnum persistenceFramework;
-
-    /**
-     * 服务构件ID列表
-     */
-    private final List<String> serviceArtifactIds;
+@JSONType(orders = {"projectArtifactId", "groupId", "name", "description", "version", "author", "rootPath", "basePackage", "enableSpringDoc", "javaVersion", "loggingFramework", "persistenceFramework"})
+public record ProjectCreateReqCTransfer(
+        String projectArtifactId, String groupId, String name, String description,
+        String version, String author, String rootPath, String basePackage,
+        Boolean enableSpringDoc, String javaVersion, String loggingFramework,
+        String persistenceFramework) implements DDDSimplifiedGeneratorCommandTransfer {
 
     @Override
     public ProjectCreateReqCTransfer validate() {
@@ -114,7 +52,6 @@ public class ProjectCreateReqCTransfer implements DDDSimplifiedGeneratorCommandT
         validateJavaVersion();
         validateLoggingFramework();
         validatePersistenceFramework();
-        validateServiceArtifactIds();
         return this;
     }
 
@@ -126,7 +63,7 @@ public class ProjectCreateReqCTransfer implements DDDSimplifiedGeneratorCommandT
 
     private void validateGroupId() {
         if (!StringUtils.hasText(groupId)) {
-            throw new CommandTransferValidateException("组织ID不能为空");
+            throw new CommandTransferValidateException("项目组织ID不能为空");
         }
     }
 
@@ -167,32 +104,26 @@ public class ProjectCreateReqCTransfer implements DDDSimplifiedGeneratorCommandT
     }
 
     private void validateEnableSpringDoc() {
-        if (!StringUtils.hasText(enableSpringDoc)) {
-            throw new CommandTransferValidateException("项目是否启用Spring Doc不能为空");
+        if (enableSpringDoc == null) {
+            throw new CommandTransferValidateException("项目是否启用Spring Doc不能为 null ");
         }
     }
 
     private void validateJavaVersion() {
-        if (javaVersion == null) {
+        if (!StringUtils.hasText(javaVersion)) {
             throw new CommandTransferValidateException("项目Java版本不能为空");
         }
     }
 
     private void validateLoggingFramework() {
-        if (loggingFramework == null) {
+        if (!StringUtils.hasText(loggingFramework)) {
             throw new CommandTransferValidateException("项目日志框架不能为空");
         }
     }
 
     private void validatePersistenceFramework() {
-        if (persistenceFramework == null) {
+        if (!StringUtils.hasText(persistenceFramework)) {
             throw new CommandTransferValidateException("项目持久化框架不能为空");
-        }
-    }
-
-    private void validateServiceArtifactIds() {
-        if (CollectionUtils.isEmpty(serviceArtifactIds)) {
-            throw new CommandTransferValidateException("服务构件ID列表不能为空");
         }
     }
 }
