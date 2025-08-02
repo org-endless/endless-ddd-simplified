@@ -1,0 +1,21 @@
+spring:
+  profiles:
+    active: prod
+  application:
+    name: endless-ddd-simplified-generator
+  freemarker:
+    enabled: true
+    template-loader-path: classpath:/templates/freemarker/
+    suffix: .ftl
+    check-template-location: false
+  mvc:
+    throw-exception-if-no-handler-found: true
+  actuator:
+    endpoints:
+      web:
+        exposure:
+          include: health,info
+        base-path: /actuator
+    endpoint:
+      health:
+        show-details: always

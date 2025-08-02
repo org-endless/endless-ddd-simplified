@@ -25,14 +25,14 @@ class AppBar {
         const appBar = document.createElement('div');
         appBar.id = 'appBar';
         appBar.className = 'app-bar';
-        
+
         // 根据当前页面路径确定图片路径
         const imagePath = this.getImagePath();
-        
+
         appBar.innerHTML = `
             <div class="app-bar-container">
                 <div class="app-bar-left">
-                    <a href="/" class="app-bar-brand">
+                    <a href="/endless-ddd-simplified-generator-ui/public" class="app-bar-brand">
                         <img src="${imagePath}" alt="Endless DDD" class="app-bar-logo">
                         <span class="app-bar-title">Endless DDD</span>
                         <span class="app-bar-subtitle">Simplified Generator</span>
@@ -57,19 +57,19 @@ class AppBar {
         // 插入到页面顶部
         document.body.insertBefore(appBar, document.body.firstChild);
     }
-    
+
     /**
      * 根据当前页面路径获取图片路径
      * @returns {string} 图片路径
      */
     getImagePath() {
         const currentPath = window.location.pathname;
-        
+
         // 简单的路径检测
         if (currentPath.includes('/components/')) {
             return '../image/endless-favicon-256.svg';
         }
-        
+
         // 默认返回根目录路径
         return 'image/endless-favicon-256.svg';
     }
@@ -127,7 +127,7 @@ class AppBar {
         if (themeToggle) {
             const lightIcon = themeToggle.querySelector('.light-icon');
             const darkIcon = themeToggle.querySelector('.dark-icon');
-            
+
             if (this.isDarkMode) {
                 lightIcon.style.display = 'none';
                 darkIcon.style.display = 'inline-block';

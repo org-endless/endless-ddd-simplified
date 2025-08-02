@@ -21,12 +21,44 @@ spring:
   profiles:
     active: dev
   freemarker:
-    enabled: true  # 启用 Freemarker 模板引擎
+    enabled: true # 启用 Freemarker 模板引擎
     template-loader-path: classpath:/templates/freemarker/ # Freemarker 模板路径
     suffix: .ftl # Freemarker 模板后缀
-    check-template-location: false  #
+    check-template-location: false #
   mvc:
     throw-exception-if-no-handler-found: true # 未找到请求处理器时，抛出异常
+  datasource:
+    type: ${datasource-type}  # 指定数据源类型
+    driver-class-name: ${datasource-driver-class-name}  # 设置数据库驱动类
+    url: ${datasource-url} # 数据库连接 URL
+    username: ${datasource-username}  # 数据库用户名
+    password: ${datasource-password}  # 数据库密码
+    druid:
+      initial-size: ${druid-initial-size}  # 初始化连接数
+      min-idle: ${druid-min-idle}  # 最小空闲连接数
+      max-active: ${druid-max-active}  # 最大活动连接数
+      max-wait: ${druid-max-wait}  # 获取连接的最大等待时间，单位为毫秒
+      validation-query: ${druid-validation-query}  # 连接验证查询
+      test-on-borrow: ${druid-test-on-borrow}  # 在获取连接时检查有效性
+      test-on-return: ${druid-test-on-return}  # 归还连接时进行检测
+      test-while-idle: ${druid-test-while-idle}  # 在空闲时检查连接有效性
+      time-between-eviction-runs-millis: ${druid-time-between-eviction-runs-millis}  # 运行空闲连接回收线程的时间间隔，单位为毫秒
+      min-evictable-idle-time-millis: ${druid-min-evictable-idle-time-millis}  # 连接最小空闲时间，超过该时间将被回收，单位为毫秒
+      max-evictable-idle-time-millis: ${druid-max-evictable-idle-time-millis}  # 连接最小空闲时间，超过该时间将被回收，单位为毫秒
+      filters: ${druid-filters}  # Druid 监控过滤器配置，开启统计和 log4j 记录
+      stat-view-servlet:
+        enabled: ${druid-stat-view-servlet-enabled}  # 是否启用 Druid 的监控页面
+      web-stat-filter:
+        enabled: ${druid-web-stat-filter-enabled}  # 是否启用 Druid 的 Web 统计过滤器
+      filter:
+        stat:
+          enabled: ${druid-filter-stat-enabled}  # 启用统计过滤器
+          log-slow-sql: ${druid-filter-stat-log-slow-sql}  # 启用慢SQL记录
+          slow-sql-millis: ${druid-filter-stat-slow-sql-millis}  # 记录执行时间超过1000毫秒的SQL
+          merge-sql: ${druid-filter-stat-merge-sql}  # 合并相似的SQL执行
+        wall:
+          config:
+            multi-statement-allow: ${druid-filter-wall-config-multi-statement-allow}  # 允许多条语句执行
 #------------------------Logging------------------------
 logging:
   config: ${logging-config}
