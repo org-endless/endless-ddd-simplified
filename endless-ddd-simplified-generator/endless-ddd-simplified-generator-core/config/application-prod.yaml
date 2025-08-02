@@ -7,5 +7,29 @@ tomcat-min-spare-threads: 10 # 设置最小闲置线程数
 tomcat-accept-count: 100 # 设置最大请求队列数
 tomcat-max-http-header-size: 8192 # 设置最大 HTTP 请求头大小，单位为字节
 tomcat-uri-encoding: UTF-8 # 设置 URI 编码格式
+# 数据源配置（SQLite）
+datasource-type: com.alibaba.druid.pool.DruidDataSource
+datasource-driver-class-name: org.sqlite.JDBC
+datasource-url: jdbc:sqlite:file:data/demo.db
+datasource-username: ""
+datasource-password: ""
+#Druid
+druid-initial-size: 1
+druid-min-idle: 1
+druid-max-active: 1          # SQLite 强烈建议单连接
+druid-max-wait: 3000
+druid-validation-query: select 1
+druid-test-on-borrow: true
+druid-test-on-return: false
+druid-test-while-idle: false
+druid-time-between-eviction-runs-millis: 60000
+druid-min-evictable-idle-time-millis: 300000
+druid-max-evictable-idle-time-millis: 900000
+druid-filters: stat
+druid-filter-stat-enabled: true
+druid-filter-stat-log-slow-sql: false
+druid-filter-stat-merge-sql: false
+druid-stat-view-servlet-enabled: false
+druid-web-stat-filter-enabled: false
 #Logging
 logging-config: file:config/log4j2-prod.xml

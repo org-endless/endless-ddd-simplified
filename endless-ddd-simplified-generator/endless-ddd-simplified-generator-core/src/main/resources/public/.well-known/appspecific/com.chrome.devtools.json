@@ -1,8 +1,0 @@
-{
-  "name": "Endless DDD Generator",
-  "description": "基于领域驱动设计的代码生成器",
-  "version": "1.0.0",
-  "devtools": {
-    "enabled": false
-  }
-} 
