@@ -4,12 +4,10 @@ import org.endless.ddd.simplified.generator.common.model.domain.anticorruption.D
 import org.endless.ddd.simplified.starter.common.exception.common.FailedException;
 import org.endless.ddd.simplified.starter.common.exception.model.infrastructure.adapter.filesystem.FileSystemRemoveFailedException;
 import org.endless.ddd.simplified.starter.common.exception.model.infrastructure.adapter.filesystem.FileSystemStoreFailedException;
-import org.endless.ddd.simplified.starter.common.model.sidecar.rest.RestResponse;
 import org.endless.ddd.simplified.starter.common.utils.model.time.DateTime;
 import org.endless.ddd.simplified.starter.common.utils.model.time.TimeStamp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -42,12 +40,11 @@ public interface DDDSimplifiedGeneratorFileDrivenAdapter extends DDDSimplifiedGe
     String DEFAULT_BACKUP_DIRECTORY = ".ddd";
     Integer MAX_BACKUP_COUNTS = 10;
 
-    Logger log = LoggerFactory.getLogger(RestResponse.class);
+    Logger log = LoggerFactory.getLogger(DDDSimplifiedGeneratorFileDrivenAdapter.class);
 
 
-    default void write(String projectPath, String servicePath, String fileName, String content) {
+    default void write(String filePath, String fileName, String content) {
         try {
-            String filePath = projectPath + (StringUtils.hasText(servicePath) ? "/" + servicePath : "");
             File directory = new File(filePath);
             if (!directory.exists()) {
                 if (!directory.mkdirs()) {
@@ -56,7 +53,7 @@ public interface DDDSimplifiedGeneratorFileDrivenAdapter extends DDDSimplifiedGe
             }
             File file = Paths.get(filePath, fileName).toFile();
             if (!file.exists()) {
-                remove(projectPath, servicePath, fileName, content);
+                remove(filePath, fileName, content);
             }
             try (FileWriter writer = new FileWriter(file)) {
                 writer.write(content);
@@ -72,11 +69,11 @@ public interface DDDSimplifiedGeneratorFileDrivenAdapter extends DDDSimplifiedGe
         }
     }
 
-    default void remove(String projectPath, String servicePath, String fileName, String content) {
+    default void remove(String filePath, String fileName, String content) {
         try {
-            File file = Paths.get(projectPath + "/" + servicePath, fileName).toFile();
+            File file = Paths.get(filePath, fileName).toFile();
             if (file.exists()) {
-                backup(file, projectPath, servicePath, fileName);
+                backup(file, filePath, fileName);
                 if (!file.delete()) {
                     throw new FileSystemRemoveFailedException("删除文件失败 " + fileName);
                 }
@@ -89,9 +86,9 @@ public interface DDDSimplifiedGeneratorFileDrivenAdapter extends DDDSimplifiedGe
         }
     }
 
-    default void backup(File file, String projectPath, String servicePath, String fileName) {
+    default void backup(File file, String filePath, String fileName) {
         try {
-            String backupPath = projectPath + "/" + DEFAULT_BACKUP_DIRECTORY + "/" + servicePath;
+            String backupPath = DEFAULT_BACKUP_DIRECTORY + "/" + filePath;
             File directory = new File(backupPath);
             if (!directory.exists()) {
                 if (!directory.mkdirs()) {

@@ -17,4 +17,5 @@ import org.endless.ddd.simplified.starter.common.model.application.command.handl
 public interface DDDSimplifiedGeneratorCommandHandler<A extends DDDSimplifiedGeneratorAggregate>
         extends CommandHandler<A> {
 
+    String DDD_SIMPLIFIED_GENERATOR_USER_ID = "DDD_SIMPLIFIED_GENERATOR_USER_ID";
 }

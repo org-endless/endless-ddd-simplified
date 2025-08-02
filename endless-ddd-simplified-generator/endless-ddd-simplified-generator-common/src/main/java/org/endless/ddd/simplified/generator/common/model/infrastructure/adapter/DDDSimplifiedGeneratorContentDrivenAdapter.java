@@ -6,12 +6,14 @@ import freemarker.template.Template;
 import org.endless.ddd.simplified.generator.common.model.domain.anticorruption.DDDSimplifiedGeneratorDrivenAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.CollectionUtils;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.error.YAMLException;
 
 import java.io.StringWriter;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * DDDSimplifiedGeneratorContentDrivenAdapter
@@ -37,10 +39,10 @@ public interface DDDSimplifiedGeneratorContentDrivenAdapter extends DDDSimplifie
 
             // 配置输出选项，设置为块样式（标准 YAML 格式），并设置缩进
             DumperOptions options = new DumperOptions();
-            options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);  // 使用块样式
-            options.setPrettyFlow(true);  // 美化输出
-            options.setIndent(4);  // 设置缩进为 4
-            options.setIndicatorIndent(2);  // 数组前的缩进
+            options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK); // 使用块样式
+            options.setPrettyFlow(true); // 美化输出
+            options.setIndent(4); // 设置缩进为 4
+            options.setIndicatorIndent(2); // 数组前的缩进
             Yaml yaml = new Yaml(options);
             try (StringWriter writer = new StringWriter()) {
                 yaml.dump(jsonMap, writer);
@@ -53,14 +55,14 @@ public interface DDDSimplifiedGeneratorContentDrivenAdapter extends DDDSimplifie
         }
     }
 
-    default <T> String freemarker(Configuration freemarkerConfig, T object, String templateFileName) {
-        if (object == null) {
-            throw new YAMLException("Freemarker模板渲染失败，输入对象为空");
+    default <T> String freemarker(Configuration freemarkerConfig, Map<String, Object> model, String templateFileName) {
+        if (CollectionUtils.isEmpty(model)) {
+            throw new YAMLException("Freemarker模板渲染失败，输入模型为空");
         }
         try {
             Template template = freemarkerConfig.getTemplate(templateFileName);
             try (StringWriter writer = new StringWriter()) {
-                template.process(object, writer);
+                template.process(model, writer);
                 writer.flush();
                 log.trace("Freemarker模板渲染成功");
                 return writer.toString();

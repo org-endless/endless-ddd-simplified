@@ -21,7 +21,7 @@ public class DomainCommandHandlerImpl implements DomainCommandHandler {
     @Override
     public void create(DomainCreateReqCTransfer command) {
         // TODO: 实现聚合创建逻辑
-        //     创建聚合。生成存储文件内容
+        //     创建聚合。创建存储文件内容
         //     开始构建项目结构
         //     构建POM文件
         //     构建Common服务
