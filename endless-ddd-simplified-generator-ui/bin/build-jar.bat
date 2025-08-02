@@ -1,34 +1,29 @@
 @echo off
 setlocal enabledelayedexpansion
 
-echo ========================================
-echo EndlessDDD - JAR Build Script
-echo ========================================
-
-:: Check environment
-echo [1/5] Checking build environment...
 call "%~dp0check-env.bat"
-if %errorlevel% neq 0 (
+if not "%errorlevel%"=="0" (
     echo Error: Environment check failed, please install missing dependencies first
     pause
     exit /b 1
 )
-
-:: Build JAR
 echo.
-echo [2/4] Building JAR file...
+echo.
+echo ========================================
+echo EndlessDDD - JAR Build Script
+echo ========================================
+echo.
+echo Build JAR [1/3] Building JAR file...
 echo Using Maven wrapper to build Spring Boot application...
 cd /d "%~dp0..\.."
 call mvnw.cmd clean package -DskipTests
-if %errorlevel% neq 0 (
+if not "%errorlevel%"=="0" (
     echo Error: Maven build failed
     pause
     exit /b 1
 )
-
-:: Copy JAR file and configuration
 echo.
-echo [3/4] Copying JAR file and configuration...
+echo Build JAR [2/3] Copying JAR file and configuration...
 cd /d "%~dp0..\..\endless-ddd-simplified-generator\endless-ddd-simplified-generator-core\target"
 if not exist "endless-ddd-simplified-generator.jar" (
     echo Error: JAR file not generated
@@ -36,8 +31,6 @@ if not exist "endless-ddd-simplified-generator.jar" (
     exit /b 1
 )
 cd /d "%~dp0.."
-
-:: Clean target directories before copying
 echo Cleaning target directories...
 if exist "lib" (
     echo Cleaning lib directory...
@@ -47,40 +40,35 @@ if exist "config" (
     echo Cleaning config directory...
     rmdir /s /q "config"
 )
-
-:: Create directories
 echo Creating directories...
 mkdir "lib"
 mkdir "config"
 
 copy /Y "%~dp0..\..\endless-ddd-simplified-generator\endless-ddd-simplified-generator-core\target\endless-ddd-simplified-generator.jar" "lib\" >nul
-if %errorlevel% neq 0 (
+if not "%errorlevel%"=="0" (
     echo Error: JAR file copy failed
     pause
     exit /b 1
 )
 
-:: Copy configuration files
 echo Copying configuration files...
 
-copy /Y "..\..\endless-ddd-simplified-generator\endless-ddd-simplified-generator-core\config\application.yaml" "config\" >nul
-if %errorlevel% neq 0 (
+copy /Y "%~dp0..\..\endless-ddd-simplified-generator\endless-ddd-simplified-generator-core\config\application.yaml" "config\" >nul
+if not "%errorlevel%"=="0" (
     echo Warning: application.yaml copy failed, using default
 )
 
-copy /Y "..\..\endless-ddd-simplified-generator\endless-ddd-simplified-generator-core\config\log4j2-prod.xml" "config\" >nul
-if %errorlevel% neq 0 (
+copy /Y "%~dp0..\..\endless-ddd-simplified-generator\endless-ddd-simplified-generator-core\config\log4j2-prod.xml" "config\" >nul
+if not "%errorlevel%"=="0" (
     echo Warning: log4j2-prod.xml copy failed
 )
 
-copy /Y "..\..\endless-ddd-simplified-generator\endless-ddd-simplified-generator-core\config\application-prod.yaml" "config\" >nul
-if %errorlevel% neq 0 (
+copy /Y "%~dp0..\..\endless-ddd-simplified-generator\endless-ddd-simplified-generator-core\config\application-prod.yaml" "config\" >nul
+if not "%errorlevel%"=="0" (
     echo Warning: application-prod.yaml copy failed
 )
-
-:: Modify application.yaml to use prod profile
 echo.
-echo [4/4] Modifying Spring Boot configuration for production...
+echo [3/3] Modifying Spring Boot configuration for production...
 set "CONFIG_FILE=config\application.yaml"
 set "TEMP_FILE=%TEMP%\application.yaml.tmp"
 set "OLD_STRING=active: dev"

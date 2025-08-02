@@ -1,5 +1,5 @@
 project-home: ${user.dir}
-server-port: 80
+server-port: 60001
 #Tomcat
 tomcat-connection-timeout: 20000 # 设置连接超时时间，单位为毫秒
 tomcat-max-threads: 200 # 设置最大线程数

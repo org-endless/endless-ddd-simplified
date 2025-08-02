@@ -2,7 +2,7 @@
 <Configuration status="ERROR" monitorInterval="300">
     <Properties>
         <property name="APP_NAME" value="endless-ddd-simplified-generator"/>
-        <property name="LOG_HOME" value="/logs/${APP_NAME}"/>
+        <property name="LOG_HOME" value="logs/${APP_NAME}"/>
         <property name="LOG_NAME" value="${APP_NAME}"/>
         <property name="LOG_PATTERN_ASPECT">[%d{yyyy-MM-dd HH:mm:ss.SSS}][%-5p][%T][%c.%M:%L]%msg%xEx%n</property>
         <property name="LOG_PATTERN">[%d{yyyy-MM-dd HH:mm:ss.SSS}][%-5p][%T][%c.%M:%L]%msg%xEx%n</property>

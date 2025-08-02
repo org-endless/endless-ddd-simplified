@@ -299,7 +299,7 @@ async fn main() -> Result<()> {
         ])
         .setup(|app| {
             // 设置应用关闭时的清理逻辑
-            let app_handle = app.handle();
+            let _app_handle = app.handle();
 
             // 在Tauri 2.x中，我们需要使用不同的方式来监听关闭事件
             // 这里我们将在应用关闭时进行清理
