@@ -35,7 +35,7 @@ if %errorlevel% neq 0 (
             goto :fail
         )
     ) else (
-        echo Java version is OK ^(>=21^)
+        echo Java version is OK
     )
 )
 

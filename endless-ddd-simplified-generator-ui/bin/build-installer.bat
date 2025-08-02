@@ -9,19 +9,6 @@ echo ========================================
 echo.
 echo [1/4] Cleaning build artifacts...
 cd /d "%~dp0..\..\.."
-echo Cleaning Maven build artifacts...
-if exist "endless-ddd-simplified-starter\target" (
-    rmdir /s /q "endless-ddd-simplified-starter\target"
-)
-if exist "endless-ddd-simplified-generator\endless-ddd-simplified-generator-common\target" (
-    rmdir /s /q "endless-ddd-simplified-generator\endless-ddd-simplified-generator-common\target"
-)
-if exist "endless-ddd-simplified-generator\endless-ddd-simplified-generator-components\target" (
-    rmdir /s /q "endless-ddd-simplified-generator\endless-ddd-simplified-generator-components\target"
-)
-if exist "endless-ddd-simplified-generator\endless-ddd-simplified-generator-core\target" (
-    rmdir /s /q "endless-ddd-simplified-generator\endless-ddd-simplified-generator-core\target"
-)
 cd endless-ddd-simplified-generator-ui
 echo Cleaning Rust build artifacts...
 if exist "target" (

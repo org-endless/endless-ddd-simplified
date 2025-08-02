@@ -5,6 +5,7 @@
 build/*
 !gradle/wrapper/gradle-wrapper.jar
 target/
+endless-ddd-simplified-generator.jar
 !.mvn/wrapper/maven-wrapper.jar
 ci/*/lib/*.jar
 ### IDE ###

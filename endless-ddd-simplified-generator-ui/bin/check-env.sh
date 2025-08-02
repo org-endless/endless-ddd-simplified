@@ -28,6 +28,8 @@ install_dependencies() {
             curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
             source ~/.cargo/env
             echo "Rust installation completed"
+            echo "Please re-run this script to verify installation"
+            exit 0
         fi
         
         if [[ "$NEEDS_INSTALL" == *"tauri"* ]]; then
@@ -50,6 +52,8 @@ install_dependencies() {
             curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
             source ~/.cargo/env
             echo "Rust installation completed"
+            echo "Please re-run this script to verify installation"
+            exit 0
         fi
         
         if [[ "$NEEDS_INSTALL" == *"tauri"* ]]; then
@@ -128,56 +132,3 @@ else
     echo "All dependencies installed"
     exit 0
 fi
-    echo
-    echo "Starting auto-install dependencies..."
-    
-    # Detect operating system
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-        # macOS
-        if [[ "$NEEDS_INSTALL" == *"java"* ]]; then
-            echo "Installing OpenJDK 21..."
-            brew install openjdk@21
-            echo 'export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"' >> ~/.zshrc
-            echo 'export JAVA_HOME="/opt/homebrew/opt/openjdk@21"' >> ~/.zshrc
-            echo "OpenJDK 21 installation completed"
-        fi
-        
-        if [[ "$NEEDS_INSTALL" == *"rust"* ]]; then
-            echo "Installing Rust..."
-            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-            source ~/.cargo/env
-            echo "Rust installation completed"
-        fi
-        
-        if [[ "$NEEDS_INSTALL" == *"tauri"* ]]; then
-            echo "Installing Tauri CLI..."
-            cargo install tauri-cli
-            echo "Tauri CLI installation completed"
-        fi
-        
-    elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
-        # Linux
-        if [[ "$NEEDS_INSTALL" == *"java"* ]]; then
-            echo "Installing OpenJDK 21..."
-            sudo apt update
-            sudo apt install -y openjdk-21-jdk
-            echo "OpenJDK 21 installation completed"
-        fi
-        
-        if [[ "$NEEDS_INSTALL" == *"rust"* ]]; then
-            echo "Installing Rust..."
-            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-            source ~/.cargo/env
-            echo "Rust installation completed"
-        fi
-        
-        if [[ "$NEEDS_INSTALL" == *"tauri"* ]]; then
-            echo "Installing Tauri CLI..."
-            cargo install tauri-cli
-            echo "Tauri CLI installation completed"
-        fi
-    fi
-    
-echo
-echo "All dependencies installation completed"
-echo "Please re-run this script to verify installation"
